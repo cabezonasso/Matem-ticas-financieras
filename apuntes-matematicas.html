@@ -1,0 +1,736 @@
+<title>Costes, Ingresos y Beneficios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: cuaderno de apuntes — índice fijo a la izquierda (escritorio), columna de lectura de ~68ch, fórmulas en "fichas" de papel cuadriculado */
+:root {
+  --bg: #f6f7f9;
+  --paper: #ffffff;
+  --ink: #16202c;
+  --ink-2: #4a5566;
+  --muted: #7a8494;
+  --rule: #dfe3ea;
+  --grid: #eef1f5;
+  --accent: #1d4ed8;
+  --accent-soft: #e6edfc;
+  --hl: #fff4c2;
+  --good: #0f7a4f;
+  --bad: #b42318;
+  --s-ing: #2a78d6;
+  --s-cos: #eb6834;
+  --s-ben: #1baf7a;
+  --s-ben-fill: rgba(27,175,122,.12);
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151b; --paper: #181d25; --ink: #e8ecf2; --ink-2: #b4bcc8; --muted: #8590a0;
+    --rule: #2a313c; --grid: #1e242d; --accent: #7aa2ff; --accent-soft: #1f2a44; --hl: #3a3415;
+    --good: #4cc38a; --bad: #ff7b72;
+    --s-ing: #3987e5; --s-cos: #d95926; --s-ben: #199e70; --s-ben-fill: rgba(25,158,112,.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151b; --paper: #181d25; --ink: #e8ecf2; --ink-2: #b4bcc8; --muted: #8590a0;
+  --rule: #2a313c; --grid: #1e242d; --accent: #7aa2ff; --accent-soft: #1f2a44; --hl: #3a3415;
+  --good: #4cc38a; --bad: #ff7b72;
+  --s-ing: #3987e5; --s-cos: #d95926; --s-ben: #199e70; --s-ben-fill: rgba(25,158,112,.16);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 80px; display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 48px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0,1fr); gap: 24px; } }
+
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-family: var(--f-display); font-size: 14px; }
+nav.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 10px; font-weight: 500; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: t; }
+nav.toc li a { display: block; padding: 4px 10px; border-radius: 6px; color: var(--ink-2); text-decoration: none; }
+nav.toc li a:hover, nav.toc li a:focus-visible { background: var(--accent-soft); color: var(--accent); outline: none; }
+nav.toc .grp { margin-top: 14px; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding-left: 10px; }
+@media (max-width: 900px) {
+  nav.toc { position: static; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; }
+  nav.toc ol { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+main { min-width: 0; }
+header.hero { padding-bottom: 24px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+.eyebrow { font-family: var(--f-display); font-size: 13px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin: 0 0 8px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(34px, 5vw, 52px); line-height: 1.05; margin: 0 0 14px; text-wrap: balance; letter-spacing: -.01em; }
+.lede { font-size: 19px; color: var(--ink-2); max-width: 64ch; margin: 0; }
+.hero-eq { margin-top: 20px; font-family: var(--f-mono); font-size: clamp(15px, 2.2vw, 20px); display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.hero-eq span b { font-weight: 600; }
+
+section { padding-top: 40px; scroll-margin-top: 16px; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 30px; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+h2 .n { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 10px; }
+h3 { font-family: var(--f-display); font-weight: 500; font-size: 21px; margin: 28px 0 6px; text-wrap: balance; }
+h4 { font-family: var(--f-display); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); margin: 22px 0 4px; }
+p, li { max-width: 68ch; }
+p { margin: 10px 0; }
+ul, ol { padding-left: 22px; margin: 8px 0; }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+.part { margin-top: 56px; padding: 14px 0 0; border-top: 3px solid var(--ink); font-family: var(--f-display); text-transform: uppercase; letter-spacing: .14em; font-size: 13px; color: var(--ink-2); }
+
+.m { font-family: var(--f-mono); font-size: .9em; overflow-wrap: anywhere; }
+.formula { background-color: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 18px 18px; border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-family: var(--f-mono); font-size: 15.5px; line-height: 1.9; overflow-x: auto; max-width: 74ch; white-space: pre; }
+.formula .lbl { white-space: normal; }
+.formula .lbl { display: block; font-family: var(--f-display); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); line-height: 1.4; margin-bottom: 4px; }
+.key { background: var(--hl); padding: 0 4px; border-radius: 3px; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; max-width: 74ch; }
+.note strong:first-child { font-family: var(--f-display); }
+.warn { border-left-color: var(--s-cos); }
+.c-ing { color: var(--s-ing); font-weight: 600; }
+.c-cos { color: var(--s-cos); font-weight: 600; }
+.c-ben { color: var(--s-ben); font-weight: 600; }
+.good { color: var(--good); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+
+.tbl-wrap { overflow-x: auto; margin: 14px 0; max-width: 100%; }
+table { border-collapse: collapse; font-size: 15px; min-width: 100%; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--f-display); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); font-size: 14px; white-space: nowrap; }
+
+.ex { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 22px 24px 18px; margin-top: 24px; }
+@media (max-width: 520px) { .ex { padding: 18px 16px 14px; } }
+.ex-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.ex-head h2 { font-size: 26px; }
+.ex-tag { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.enun { font-style: italic; color: var(--ink-2); }
+.ex dl { margin: 6px 0 0; display: grid; gap: 4px; }
+.ex dt { font-family: var(--f-display); font-weight: 700; margin-top: 14px; color: var(--accent); }
+.ex dd { margin: 0; min-width: 0; }
+.ans { display: inline-block; font-family: var(--f-mono); font-size: 14.5px; background: var(--hl); padding: 1px 8px; border-radius: 4px; }
+
+figure.chart { margin: 18px 0 6px; position: relative; }
+figure.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+figure.chart figcaption { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--f-display); font-size: 13px; color: var(--ink-2); margin-bottom: 4px; }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.tip { position: absolute; pointer-events: none; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 6px 10px; font-family: var(--f-mono); font-size: 12.5px; line-height: 1.5; color: var(--ink); box-shadow: 0 4px 16px rgba(0,0,0,.12); white-space: nowrap; z-index: 2; }
+.tip b { font-family: var(--f-display); }
+.ax text { fill: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.ax line, .ax path { stroke: var(--rule); }
+.ax .zero { stroke: var(--ink-2); stroke-width: 1; }
+.lab { font-family: var(--f-display); font-size: 12px; fill: var(--ink-2); }
+.dotlab { font-family: var(--f-mono); font-size: 11px; fill: var(--ink); }
+
+.lab-tool { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; margin-top: 18px; }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px 16px; }
+.ctrls label { display: grid; gap: 4px; font-family: var(--f-display); font-size: 13px; color: var(--ink-2); }
+.ctrls input, .ctrls select { font-family: var(--f-mono); font-size: 15px; padding: 7px 9px; border: 1px solid var(--rule); border-radius: 7px; background: var(--bg); color: var(--ink); width: 100%; }
+.ctrls input:focus-visible, .ctrls select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.presets button { font-family: var(--f-display); font-size: 13px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
+.presets button:hover, .presets button:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 16px; }
+.stat { border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.stat .k { font-family: var(--f-display); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.stat .v { font-family: var(--f-mono); font-size: 18px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat .s { font-size: 13px; color: var(--ink-2); }
+
+.cheat { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
+.cheat > div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.cheat h4 { margin: 0 0 6px; }
+.cheat p { font-family: var(--f-mono); font-size: 14px; margin: 4px 0; overflow-wrap: anywhere; }
+.steps { counter-reset: s; list-style: none; padding: 0; }
+.steps li { counter-increment: s; position: relative; padding-left: 38px; margin: 10px 0; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: var(--f-display); font-size: 13px; display: grid; place-items: center; }
+footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Índice">
+  <h2>Índice</h2>
+  <ol>
+    <li class="grp">Teoría</li>
+    <li><a href="#t1">1 · Funciones económicas</a></li>
+    <li><a href="#t2">2 · La parábola</a></li>
+    <li><a href="#t3">3 · Umbral y óptimo</a></li>
+    <li><a href="#t4">4 · Precio mínimo</a></li>
+    <li><a href="#t5">5 · Cambios de escenario</a></li>
+    <li><a href="#t6">6 · Demanda e ingresos</a></li>
+    <li><a href="#t7">7 · Análisis marginal</a></li>
+    <li><a href="#t8">8 · Coste medio</a></li>
+    <li><a href="#t9">9 · Método de examen</a></li>
+    <li class="grp">Ejercicios resueltos</li>
+    <li><a href="#e1">Space Egg</a></li>
+    <li><a href="#e2">Coccinelle</a></li>
+    <li><a href="#e3">Bally</a></li>
+    <li><a href="#e4">Tommy</a></li>
+    <li><a href="#e5">Inmobiliaria Barcelona</a></li>
+    <li class="grp">Herramientas</li>
+    <li><a href="#lab">Calculadora</a></li>
+    <li><a href="#form">Formulario</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <p class="eyebrow">Matemáticas · Departament de Mètodes Quantitatius</p>
+  <h1>Costes, ingresos y beneficios</h1>
+  <p class="lede">Apuntes completos del bloque de modelización económica con funciones: teoría, fórmulas, cómo razonar cada apartado y los cinco ejercicios de clase resueltos paso a paso con sus gráficas.</p>
+  <div class="hero-eq">
+    <span><b class="c-cos">C(q)</b> = aq² + bq + c</span>
+    <span><b class="c-ing">I(q)</b> = p·q</span>
+    <span><b class="c-ben">B(q)</b> = I(q) − C(q)</span>
+  </div>
+</header>
+
+<div class="part">Parte I · Teoría</div>
+
+<section id="t1">
+  <h2><span class="n">1</span>Las tres funciones económicas</h2>
+  <p>En todo el bloque, <span class="m">q</span> es la <strong>cantidad producida</strong> (unidades) y supondremos que todo lo que se produce se vende. Como no se pueden producir cantidades negativas, el dominio económico siempre es <span class="m">q ≥ 0</span>.</p>
+
+  <h3>Función de costes C(q)</h3>
+  <p>Lo que cuesta fabricar <span class="m">q</span> unidades. En los ejercicios aparece casi siempre como un polinomio de grado 2:</p>
+  <div class="formula"><span class="lbl">Coste total</span>C(q) = <span class="key">aq²</span> + <span class="key">bq</span> + <span class="key">c</span>      con a &gt; 0, b &gt; 0, c &gt; 0</div>
+  <p>Cada término tiene una interpretación económica que siempre preguntan en el apartado a):</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Término</th><th>Nombre</th><th>Interpretación</th><th>Ejemplos</th></tr></thead>
+    <tbody>
+      <tr><td class="m">c</td><td>Coste fijo (CF)</td><td>No depende de <span class="m">q</span>: se paga aunque no se produzca nada. Es <span class="m">C(0)</span>.</td><td>Alquiler de la nave, maquinaria, seguros, sueldos de estructura.</td></tr>
+      <tr><td class="m">bq</td><td>Coste variable proporcional</td><td>Crece al mismo ritmo que la producción: cada unidad cuesta <span class="m">b</span> € más.</td><td>Materia prima (piel, tela), piezas, embalaje, transporte por unidad.</td></tr>
+      <tr><td class="m">aq²</td><td>Coste variable cuadrático (congestión)</td><td>Crece más deprisa que la producción. Recoge las <strong>deseconomías de escala</strong>: producir mucho satura la fábrica.</td><td>Horas extra, turnos de noche, averías, desgaste, mermas, coordinación.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Coste variable: <span class="m">CV(q) = aq² + bq</span>. Coste total = CF + CV.</p>
+
+  <h3>Función de ingresos I(q)</h3>
+  <p>Lo que se cobra por vender <span class="m">q</span> unidades. Si el precio <span class="m">p</span> es fijo:</p>
+  <div class="formula"><span class="lbl">Ingreso total con precio constante</span>I(q) = p · q</div>
+  <p>Es una recta que pasa por el origen con pendiente <span class="m">p</span>: cada unidad vendida aporta <span class="m">p</span> euros. Si el precio depende de la cantidad (demanda), el ingreso deja de ser una recta y pasa a ser una parábola; lo vemos en el <a href="#t6">tema 6</a>.</p>
+
+  <h3>Función de beneficios B(q)</h3>
+  <div class="formula"><span class="lbl">Beneficio</span>B(q) = I(q) − C(q) = pq − (aq² + bq + c)
+                 = <span class="key">−aq² + (p − b)q − c</span></div>
+  <p>Fíjate en tres cosas que se cumplen siempre con estos modelos:</p>
+  <ul>
+    <li><span class="m">B(0) = −c</span>: si no produces, pierdes el coste fijo.</li>
+    <li>El coeficiente de <span class="m">q²</span> es <span class="m">−a &lt; 0</span>, así que el beneficio es una <strong>parábola hacia abajo</strong> (cóncava, ∩): tiene un máximo.</li>
+    <li><span class="m">B(q) &gt; 0</span> ⇔ <span class="m">I(q) &gt; C(q)</span> ⇔ la recta de ingresos está por encima de la curva de costes.</li>
+  </ul>
+</section>
+
+<section id="t2">
+  <h2><span class="n">2</span>Repaso de la función cuadrática</h2>
+  <p>Todo el bloque se reduce a estudiar parábolas <span class="m">f(q) = Aq² + Bq + C</span>. Lo imprescindible:</p>
+  <div class="formula"><span class="lbl">Vértice</span>q<sub>v</sub> = −B / (2A)        f(q<sub>v</sub>) = valor máximo (A&lt;0) o mínimo (A&gt;0)</div>
+  <div class="formula"><span class="lbl">Raíces (cortes con el eje horizontal)</span>q = ( −B ± √Δ ) / (2A)        Δ = B² − 4AC</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Discriminante</th><th>Raíces</th><th>Lectura económica para B(q)</th></tr></thead>
+    <tbody>
+      <tr><td class="m">Δ &gt; 0</td><td>Dos raíces q₁ &lt; q₂</td><td>Hay beneficios entre q₁ y q₂ (umbral de rentabilidad y capacidad máxima rentable).</td></tr>
+      <tr><td class="m">Δ = 0</td><td>Una raíz doble</td><td>Caso límite: el beneficio máximo es exactamente 0. Solo se cubren costes.</td></tr>
+      <tr><td class="m">Δ &lt; 0</td><td>Ninguna raíz real</td><td>La parábola nunca toca el eje: <strong>pérdidas para cualquier producción</strong>.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Otras propiedades útiles: la parábola es simétrica respecto al vértice, así que <span class="m">q<sub>v</sub> = (q₁ + q₂)/2</span> (el óptimo está justo en medio de los dos umbrales). Además <span class="m">A &gt; 0</span> ⇒ convexa (∪) y <span class="m">A &lt; 0</span> ⇒ cóncava (∩).</p>
+  <div class="note"><strong>Truco de comprobación.</strong> Cuando calcules q₁ y q₂, comprueba que su media coincide con el vértice. Si no, hay un error de signo.</div>
+</section>
+
+<section id="t3">
+  <h2><span class="n">3</span>Producción mínima y producción óptima</h2>
+  <h3>Producción mínima (umbral de rentabilidad o punto muerto)</h3>
+  <p>Es la menor cantidad a partir de la cual hay beneficios: la primera raíz de <span class="m">B(q) = 0</span>, es decir, el primer punto donde <span class="m">I(q) = C(q)</span>. Gráficamente, el primer corte de la recta de ingresos con la curva de costes.</p>
+  <div class="formula"><span class="lbl">Intervalo de beneficios positivos</span>B(q) &gt; 0  ⇔  q₁ &lt; q &lt; q₂      con q₁, q₂ raíces de −aq² + (p−b)q − c = 0</div>
+  <p>La segunda raíz q₂ es la producción <strong>máxima</strong> rentable: más allá, los costes de congestión se comen el margen.</p>
+  <div class="note warn"><strong>Unidades enteras.</strong> Si q son unidades físicas (maletines, bolsos), redondea <em>hacia dentro</em> del intervalo: q₁ hacia arriba y q₂ hacia abajo. Ej.: q₁ = 40,45 ⇒ mínimo recomendado 41 unidades. Comprueba con B(40) y B(41).</div>
+
+  <h3>Producción óptima</h3>
+  <p>La que maximiza el beneficio: el vértice de la parábola. Se puede obtener de dos formas equivalentes:</p>
+  <div class="formula"><span class="lbl">Por el vértice</span>q* = −(p − b) / (2·(−a)) = <span class="key">(p − b) / (2a)</span>
+<span class="lbl" style="margin-top:8px">Por la derivada (tema 7)</span>B′(q) = −2aq + (p − b) = 0   ⇒   q* = (p − b) / (2a)</div>
+  <p>Beneficio máximo: <span class="m">B(q*)</span>. Si q tiene que ser entero, evalúa B en los dos enteros más cercanos y quédate con el mayor.</p>
+  <figure class="chart" id="fig-teoria"></figure>
+</section>
+
+<section id="t4">
+  <h2><span class="n">4</span>Precio mínimo de venta</h2>
+  <p>Pregunta típica: <em>«Determinar el precio mínimo de venta para asegurar que haya beneficios en algún intervalo de producción.»</em></p>
+  <p>Que haya beneficios en algún intervalo significa que la parábola <span class="m">B(q)</span> sube por encima del eje, es decir, que la ecuación <span class="m">B(q) = 0</span> tiene dos raíces: <span class="m">Δ &gt; 0</span>.</p>
+  <div class="formula"><span class="lbl">Deducción</span>B(q) = −aq² + (p − b)q − c
+Δ = (p − b)² − 4·(−a)·(−c) = (p − b)² − 4ac &gt; 0
+(p − b)² &gt; 4ac   ⇒   p − b &gt; 2√(ac)
+<span class="key">p<sub>mín</sub> = b + 2√(a·c)</span></div>
+  <p>Con <span class="m">p = p<sub>mín</sub></span> el beneficio máximo es exactamente 0 (la recta de ingresos es <strong>tangente</strong> a la curva de costes). El precio tiene que ser estrictamente mayor.</p>
+  <div class="note"><strong>Interpretación.</strong> p<sub>mín</sub> coincide con el mínimo del <a href="#t8">coste medio</a>: no puedes ganar dinero si el precio no supera lo que, en el mejor de los casos, te cuesta cada unidad.</div>
+</section>
+
+<section id="t5">
+  <h2><span class="n">5</span>Qué pasa si cambia el escenario</h2>
+  <h3>Sube o baja el precio</h3>
+  <ul>
+    <li><strong>Sube p</strong>: la recta de ingresos se empina. El intervalo de beneficios se ensancha (q₁ baja, q₂ sube), el óptimo <span class="m">q* = (p−b)/(2a)</span> aumenta y el beneficio máximo crece.</li>
+    <li><strong>Baja p</strong>: el intervalo se estrecha. Si cae por debajo de p<sub>mín</sub>, Δ &lt; 0 y hay pérdidas en toda producción.</li>
+    <li>Si <span class="m">p ≤ b</span>, ni siquiera se cubre el coste variable de la primera unidad: <span class="m">q* ≤ 0</span>, lo mejor (o lo menos malo) es no producir.</li>
+  </ul>
+  <h3>Descuentos</h3>
+  <p>Un descuento del <span class="m">d %</span> por artículo equivale a un nuevo precio <span class="m">p′ = p·(1 − d/100)</span>. Después se repite todo el análisis con p′. 50 % de 150 € ⇒ p′ = 75 €; 70 % ⇒ p′ = 45 €.</p>
+  <h3>Coste fijo adicional K</h3>
+  <p>Ejemplo: mantenimiento de maquinaria. El nuevo beneficio es <span class="m">B(q) − K</span>: la parábola baja K unidades sin moverse a izquierda ni derecha.</p>
+  <ul>
+    <li>La <strong>producción óptima no cambia</strong> (el vértice está en la misma q, porque K no afecta a la derivada).</li>
+    <li>El <strong>beneficio máximo baja</strong> exactamente K.</li>
+    <li>La <strong>producción mínima sube</strong> y la máxima baja: el intervalo rentable se estrecha. Si K ≥ B<sub>máx</sub>, desaparece.</li>
+    <li>El precio mínimo sube a <span class="m">b + 2√(a·(c + K))</span>.</li>
+  </ul>
+  <div class="note warn"><strong>Pérdidas inevitables.</strong> Si Δ &lt; 0, la producción q* sigue siendo la que <em>minimiza</em> pérdidas. A corto plazo conviene producir si el precio supera el coste variable medio (las pérdidas son menores que el coste fijo); a largo plazo hay que cerrar o cambiar el modelo.</div>
+</section>
+
+<section id="t6">
+  <h2><span class="n">6</span>Modelizar la demanda y el ingreso</h2>
+  <p>Cuando el precio no es fijo, sino que <strong>al subir el precio se vende menos</strong>, hay que construir la función de demanda. Planteamiento general a partir de un enunciado verbal:</p>
+  <ol class="steps">
+    <li>Identifica una situación de partida: con precio <span class="m">p₀</span> se venden <span class="m">q₀</span> unidades.</li>
+    <li>Identifica la regla de cambio: cada aumento de <span class="m">Δp</span> € hace perder <span class="m">Δq</span> unidades.</li>
+    <li>Llama <span class="m">x</span> al número de aumentos. Entonces <span class="m">p = p₀ + Δp·x</span> y <span class="m">q = q₀ − Δq·x</span>.</li>
+    <li>Ingreso: <span class="m">I = p · q = (p₀ + Δp·x)(q₀ − Δq·x)</span>, una parábola hacia abajo en x.</li>
+    <li>Optimiza con el vértice y traduce el resultado a precio y cantidad.</li>
+  </ol>
+  <p>También se puede escribir la demanda directamente como recta <span class="m">q(p) = q₀ − (Δq/Δp)·(p − p₀)</span> y el ingreso como <span class="m">I(p) = p · q(p)</span>.</p>
+  <div class="note"><strong>Idea clave.</strong> Subir el precio tiene dos efectos opuestos: cobras más por cada unidad, pero vendes menos unidades. El precio óptimo equilibra ambos. Con demanda lineal <span class="m">q = α − βp</span>, el ingreso máximo se alcanza en <span class="m">p* = α/(2β)</span>, la mitad del precio que anula la demanda.</div>
+</section>
+
+<section id="t7">
+  <h2><span class="n">7</span>Análisis marginal y derivadas</h2>
+  <p>«Marginal» significa <strong>lo que cambia una función cuando producimos una unidad más</strong>. Matemáticamente es la derivada.</p>
+  <div class="formula"><span class="lbl">Funciones marginales</span>Coste marginal       CMg(q) = C′(q)
+Ingreso marginal     IMg(q) = I′(q)
+Beneficio marginal   BMg(q) = B′(q) = I′(q) − C′(q)</div>
+  <h3>Reglas de derivación que necesitas</h3>
+  <div class="formula">(k)′ = 0          (kq)′ = k          (q<sup>n</sup>)′ = n·q<sup>n−1</sup>          (f ± g)′ = f′ ± g′
+C(q) = aq² + bq + c   ⇒   C′(q) = 2aq + b
+B(q) = −aq² + (p−b)q − c   ⇒   B′(q) = −2aq + (p − b)</div>
+  <p>El coste fijo desaparece al derivar: no influye en ninguna decisión marginal (por eso K no cambia el óptimo).</p>
+  <h3>Cómo interpretar un valor marginal</h3>
+  <p>Si <span class="m">B′(200) = 143,125</span>, la frase de examen es: <em>«Cuando se producen 200 unidades, fabricar una unidad adicional aumenta el beneficio en aproximadamente 143,13 €.»</em> Siempre con las unidades (€ por unidad) y con «aproximadamente».</p>
+  <ul>
+    <li><span class="m">B′(q) &gt; 0</span>: conviene producir más (el beneficio aún crece).</li>
+    <li><span class="m">B′(q) &lt; 0</span>: se está produciendo demasiado.</li>
+    <li><span class="m">B′(q) = 0</span> ⇔ <span class="m">IMg = CMg</span>: <strong>condición de óptimo</strong>. Con precio fijo: <span class="m">p = C′(q)</span>.</li>
+  </ul>
+  <h3>Crecimiento y curvatura</h3>
+  <p>Para «indicar las variaciones» de una función: estudia el signo de la derivada. <span class="m">f′ &gt; 0</span> ⇒ creciente; <span class="m">f′ &lt; 0</span> ⇒ decreciente. Y la segunda derivada da la curvatura: <span class="m">f″ &gt; 0</span> ⇒ convexa (∪), <span class="m">f″ &lt; 0</span> ⇒ cóncava (∩). Para <span class="m">C(q) = aq² + bq + c</span>: <span class="m">C″ = 2a &gt; 0</span>, siempre convexa.</p>
+  <h3>Recta tangente y aproximación lineal</h3>
+  <div class="formula"><span class="lbl">Recta tangente en q = q₀</span>y = f(q₀) + f′(q₀) · (q − q₀)
+<span class="lbl" style="margin-top:8px">Aproximación para una unidad más</span>f(q₀ + 1) ≈ f(q₀) + f′(q₀)</div>
+  <p>La tangente es la mejor recta que se parece a la curva cerca de q₀. Para una parábola el error de aproximar con una unidad es exactamente el coeficiente de q² en valor absoluto (para B(q), el error es <span class="m">a</span>): la tangente a una función cóncava queda por encima, así que <strong>sobreestima</strong> un poco.</p>
+</section>
+
+<section id="t8">
+  <h2><span class="n">8</span>Coste medio (complemento)</h2>
+  <p>Aunque no aparezca en todos los ejercicios, ayuda a entender el precio mínimo:</p>
+  <div class="formula"><span class="lbl">Coste medio (por unidad)</span>CMe(q) = C(q) / q = aq + b + c/q
+Mínimo:  CMe′(q) = a − c/q² = 0   ⇒   <span class="key">q = √(c/a)</span>
+CMe<sub>mín</sub> = 2√(ac) + b = p<sub>mín</sub></div>
+  <p>En el mínimo del coste medio se cumple <span class="m">CMg = CMe</span>: la curva de coste marginal corta a la de coste medio justo en su mínimo.</p>
+  <p>Coste variable medio: <span class="m">CVMe(q) = aq + b</span>, cuyo mínimo (en q→0) es <span class="m">b</span>. Si <span class="m">p &gt; b</span>, producir reduce pérdidas a corto plazo.</p>
+</section>
+
+<section id="t9">
+  <h2><span class="n">9</span>Método para un ejercicio de examen</h2>
+  <ol class="steps">
+    <li>Escribe C(q) e I(q) y obtén <span class="m">B(q) = −aq² + (p−b)q − c</span> agrupando términos con cuidado con los signos.</li>
+    <li>Interpreta: <span class="m">c</span> fijo, <span class="m">bq</span> variable proporcional, <span class="m">aq²</span> congestión; <span class="m">p</span> ingreso por unidad.</li>
+    <li>Resuelve <span class="m">B(q) = 0</span>: q₁ (producción mínima) y q₂ (máxima). Redondea hacia dentro si son unidades.</li>
+    <li>Calcula el vértice <span class="m">q* = (p−b)/(2a)</span> y <span class="m">B(q*)</span>. Comprueba <span class="m">q* = (q₁+q₂)/2</span>.</li>
+    <li>Gráfica: costes (parábola ∪ que empieza en c), ingresos (recta desde el origen), beneficios (parábola ∩ que empieza en −c). Marca q₁, q₂ y q* en el eje.</li>
+    <li>Escenarios: cambia p (o aplica descuento) o suma K al coste fijo y repite 3–4. Usa <span class="m">p<sub>mín</sub> = b + 2√(ac)</span>.</li>
+    <li>Concluye en lenguaje económico: «la empresa debe producir entre … y … unidades; el beneficio máximo es … € con … unidades».</li>
+  </ol>
+</section>
+
+<div class="part">Parte II · Ejercicios resueltos</div>
+
+<!-- ============ SPACE EGG ============ -->
+<article class="ex" id="e1">
+  <div class="ex-head"><h2>Alibaba Space Egg</h2><span class="ex-tag">20/09/2023 · Marginal y tangente</span></div>
+  <p class="enun">Ingresos y costes por la fabricación de q unidades: I(q) = 250q, C(q) = 0,225q² + 16,875q + 4578.</p>
+  <figure class="chart" id="fig-space"></figure>
+  <dl>
+    <dt>a) Función de ingresos</dt>
+    <dd><span class="c-ing">I(q) = 250q</span> es una recta que pasa por el origen con pendiente 250: cada Space Egg vendido aporta 250 €. Si no se vende nada no se ingresa nada.</dd>
+    <dt>b) Función de costes</dt>
+    <dd><span class="c-cos">C(q)</span> es una parábola convexa que corta al eje vertical en 4578 € (coste fijo: se paga aunque q = 0). Es creciente para q ≥ 0, porque <span class="m">C′(q) = 0,45q + 16,875 &gt; 0</span>: cada unidad extra cuesta más que la anterior. El término 16,875q son costes variables proporcionales y 0,225q² los costes de congestión al producir mucho.</dd>
+    <dt>c) Intervalo de beneficios positivos</dt>
+    <dd>
+      <div class="formula">B(q) = 250q − 0,225q² − 16,875q − 4578 = −0,225q² + 233,125q − 4578
+Δ = 233,125² − 4·0,225·4578 = 54 347,27 − 4 120,2 = 50 227,07   √Δ ≈ 224,11
+q = (−233,125 ± 224,11) / (−0,45)   ⇒   q₁ ≈ 20,02   q₂ ≈ 1016,09</div>
+      Beneficio positivo para <span class="ans">20,02 &lt; q &lt; 1016,09</span>, es decir, entre <strong>21 y 1016 unidades</strong>. Por debajo de 21 las ventas no cubren el coste fijo; por encima de 1016 los costes de congestión superan el ingreso. Gráficamente, es la zona donde la recta azul queda por encima de la parábola naranja.
+    </dd>
+    <dt>d) Beneficio marginal</dt>
+    <dd>
+      <div class="formula">B′(q) = −0,45q + 233,125</div>
+      Es una recta decreciente: cada unidad adicional aporta algo menos de beneficio que la anterior. Indica cuánto cambia aproximadamente el beneficio al producir una unidad más. Mientras <span class="m">B′ &gt; 0</span> (q &lt; 518,06) conviene aumentar la producción; se anula en <span class="m">q = 233,125/0,45 ≈ 518,06</span>, la producción óptima (B<sub>máx</sub> ≈ 55 807,85 €, con 518 unidades); y a partir de ahí cada unidad extra reduce el beneficio. Equivalentemente: 250 = IMg = CMg = 0,45q + 16,875.
+    </dd>
+    <dt>e) Recta tangente en q = 200 y aproximación</dt>
+    <dd>
+      <div class="formula">B(200) = −0,225·40 000 + 233,125·200 − 4578 = −9000 + 46 625 − 4578 = 33 047 €
+B′(200) = −0,45·200 + 233,125 = 143,125 €/unidad
+Tangente:  y = 33 047 + 143,125·(q − 200)   ⇔   y = 143,125q + 4422</div>
+      Interpretación: produciendo 200 unidades el beneficio es 33 047 € y, en ese punto, aumenta a razón de unos 143,13 € por cada unidad adicional.<br>
+      Aproximación: <span class="m">B(201) ≈ 33 047 + 143,125 = 33 190,125 €</span>. Valor real: <span class="m">B(201) = 33 189,90 €</span>. Error = <span class="ans">0,225 €</span> (0,0007 %), justo el coeficiente <span class="m">a</span>. La tangente sobreestima un poco porque B es cóncava.
+    </dd>
+  </dl>
+</article>
+
+<!-- ============ COCCINELLE ============ -->
+<article class="ex" id="e2">
+  <div class="ex-head"><h2>Coccinelle · bolso de hombro</h2><span class="ex-tag">27/09/2022 · Descuentos</span></div>
+  <p class="enun">C(q) = 0,2q² + 2q + 500. Precio de venta inicial 150 €.</p>
+  <dl>
+    <dt>a) Coste marginal</dt>
+    <dd><span class="m">C′(q) = 0,4q + 2</span>. Recta creciente que empieza en 2 €: la primera unidad cuesta unos 2 € adicionales y cada unidad posterior cuesta 0,40 € más que la anterior. Por ejemplo C′(100) = 42 € y C′(370) = 150 €.</dd>
+    <dt>b) Variaciones de C(q)</dt>
+    <dd>Como <span class="m">C′(q) = 0,4q + 2 &gt; 0</span> para todo q ≥ 0, C es <strong>estrictamente creciente</strong>: producir más siempre cuesta más. <span class="m">C″(q) = 0,4 &gt; 0</span> ⇒ convexa, crece cada vez más deprisa. El vértice de la parábola está en q = −5, fuera del dominio económico, así que no hay mínimo en q &gt; 0; el valor mínimo es C(0) = 500 € (coste fijo).</dd>
+    <dt>c) Ingresos con p = 150 €</dt>
+    <dd><span class="c-ing">I(q) = 150q</span>, recta por el origen.</dd>
+    <dt>d) Intervalo de beneficios</dt>
+    <dd>
+      <div class="formula">B(q) = −0,2q² + 148q − 500     Δ = 148² − 400 = 21 504     √Δ ≈ 146,64
+q₁ ≈ 3,39    q₂ ≈ 736,61    q* = 148 / 0,4 = 370    B(370) = 26 880 €</div>
+      Beneficios entre <span class="ans">4 y 736 unidades</span>; óptimo <span class="ans">370 unidades, 26 880 €</span>.
+    </dd>
+    <dt>e) Descuento del 50 % ⇒ p′ = 75 €</dt>
+    <dd>
+      <div class="formula">B(q) = −0,2q² + 73q − 500     Δ = 5329 − 400 = 4929     √Δ ≈ 70,21
+q₁ ≈ 6,98    q₂ ≈ 358,02    q* = 73 / 0,4 = 182,5    B(182,5) = 6161,25 €</div>
+      Intervalo: <span class="ans">7 a 358 unidades</span>. Óptimo: 182 o 183 unidades (ambas dan 6161,20 €). El beneficio máximo cae un 77 % y hay que vender casi la mitad.
+    </dd>
+    <dt>f) Descuento del 70 % ⇒ p′ = 45 €</dt>
+    <dd>
+      <div class="formula">B(q) = −0,2q² + 43q − 500     Δ = 1849 − 400 = 1449     √Δ ≈ 38,07
+q₁ ≈ 12,34    q₂ ≈ 202,66    q* = 43 / 0,4 = 107,5    B(107,5) = 1811,25 €</div>
+      Intervalo: <span class="ans">13 a 202 unidades</span>. Óptimo: 107 o 108 unidades (1811,20 €). Aún hay beneficios porque 45 € &gt; p<sub>mín</sub> = 2 + 2√(0,2·500) = <strong>22 €</strong>. Un descuento superior al 85,3 % (p &lt; 22 €) haría imposible ganar dinero.
+    </dd>
+  </dl>
+  <figure class="chart" id="fig-cocc"></figure>
+</article>
+
+<!-- ============ BALLY ============ -->
+<article class="ex" id="e3">
+  <div class="ex-head"><h2>Bally · maletín</h2><span class="ex-tag">29/09/2023 · Escenarios completos</span></div>
+  <p class="enun">C(q) = 0,225q² + 27,435q + 2567. Precio inicial 100 €/unidad.</p>
+  <figure class="chart" id="fig-bally"></figure>
+  <dl>
+    <dt>a) Interpretación</dt>
+    <dd><strong>2567 €</strong>: costes fijos (alquiler del taller, amortización de máquinas, sueldos fijos). <strong>27,435q</strong>: coste variable proporcional, unos 27,44 € por maletín en piel, herrajes y mano de obra directa. <strong>0,225q²</strong>: costes de congestión que se disparan al producir mucho (horas extra, saturación, desgaste).</dd>
+    <dt>b) Ingresos y beneficios</dt>
+    <dd><span class="m">I(q) = 100q</span> &nbsp;·&nbsp; <span class="m">B(q) = −0,225q² + 72,565q − 2567</span></dd>
+    <dt>c) Gráfica</dt>
+    <dd>Ver figura: costes ∪ desde 2567, ingresos recta desde 0, beneficios ∩ desde −2567.</dd>
+    <dt>d) Producción mínima</dt>
+    <dd>
+      <div class="formula">Δ = 72,565² − 4·0,225·2567 = 5265,68 − 2310,3 = 2955,38     √Δ ≈ 54,36
+q₁ = (−72,565 + 54,36) / (−0,45) ≈ 40,45     q₂ ≈ 282,06</div>
+      Mínimo recomendado <span class="ans">41 maletines</span> (B(40) = −24,40 €, B(41) = +29,94 €). Máximo rentable 282.
+    </dd>
+    <dt>e) Producción óptima</dt>
+    <dd><span class="m">q* = 72,565 / 0,45 ≈ 161,26</span> ⇒ <span class="ans">161 maletines, B ≈ 3283,74 €</span>.</dd>
+    <dt>f) Precio 240 €</dt>
+    <dd><span class="m">B(q) = −0,225q² + 212,565q − 2567</span>. Raíces 12,23 y 932,50 ⇒ beneficios de <strong>13 a 932</strong> unidades. Óptimo <span class="m">q* ≈ 472,37</span> ⇒ <span class="ans">472 maletines, 47 637,28 €</span>. El intervalo se ensancha muchísimo y el beneficio se multiplica por 14.</dd>
+    <dt>g) Precio 50 €</dt>
+    <dd><span class="m">B(q) = −0,225q² + 22,565q − 2567</span>. <span class="m">Δ = 509,18 − 2310,3 = −1801,12 &lt; 0</span>: <span class="bad">pérdidas para cualquier producción</span>. La pérdida mínima se da en q ≈ 50 (−2001,25 €). Como 50 € supera el coste variable medio mínimo (27,44 €), a corto plazo producir 50 unidades pierde menos que cerrar (−2567 €); a largo plazo no es viable.</dd>
+    <dt>h) Precio mínimo</dt>
+    <dd><span class="m">p<sub>mín</sub> = 27,435 + 2√(0,225·2567) = 27,435 + 2·24,033 ≈ 75,50 €</span>. Hay que vender a <span class="ans">más de 75,50 €</span>.</dd>
+    <dt>i) Coste de mantenimiento de 3000 €</dt>
+    <dd>
+      <div class="formula">B(q) = −0,225q² + 72,565q − 5567     Δ = 5265,68 − 5010,3 = 255,38     √Δ ≈ 15,98
+q₁ ≈ 125,74     q₂ ≈ 196,77     q* = 161,26 (no cambia)     B(161) = 283,74 €</div>
+      Producción mínima <span class="ans">126 maletines</span>; óptima <span class="ans">161</span>, pero el beneficio máximo cae a 283,74 € (justo 3000 € menos). El margen es muy estrecho: de 126 a 196 unidades. El precio mínimo sube a 98,22 €, muy cerca de los 100 € actuales.
+    </dd>
+  </dl>
+</article>
+
+<!-- ============ TOMMY ============ -->
+<article class="ex" id="e4">
+  <div class="ex-head"><h2>Tommy · cartera</h2><span class="ex-tag">07/10/2024 · Escenarios completos</span></div>
+  <p class="enun">C(q) = 0,04q² + 12q + 1500. Precio inicial 190 €/unidad.</p>
+  <dl>
+    <dt>a) Interpretación</dt>
+    <dd><strong>1500 €</strong> costes fijos; <strong>12q</strong> 12 € de material y mano de obra por cartera; <strong>0,04q²</strong> costes de congestión, pequeños al principio (con 100 carteras son 400 €) pero dominantes con producciones grandes (con 3000 son 360 000 €).</dd>
+    <dt>b) Ingresos y beneficios</dt>
+    <dd><span class="m">I(q) = 190q</span> &nbsp;·&nbsp; <span class="m">B(q) = −0,04q² + 178q − 1500</span></dd>
+    <dt>c) Producción mínima y óptima</dt>
+    <dd>
+      <div class="formula">Δ = 178² − 4·0,04·1500 = 31 684 − 240 = 31 444     √Δ ≈ 177,32
+q₁ ≈ 8,44     q₂ ≈ 4441,56     q* = 178 / 0,08 = 2225     B(2225) = 196 525 €</div>
+      Mínimo <span class="ans">9 carteras</span>; óptimo <span class="ans">2225 carteras, 196 525 €</span>. Rentable hasta 4441.
+    </dd>
+    <dt>d) Precio 240 € y precio 12 €</dt>
+    <dd><strong>240 €</strong>: <span class="m">B = −0,04q² + 228q − 1500</span>, raíces 6,59 y 5693,41 ⇒ de 7 a 5693 carteras; óptimo <span class="m">q* = 2850</span>, <span class="ans">B = 323 400 €</span>.<br>
+    <strong>12 €</strong>: <span class="m">B = −0,04q² − 1500</span>, siempre negativo. El precio es igual al coste variable por unidad (b = 12), así que cada cartera ni siquiera cubre su propio coste: <span class="bad">no conviene producir nada</span> (q* = 0, pérdida = coste fijo 1500 €).</dd>
+    <dt>e) Precio mínimo</dt>
+    <dd><span class="m">p<sub>mín</sub> = 12 + 2√(0,04·1500) = 12 + 2√60 ≈ 27,49 €</span>.</dd>
+    <dt>f) Mantenimiento de 350 €</dt>
+    <dd><span class="m">B = −0,04q² + 178q − 1850</span>. Δ = 31 388, raíces 10,42 y 4439,58. Mínimo <span class="ans">11 carteras</span>; óptimo <span class="ans">2225</span> (no cambia) con B = 196 175 € (350 € menos). Aquí el efecto es pequeño porque el coste extra es poco comparado con el beneficio.</dd>
+  </dl>
+  <figure class="chart" id="fig-tommy"></figure>
+</article>
+
+<!-- ============ INMOBILIARIA ============ -->
+<article class="ex" id="e5">
+  <div class="ex-head"><h2>Inmobiliaria Barcelona</h2><span class="ex-tag">05/10/2022 · Modelizar la demanda</span></div>
+  <p class="enun">40 pisos. A 450 €/mes se ocupan todos; cada aumento de 40 € deja probablemente 1 piso vacío.</p>
+  <dl>
+    <dt>a) Demanda e ingresos</dt>
+    <dd>
+      Con x aumentos de 40 €: <span class="m">p = 450 + 40x</span> y pisos ocupados <span class="m">q = 40 − x</span>. Despejando <span class="m">x = (p − 450)/40</span>:
+      <div class="formula"><span class="lbl">Demanda</span>q(p) = 40 − (p − 450)/40 = 51,25 − p/40      (450 ≤ p ≤ 2050)
+<span class="lbl" style="margin-top:8px">Ingresos</span>I(p) = p · q(p) = 51,25p − p²/40
+I(x) = (450 + 40x)(40 − x) = 18 000 + 1150x − 40x²</div>
+      La demanda es una recta decreciente: a 2050 € no se alquilaría ningún piso. El ingreso es una parábola cóncava.
+    </dd>
+    <dt>b) Precio con el mismo ingreso que con todo ocupado</dt>
+    <dd>
+      Ingreso con todo ocupado: <span class="m">I = 450·40 = 18 000 €</span>.
+      <div class="formula">51,25p − p²/40 = 18 000   ⇒   p² − 2050p + 720 000 = 0
+p = (2050 ± √(4 202 500 − 2 880 000)) / 2 = (2050 ± 1150) / 2   ⇒   p = 450  o  <span class="key">p = 1600 €</span></div>
+      Cobrando <span class="ans">1600 €</span> se ingresan los mismos 18 000 € con solo <span class="m">q = 51,25 − 40 = 11,25</span> pisos ocupados (unos 28–29 vacíos). En términos enteros, x = 28,75 no es entero: con x = 28 (1570 €, 12 pisos) se ingresan 18 840 € y con x = 29 (1610 €, 11 pisos) 17 710 €.
+    </dd>
+    <dt>c) Precio óptimo</dt>
+    <dd>
+      <div class="formula">I′(p) = 51,25 − p/20 = 0   ⇒   p* = 1025 €    q = 25,625 pisos
+Versión entera:  I′(x) = 1150 − 80x = 0  ⇒  x = 14,375
+x = 14: p = 1010 €, 26 pisos, I = 26 260 €     x = 15: p = 1050 €, 25 pisos, I = 26 250 €</div>
+      Modelo continuo: <span class="m">p* = 1025 €</span>. Como los pisos son unidades enteras y la subida va en saltos de 40 €, lo recomendable es <span class="ans">1010 € al mes</span> con 26 pisos ocupados.
+    </dd>
+    <dt>d) Ingreso máximo</dt>
+    <dd>Modelo continuo: <span class="m">I(1025) = 1025 · 25,625 ≈ 26 265,63 €</span>. Con pisos enteros: <span class="ans">26 260 €/mes</span> (1010 € × 26). Es un 45,9 % más que con todo ocupado, aunque queden 14 pisos vacíos.</dd>
+  </dl>
+  <figure class="chart" id="fig-piso"></figure>
+</article>
+
+<div class="part">Parte III · Herramientas</div>
+
+<section id="lab">
+  <h2>Calculadora de escenarios</h2>
+  <p>Cambia los parámetros de cualquier ejercicio (o los tuyos) y comprueba tus resultados. Pasa el ratón o el dedo sobre la gráfica para leer los valores.</p>
+  <div class="lab-tool">
+    <div class="presets" role="group" aria-label="Cargar ejercicio">
+      <button type="button" data-p="0.225,16.875,4578,250,0,0">Space Egg</button>
+      <button type="button" data-p="0.2,2,500,150,0,0">Coccinelle</button>
+      <button type="button" data-p="0.225,27.435,2567,100,0,0">Bally</button>
+      <button type="button" data-p="0.04,12,1500,190,0,0">Tommy</button>
+    </div>
+    <div class="ctrls">
+      <label for="in-a">a (coef. de q²)<input id="in-a" type="number" step="0.001" value="0.225"></label>
+      <label for="in-b">b (coef. de q)<input id="in-b" type="number" step="0.001" value="27.435"></label>
+      <label for="in-c">c (coste fijo, €)<input id="in-c" type="number" step="1" value="2567"></label>
+      <label for="in-p">Precio p (€)<input id="in-p" type="number" step="1" value="100"></label>
+      <label for="in-d">Descuento (%)<input id="in-d" type="number" step="1" min="0" max="100" value="0"></label>
+      <label for="in-k">Coste extra K (€)<input id="in-k" type="number" step="1" value="0"></label>
+    </div>
+    <div class="stats" id="lab-stats"></div>
+    <figure class="chart" id="fig-lab"></figure>
+  </div>
+</section>
+
+<section id="form">
+  <h2>Formulario resumen</h2>
+  <div class="cheat">
+    <div><h4>Funciones</h4>
+      <p>C(q) = aq² + bq + c</p><p>I(q) = p·q</p><p>B(q) = −aq² + (p−b)q − c</p></div>
+    <div><h4>Umbrales</h4>
+      <p>B(q) = 0 ⇒ q = (−B ± √Δ)/(2A)</p><p>Δ = (p−b)² − 4ac</p><p>Rentable si q₁ &lt; q &lt; q₂</p></div>
+    <div><h4>Óptimo</h4>
+      <p>q* = (p − b)/(2a)</p><p>q* = (q₁ + q₂)/2</p><p>B′(q*) = 0 ⇔ p = C′(q*)</p></div>
+    <div><h4>Precio mínimo</h4>
+      <p>p<sub>mín</sub> = b + 2√(a·c)</p><p>Con K: b + 2√(a(c+K))</p><p>= CMe mínimo</p></div>
+    <div><h4>Marginales</h4>
+      <p>C′(q) = 2aq + b</p><p>B′(q) = −2aq + (p − b)</p><p>f(q₀+1) ≈ f(q₀) + f′(q₀)</p></div>
+    <div><h4>Tangente</h4>
+      <p>y = f(q₀) + f′(q₀)(q − q₀)</p><p>Error con 1 unidad (parábola) = |a|</p></div>
+    <div><h4>Demanda lineal</h4>
+      <p>p = p₀ + Δp·x ; q = q₀ − Δq·x</p><p>I = p · q</p><p>p* = α/(2β) si q = α − βp</p></div>
+    <div><h4>Escenarios</h4>
+      <p>Descuento d%: p′ = p(1 − d)</p><p>+K fijo: q* igual, B<sub>máx</sub> − K</p><p>Δ &lt; 0: pérdidas siempre</p></div>
+  </div>
+</section>
+
+<footer>Apuntes elaborados a partir de los enunciados de clase del Dr. Octasiano Valerio (Matemáticas, Departament de Mètodes Quantitatius). Resultados redondeados a dos decimales; las cantidades recomendadas se dan en unidades enteras.</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = (v, d = 2) => (Math.abs(v) < 1e-9 ? 0 : v).toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: d });
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function niceStep(span, n) { const raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), r = raw / mag; return (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag; }
+
+  // series: [{name, f, color(var), shade?}]  marks: [{x, y, label, color}]
+  function plot(fig, opt) {
+    fig.innerHTML = "";
+    const W = 720, H = opt.h || 360, m = { l: 64, r: 92, t: 14, b: 40 };
+    const xs = [], N = 240;
+    for (let i = 0; i <= N; i++) xs.push(opt.x0 + (opt.x1 - opt.x0) * i / N);
+    let ymin = opt.ymin, ymax = opt.ymax;
+    if (ymin === undefined || ymax === undefined) {
+      let lo = Infinity, hi = -Infinity;
+      opt.series.forEach(s => xs.forEach(x => { const y = s.f(x); lo = Math.min(lo, y); hi = Math.max(hi, y); }));
+      if (ymin === undefined) ymin = Math.min(0, lo);
+      if (ymax === undefined) ymax = Math.max(0, hi);
+      const pad = (ymax - ymin) * 0.06; ymin -= ymin < 0 ? pad : 0; ymax += pad;
+    }
+    const sx = x => m.l + (x - opt.x0) / (opt.x1 - opt.x0) * (W - m.l - m.r);
+    const sy = y => m.t + (ymax - y) / (ymax - ymin) * (H - m.t - m.b);
+    const leg = document.createElement("div"); leg.className = "legend";
+    opt.series.forEach(s => { const sp = document.createElement("span"); sp.innerHTML = `<i style="background:var(${s.color})"></i>${s.name}`; leg.appendChild(sp); });
+    fig.appendChild(leg);
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opt.aria || "Gráfica" }, fig);
+    const defs = el("defs", {}, svg);
+    const cid = "clip" + Math.random().toString(36).slice(2);
+    const cp = el("clipPath", { id: cid }, defs); el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b }, cp);
+    // axes / grid
+    const ax = el("g", { class: "ax" }, svg);
+    const ys = niceStep(ymax - ymin, 6), xst = niceStep(opt.x1 - opt.x0, 7);
+    for (let v = Math.ceil(ymin / ys) * ys; v <= ymax + 1e-9; v += ys) {
+      el("line", { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), "stroke-width": 1, class: Math.abs(v) < 1e-9 ? "zero" : "" }, ax);
+      const t = el("text", { x: m.l - 8, y: sy(v) + 4, "text-anchor": "end" }, ax); t.textContent = fmt(v, 0);
+    }
+    for (let v = Math.ceil(opt.x0 / xst) * xst; v <= opt.x1 + 1e-9; v += xst) {
+      el("line", { x1: sx(v), x2: sx(v), y1: H - m.b, y2: H - m.b + 5, "stroke-width": 1 }, ax);
+      const t = el("text", { x: sx(v), y: H - m.b + 18, "text-anchor": "middle" }, ax); t.textContent = fmt(v, 2);
+    }
+    const xl = el("text", { x: W - m.r, y: H - 4, "text-anchor": "end" }, ax); xl.textContent = opt.xlabel || "q (unidades)";
+    const plotG = el("g", { "clip-path": `url(#${cid})` }, svg);
+    // shaded profit band
+    if (opt.band) {
+      const [a, b] = opt.band;
+      el("rect", { x: sx(a), y: m.t, width: Math.max(0, sx(b) - sx(a)), height: H - m.t - m.b, fill: "var(--s-ben-fill)" }, plotG);
+    }
+    opt.series.forEach(s => {
+      const d = xs.map((x, i) => (i ? "L" : "M") + sx(x).toFixed(1) + "," + sy(s.f(x)).toFixed(1)).join("");
+      el("path", { d, fill: "none", stroke: `var(${s.color})`, "stroke-width": 2, "stroke-dasharray": s.dash || "none", "stroke-linejoin": "round" }, plotG);
+    });
+    // direct labels at right end
+    const ends = opt.series.map(s => ({ s, y: sy(Math.max(ymin, Math.min(ymax, s.f(opt.x1)))) })).sort((p, q) => p.y - q.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) ends[i].y = ends[i - 1].y + 15;
+    ends.forEach(e => { const t = el("text", { x: W - m.r + 8, y: e.y + 4, class: "lab" }, svg); t.textContent = e.s.short || e.s.name; });
+    (opt.marks || []).forEach(k => {
+      if (k.x < opt.x0 || k.x > opt.x1) return;
+      el("line", { x1: sx(k.x), x2: sx(k.x), y1: sy(k.y), y2: sy(Math.max(ymin, Math.min(ymax, 0))), stroke: "var(--muted)", "stroke-dasharray": "3 3", "stroke-width": 1 }, svg);
+      el("circle", { cx: sx(k.x), cy: sy(k.y), r: 4.5, fill: `var(${k.color || "--ink"})`, stroke: "var(--paper)", "stroke-width": 2 }, svg);
+      const t = el("text", { x: sx(k.x) + (k.dx || 6), y: sy(k.y) + (k.dy || -8), class: "dotlab", "text-anchor": k.anchor || "start" }, svg); t.textContent = k.label;
+    });
+    // hover layer
+    const cross = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-2)", "stroke-width": 1, opacity: 0 }, svg);
+    const dots = opt.series.map(s => el("circle", { r: 4, fill: `var(${s.color})`, stroke: "var(--paper)", "stroke-width": 2, opacity: 0 }, svg));
+    const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+    const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; fig.appendChild(tip);
+    function move(ev) {
+      const r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+      let x = opt.x0 + (px - m.l) / (W - m.l - m.r) * (opt.x1 - opt.x0);
+      x = Math.max(opt.x0, Math.min(opt.x1, x)); if (opt.integer) x = Math.round(x);
+      cross.setAttribute("x1", sx(x)); cross.setAttribute("x2", sx(x)); cross.setAttribute("opacity", .5);
+      let html = `<b>${opt.xname || "q"} = ${fmt(x, opt.integer ? 0 : 1)}</b>`;
+      opt.series.forEach((s, i) => { const y = s.f(x); dots[i].setAttribute("cx", sx(x)); dots[i].setAttribute("cy", sy(y)); dots[i].setAttribute("opacity", y >= ymin && y <= ymax ? 1 : 0); html += `<br><span style="color:var(${s.color})">●</span> ${s.short || s.name}: ${fmt(y)} €`; });
+      tip.innerHTML = html; tip.hidden = false;
+      const fx = (sx(x) / W) * r.width, fr = fig.getBoundingClientRect();
+      const left = fx + (r.left - fr.left);
+      tip.style.top = (r.top - fr.top + 20) + "px";
+      tip.style.left = (left > r.width * 0.6 ? left - tip.offsetWidth - 12 : left + 12) + "px";
+    }
+    function leave() { tip.hidden = true; cross.setAttribute("opacity", 0); dots.forEach(d => d.setAttribute("opacity", 0)); }
+    hit.addEventListener("pointermove", move); hit.addEventListener("pointerdown", move); hit.addEventListener("pointerleave", leave);
+    if (opt.caption) { const c = document.createElement("figcaption"); c.textContent = opt.caption; fig.appendChild(c); }
+  }
+
+  function analyse(a, b, c, p) {
+    const A = -a, B = p - b, Cc = -c, D = B * B - 4 * A * Cc;
+    const qv = B / (2 * a), Bv = A * qv * qv + B * qv + Cc;
+    let r = null; if (D >= 0) { const s = Math.sqrt(D); r = [(-B + s) / (2 * A), (-B - s) / (2 * A)].sort((x, y) => x - y); }
+    return { D, qv, Bv, r, pmin: b + 2 * Math.sqrt(a * c), Bf: q => A * q * q + B * q + Cc };
+  }
+  function cib(a, b, c, p, x1, extra) {
+    const an = analyse(a, b, c, p), C = q => a * q * q + b * q + c, I = q => p * q;
+    const marks = [];
+    if (an.r) { marks.push({ x: an.r[0], y: 0, label: "q₁≈" + fmt(an.r[0]), color: "--s-ben", dy: 16 }); marks.push({ x: an.r[1], y: 0, label: "q₂≈" + fmt(an.r[1]), color: "--s-ben", dy: 16, anchor: "end", dx: -6 }); }
+    if (an.qv > 0) marks.push({ x: an.qv, y: an.Bv, label: "máx " + fmt(an.Bv, 0) + " €", color: "--s-ben" });
+    return Object.assign({ x0: 0, x1, series: [
+      { name: "Costes C(q)", short: "C(q)", f: C, color: "--s-cos" },
+      { name: "Ingresos I(q)", short: "I(q)", f: I, color: "--s-ing" },
+      { name: "Beneficios B(q)", short: "B(q)", f: an.Bf, color: "--s-ben" }
+    ], marks, band: an.r ? [Math.max(0, an.r[0]), an.r[1]] : null, integer: true }, extra || {});
+  }
+
+  // Teoría: Bally
+  plot(document.getElementById("fig-teoria"), cib(0.225, 27.435, 2567, 100, 320, { caption: "Ejemplo (Bally, p = 100 €): la zona sombreada es el intervalo de beneficios; el óptimo está en el punto medio de q₁ y q₂.", aria: "Costes, ingresos y beneficios de Bally" }));
+  // Space Egg
+  const sp = cib(0.225, 16.875, 4578, 250, 1100, { caption: "Space Egg: beneficios positivos entre 21 y 1016 unidades. Línea discontinua: tangente a B(q) en q = 200." });
+  sp.series.push({ name: "Tangente en q = 200", short: "tangente", f: q => 33047 + 143.125 * (q - 200), color: "--ink-2", dash: "5 4" });
+  sp.marks.push({ x: 200, y: 33047, label: "B(200)=33 047", color: "--ink", dx: -6, anchor: "end", dy: -10 });
+  sp.ymin = -12000; sp.ymax = 300000;
+  plot(document.getElementById("fig-space"), sp);
+  // Coccinelle: beneficios con tres precios
+  const cc = q => 0.2 * q * q + 2 * q + 500;
+  plot(document.getElementById("fig-cocc"), {
+    x0: 0, x1: 760, integer: true, ymin: -2000, ymax: 29000, caption: "Coccinelle: curvas de beneficio para 150 €, 75 € (−50 %) y 45 € (−70 %). Al bajar el precio el intervalo rentable se estrecha y el óptimo se desplaza a la izquierda.",
+    series: [
+      { name: "B(q) con 150 €", short: "150 €", f: q => 150 * q - cc(q), color: "--s-ing" },
+      { name: "B(q) con 75 €", short: "75 €", f: q => 75 * q - cc(q), color: "--s-cos" },
+      { name: "B(q) con 45 €", short: "45 €", f: q => 45 * q - cc(q), color: "--s-ben" }
+    ],
+    marks: [{ x: 370, y: 26880, label: "370 → 26 880 €", color: "--s-ing" }, { x: 182.5, y: 6161.25, label: "182,5 → 6161 €", color: "--s-cos", dy: -10 }, { x: 107.5, y: 1811.25, label: "107,5 → 1811 €", color: "--s-ben", dy: 18 }]
+  });
+  // Bally: escenarios
+  const bc = q => 0.225 * q * q + 27.435 * q + 2567;
+  plot(document.getElementById("fig-bally"), {
+    x0: 0, x1: 320, integer: true, ymin: -6000, ymax: 4500, caption: "Bally: beneficios con 100 €, 100 € + 3000 € de mantenimiento, y 50 € (siempre negativo). El escenario de 240 € se sale de la escala: máximo 47 637 € en q = 472.",
+    series: [
+      { name: "B(q) con 100 €", short: "100 €", f: q => 100 * q - bc(q), color: "--s-ing" },
+      { name: "B(q) con 100 € y K = 3000", short: "+K", f: q => 100 * q - bc(q) - 3000, color: "--s-cos" },
+      { name: "B(q) con 50 €", short: "50 €", f: q => 50 * q - bc(q), color: "--s-ben" }
+    ],
+    marks: [{ x: 40.448, y: 0, label: "40,45", dy: -8, anchor: "end", dx: -4, color: "--s-ing" }, { x: 161.26, y: 3283.75, label: "161 → 3284 €", color: "--s-ing" }, { x: 125.74, y: 0, label: "125,74", dy: 16, anchor: "end", dx: -4, color: "--s-cos" }, { x: 196.77, y: 0, label: "196,77", dy: 16, color: "--s-cos" }]
+  });
+  // Tommy
+  plot(document.getElementById("fig-tommy"), cib(0.04, 12, 1500, 190, 4700, { caption: "Tommy, p = 190 €: beneficios entre 9 y 4441 carteras; máximo 196 525 € con 2225." }));
+  // Inmobiliaria
+  plot(document.getElementById("fig-piso"), {
+    x0: 450, x1: 2050, xname: "p", xlabel: "p (€ / mes)", ymin: 0, ymax: 28000, caption: "Inmobiliaria: ingreso mensual según el alquiler. Corta la línea de 18 000 € en 450 € y 1600 €; máximo en 1025 €.",
+    series: [
+      { name: "Ingresos I(p)", short: "I(p)", f: p => p * (51.25 - p / 40), color: "--s-ing" },
+      { name: "Ingreso con todo ocupado (18 000 €)", short: "18 000 €", f: () => 18000, color: "--s-cos", dash: "5 4" }
+    ],
+    marks: [{ x: 1025, y: 26265.6, label: "1025 € → 26 266 €", color: "--s-ing", anchor: "middle", dx: 0, dy: -10 }, { x: 1600, y: 18000, label: "1600 €", color: "--s-cos", dy: -10 }]
+  });
+
+  // Calculadora
+  const ids = ["a", "b", "c", "p", "d", "k"], inp = {}; ids.forEach(i => inp[i] = document.getElementById("in-" + i));
+  function run() {
+    const v = {}; ids.forEach(i => v[i] = parseFloat(String(inp[i].value).replace(",", ".")) || 0);
+    const stats = document.getElementById("lab-stats"), fig = document.getElementById("fig-lab");
+    if (v.a <= 0) { stats.innerHTML = '<div class="stat"><div class="k">Revisa a</div><div class="s">El coeficiente de q² tiene que ser mayor que 0.</div></div>'; fig.innerHTML = ""; return; }
+    const p = v.p * (1 - v.d / 100), cf = v.c + v.k, an = analyse(v.a, v.b, cf, p);
+    const sign = (x) => (x >= 0 ? "+ " : "− ") + fmt(Math.abs(x), 4);
+    const card = (k, val, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${val}</div>${s ? `<div class="s">${s}</div>` : ""}</div>`;
+    let h = card("Beneficio", `B(q) = −${fmt(v.a, 4)}q² ${sign(p - v.b)}q − ${fmt(cf, 2)}`, v.d ? `precio efectivo ${fmt(p)} €` : "");
+    h += card("Discriminante Δ", fmt(an.D), an.D > 0 ? '<span class="good">Hay intervalo rentable</span>' : '<span class="bad">Pérdidas para toda q</span>');
+    h += an.r && an.r[1] > 0 ? card("Intervalo rentable", `${fmt(an.r[0])} &lt; q &lt; ${fmt(an.r[1])}`, `enteros: ${Math.max(0, Math.floor(an.r[0]) + 1)} a ${Math.ceil(an.r[1]) - 1}`) : card("Intervalo rentable", "ninguno", "");
+    if (an.qv > 0) { const q1 = Math.floor(an.qv), q2 = q1 + 1, qi = an.Bf(q1) >= an.Bf(q2) ? q1 : q2; h += card("Producción óptima", `q* = ${fmt(an.qv)}`, `entero: ${qi} → ${fmt(an.Bf(qi))} €`); h += card("Beneficio máximo", fmt(an.Bv) + " €", ""); }
+    else h += card("Producción óptima", "q* = 0", "p ≤ b: no cubre el coste variable");
+    h += card("Precio mínimo", fmt(an.pmin) + " €", "b + 2√(a·(c+K))");
+    stats.innerHTML = h;
+    const span = an.r ? an.r[1] * 1.08 : Math.max(50, an.qv * 2.2, 100);
+    plot(fig, cib(v.a, v.b, cf, p, Math.max(20, span), { aria: "Gráfica de la calculadora" }));
+  }
+  ids.forEach(i => inp[i].addEventListener("input", run));
+  document.querySelectorAll(".presets button").forEach(bt => bt.addEventListener("click", () => {
+    bt.dataset.p.split(",").forEach((val, j) => inp[ids[j]].value = val); run();
+  }));
+  run();
+})();
+</script>
