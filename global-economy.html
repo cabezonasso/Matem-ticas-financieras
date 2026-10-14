@@ -1,0 +1,2221 @@
+<title>Global Economy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: cuaderno de cuadrícula (gemelo de Matemáticas Financieras) — barra superior con pestañas, hoja central de 880px; tinta azul marino de las diapositivas del curso y rojo para los resultados de cada cadena */
+:root{
+  --paper:#f4f6fa; --card:#ffffff; --ink:#172036; --ink2:#3b4663; --muted:#5a6380; --line:#d7deeb;
+  --grid:rgba(36,80,143,.075); --accent:#24508f; --accent-ink:#ffffff; --accent-soft:#e6edf8;
+  --mark:rgba(255,224,60,.55); --ok:#17804a; --ok-soft:#e2f4ea; --bad:#be3434; --bad-soft:#fbe7e7;
+  --out:#a8322d; --out-soft:#f9ebe9;
+  --s-d:#2a78d6; --s-s:#d9602c; --s-3:#178f65;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f131b; --card:#161a26; --ink:#e5e9f4; --ink2:#b8c0d6; --muted:#9aa3bf; --line:#283048;
+  --grid:rgba(140,170,255,.06); --accent:#8fb0ff; --accent-ink:#0f131b; --accent-soft:#1c2640;
+  --mark:rgba(255,220,70,.22); --ok:#52c98b; --ok-soft:#14301f; --bad:#ff8080; --bad-soft:#3a1a1c;
+  --out:#ff8a80; --out-soft:#3a1c1e;
+  --s-d:#4a8fe8; --s-s:#e06a35; --s-3:#22a574; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f131b; --card:#161a26; --ink:#e5e9f4; --ink2:#b8c0d6; --muted:#9aa3bf; --line:#283048;
+  --grid:rgba(140,170,255,.06); --accent:#8fb0ff; --accent-ink:#0f131b; --accent-soft:#1c2640;
+  --mark:rgba(255,220,70,.22); --ok:#52c98b; --ok-soft:#14301f; --bad:#ff8080; --bad-soft:#3a1a1c;
+  --out:#ff8a80; --out-soft:#3a1c1e;
+  --s-d:#4a8fe8; --s-s:#e06a35; --s-3:#22a574; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:16px 6px}
+.brand h1{font:800 clamp(22px,4.5vw,30px)/1.1 var(--f-display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.brand h1 span{color:var(--accent)}
+.brand small{font:600 12px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sync{font:400 12px/1.2 var(--f-mono);color:var(--muted);display:flex;align-items:center;gap:6px}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block}
+.sync.on i{background:var(--ok)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{all:unset;cursor:pointer;padding:10px 14px;font:600 15px/1 var(--f-body);color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button:focus-visible,.chip:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding-block:18px 6px}
+.chip{all:unset;cursor:pointer;font:600 13px/1.2 var(--f-body);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+h2{font:800 24px/1.15 var(--f-display);letter-spacing:-.015em;margin:20px 0 6px;text-wrap:balance}
+h3{font:700 13px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:26px 0 10px}
+p{margin:0 0 10px;max-width:68ch}
+.eyebrow{font:600 12px/1.3 var(--f-mono);letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
+.sheet{position:relative;background-color:var(--card);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:var(--r);padding:20px clamp(16px,3vw,26px);margin-top:14px;min-width:0}
+.statement{font-size:17px}
+.statement p{max-width:none}
+.m{font-family:var(--f-mono);font-size:.92em;white-space:nowrap}
+.hl{background:linear-gradient(transparent 35%,var(--mark) 35%,var(--mark) 90%,transparent 90%);padding:0 2px}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.9em;margin:0 2px;line-height:1.15}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px}
+.frac>span:last-child{padding:0 3px}
+.formula{font-family:var(--f-mono);font-size:15px;background:var(--accent-soft);border-radius:8px;padding:12px 14px;margin:8px 0;overflow-x:auto;line-height:1.9}
+.tbl{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;font:400 14px/1.35 var(--f-mono);font-variant-numeric:tabular-nums;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:right}
+th{font-family:var(--f-body);font-weight:700;color:var(--muted);text-align:center}
+td.tx,th.tx{text-align:left;font-family:var(--f-body)}
+tr.sum td{font-weight:600;border-top:2px solid var(--ink)}
+.tbl.lft td:first-child,.tbl.lft th:first-child{text-align:left;font-family:var(--f-body)}
+.ev{font:700 19px/1.35 var(--f-display);margin:10px 0 12px;text-wrap:balance}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:18px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font:600 14px/1.3 var(--f-body)}
+.field .inrow{display:flex;align-items:center;gap:8px}
+.field input,.field select{width:100%;min-width:0;font:400 16px/1.2 var(--f-mono);padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.field select{font-family:var(--f-body);font-size:15px}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
+.field .unit{font:400 13px var(--f-mono);color:var(--muted)}
+.field.ok input,.field.ok select{border-color:var(--ok);background:var(--ok-soft)}
+.field.bad input,.field.bad select{border-color:var(--bad);background:var(--bad-soft)}
+.field .fb{font:400 13px/1.3 var(--f-mono);min-height:1em}
+.field.ok .fb{color:var(--ok)} .field.bad .fb{color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{all:unset;cursor:pointer;font:700 15px/1 var(--f-body);padding:12px 18px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.solution{margin-top:18px;border-top:2px dashed var(--line);padding-top:14px}
+.solution ol{padding-left:20px;margin:0}
+.solution li{margin-bottom:10px}
+.verdict{margin-top:14px;font:700 15px var(--f-body);padding:10px 14px;border-radius:8px}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)} .verdict.bad{background:var(--bad-soft);color:var(--bad)}
+.note{font:500 21px/1.25 var(--f-hand);color:var(--accent);border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin:12px 0}
+.warn{background:var(--bad-soft);border-radius:8px;padding:10px 14px;font-size:15px;margin:10px 0}
+.warn b{color:var(--bad)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding-left:34px;margin-bottom:10px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font:700 13px/24px var(--f-mono);text-align:center}
+/* cadenas de transmisión (shock → actor → decisión → flujo → resultado) */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px 0;margin:12px 0;padding:0;list-style:none}
+.chain li{display:flex;align-items:center;margin:0;padding:0;max-width:none}
+.chain li::before{display:none}
+.chain .nd{border:1.5px solid var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:6px 10px;font:600 14px/1.25 var(--f-body);max-width:210px}
+.chain .nd small{display:block;font:700 10.5px/1.2 var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px}
+.chain li:not(:last-child)::after{content:"→";padding:0 7px;color:var(--muted);font:600 16px var(--f-mono)}
+.chain li.out .nd{border-color:var(--out);background:var(--out-soft)}
+.loop{font:600 13px/1.3 var(--f-body);color:var(--out);margin:-4px 0 12px}
+.dash{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;margin:12px 0}
+.dash>div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--card);font:600 12px/1.3 var(--f-body);color:var(--muted);min-width:0}
+.dash b{display:block;font:600 20px/1.2 var(--f-mono);color:var(--ink)}
+.dash .up b{color:var(--accent)} .dash .dn b{color:var(--out)}
+.en{border:1.5px dashed var(--accent);border-radius:8px;padding:10px 14px;margin:12px 0;background:var(--card);font-size:15.5px}
+.en>b:first-child{display:block;font:700 11px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+/* flashcards */
+.card-fc{min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:12px;text-align:center;cursor:pointer}
+.card-fc .q{font:700 clamp(19px,3.6vw,24px)/1.3 var(--f-display);text-wrap:balance}
+.card-fc .a{font-size:17px}
+.boxes{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.box{flex:1 1 90px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--card);font:400 12px/1.3 var(--f-body);color:var(--muted)}
+.box b{display:block;font:600 20px/1.2 var(--f-mono);color:var(--ink)}
+/* progreso */
+.prow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,2fr) auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.prow .nm{font-weight:700;line-height:1.25}
+.prow .nm small{display:block;font:400 12px var(--f-mono);color:var(--muted)}
+.bar{height:10px;border-radius:5px;background:var(--accent-soft);overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--accent);border-radius:5px}
+.dots{display:flex;gap:3px;margin-top:6px}
+.dots i{width:9px;height:9px;border-radius:2px;background:var(--line)}
+.dots i.y{background:var(--ok)} .dots i.n{background:var(--bad)}
+.pct{font:600 16px var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;min-width:4ch}
+.pill{display:inline-block;font:600 11px/1 var(--f-body);letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:999px}
+.pill.weak{background:var(--bad-soft);color:var(--bad)} .pill.good{background:var(--ok-soft);color:var(--ok)} .pill.new{background:var(--accent-soft);color:var(--accent)}
+.timer{font:600 22px var(--f-mono);font-variant-numeric:tabular-nums}
+.exam-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:calc(env(safe-area-inset-top,0px) + 108px);z-index:3;background:var(--paper);padding-block:10px;border-bottom:1px solid var(--line)}
+.score{font:800 56px/1 var(--f-display)}
+.muted{color:var(--muted)}
+@media (max-width:560px){.prow{grid-template-columns:minmax(0,1fr) auto}.prow .barcell{grid-column:1/-1;grid-row:2}}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:in .25s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+/* ---- Apuntes ---- */
+#apuntes{padding-block:18px 80px}
+#apuntes .ap-wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+#apuntes nav.toc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;font-size:14px}
+#apuntes nav.toc h2{font:600 12px/1 var(--f-body);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px}
+#apuntes nav.toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:2px 8px}
+#apuntes nav.toc li{margin:0}
+#apuntes nav.toc li a{display:block;padding:5px 10px;border-radius:6px;color:var(--ink2);text-decoration:none}
+#apuntes nav.toc li a:hover,#apuntes nav.toc li a:focus-visible{background:var(--accent-soft);color:var(--accent);outline:none}
+#apuntes nav.toc .grp{grid-column:1/-1;margin-top:10px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding-left:10px}
+#apuntes main{min-width:0}
+#apuntes section,#apuntes article{scroll-margin-top:140px}
+#apuntes header.hero{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:8px}
+#apuntes .eyebrow{margin:0 0 8px}
+#apuntes .ap-h1{font:800 clamp(28px,5vw,40px)/1.08 var(--f-display);margin:0 0 12px;letter-spacing:-.015em}
+#apuntes .lede{font-size:18px;color:var(--ink2);max-width:64ch;margin:0}
+#apuntes .hero-eq{margin-top:18px;font-family:var(--f-mono);font-size:clamp(14px,2.2vw,18px);display:flex;flex-wrap:wrap;gap:10px 22px}
+#apuntes section{padding-top:36px}
+#apuntes h2{font:800 26px/1.15 var(--f-display);margin:0 0 6px}
+#apuntes h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:10px}
+#apuntes h3{font:700 20px/1.25 var(--f-display);text-transform:none;letter-spacing:0;color:var(--ink);margin:26px 0 6px}
+#apuntes h4{font:700 13px/1.2 var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);margin:20px 0 4px}
+#apuntes p,#apuntes li{max-width:68ch}
+#apuntes ul,#apuntes ol{padding-left:22px;margin:8px 0}
+#apuntes li{margin:4px 0}
+#apuntes .chain li{margin:0;max-width:none}
+#apuntes a{color:var(--accent)}
+#apuntes .part{margin-top:52px;padding-top:14px;border-top:3px solid var(--ink);font:600 13px/1 var(--f-body);text-transform:uppercase;letter-spacing:.14em;color:var(--ink2)}
+#apuntes .m{white-space:normal;overflow-wrap:anywhere}
+#apuntes .formula{background-color:var(--card);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:18px 18px;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:14px 0;font:400 15px/1.9 var(--f-mono);overflow-x:auto;max-width:74ch;white-space:pre}
+#apuntes .formula .lbl{display:block;white-space:normal;font:600 12px/1.4 var(--f-body);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
+#apuntes .key{background:var(--mark);padding:0 4px;border-radius:3px}
+#apuntes .note{font:400 16px/1.55 var(--f-body);color:var(--ink);border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 16px;border-radius:0 8px 8px 0;margin:16px 0;max-width:74ch}
+#apuntes .note.warn{border-left-color:var(--out);background:var(--out-soft)}
+#apuntes .note.warn b{color:inherit}
+#apuntes .tbl-wrap{overflow-x:auto;margin:14px 0;max-width:100%}
+#apuntes table{border-collapse:collapse;font:400 15px/1.45 var(--f-body);min-width:100%;background:transparent}
+#apuntes th,#apuntes td{text-align:left;padding:8px 12px;border:0;border-bottom:1px solid var(--line);vertical-align:top}
+#apuntes th{font:600 12px/1.2 var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#apuntes td.num,#apuntes th.num{text-align:right;font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#apuntes tr.sum td{font-weight:700;border-top:2px solid var(--ink)}
+#apuntes .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+#apuntes .pair>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+#apuntes .pair h4{margin:0 0 4px;color:var(--accent)}
+#apuntes .pair p,#apuntes .pair ul{margin:4px 0;font-size:15.5px}
+#apuntes .quote{font:700 clamp(19px,3vw,23px)/1.35 var(--f-display);margin:16px 0;max-width:40ch;text-wrap:balance}
+#apuntes .ex{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px clamp(16px,3vw,24px) 18px;margin-top:24px}
+#apuntes .ex-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+#apuntes .ex-head h2{font-size:24px}
+#apuntes .ex-tag{font:400 13px var(--f-mono);color:var(--muted)}
+#apuntes .enun{font-style:italic;color:var(--ink2)}
+#apuntes .ex dl{margin:6px 0 0;display:grid;gap:4px}
+#apuntes .ex dt{font:700 16px var(--f-display);margin-top:14px;color:var(--accent)}
+#apuntes .ex dd{margin:0;min-width:0}
+#apuntes .ans{display:inline-block;font:400 14px var(--f-mono);background:var(--mark);padding:1px 8px;border-radius:4px}
+#apuntes figure{margin:18px 0 6px;position:relative;min-width:0}
+#apuntes figure.dgm .scroll{overflow-x:auto}
+#apuntes figure.dgm svg{display:block;width:100%;min-width:560px;height:auto;color:var(--ink)}
+#apuntes figure.chart svg{display:block;width:100%;height:auto;overflow:visible}
+#apuntes figcaption{font-size:14px;color:var(--muted);margin-top:6px;max-width:74ch}
+#apuntes .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink2);margin-bottom:4px}
+#apuntes .legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+#apuntes .legend i.dashed{background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px)!important}
+#apuntes .tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:400 12.5px/1.5 var(--f-mono);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap;z-index:2}
+#apuntes .ax text{fill:var(--muted);font-family:var(--f-mono);font-size:11px}
+#apuntes .ax line{stroke:var(--line)}
+#apuntes .lab{font-family:var(--f-body);font-size:12.5px;font-weight:600;fill:var(--ink2)}
+#apuntes .dotlab{font-family:var(--f-mono);font-size:11px;fill:var(--ink)}
+@media (max-width:560px){#apuntes figure.chart .ax text{font-size:17px}#apuntes figure.chart .lab{font-size:18px}#apuntes figure.chart .dotlab{font-size:16px}}
+#apuntes .lab-tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px clamp(14px,3vw,20px);margin-top:18px}
+#apuntes .ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 16px}
+#apuntes .ctrls label{display:grid;gap:4px;font-size:13px;color:var(--ink2)}
+#apuntes .ctrls input,#apuntes .ctrls select{font:400 15px var(--f-mono);padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
+#apuntes .ctrls select{font-family:var(--f-body)}
+#apuntes .ctrls input:focus-visible,#apuntes .ctrls select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+#apuntes .presets{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+#apuntes .presets button{font:600 13px var(--f-body);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+#apuntes .presets button:hover,#apuntes .presets button:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+#apuntes .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+#apuntes .stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+#apuntes .stat .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+#apuntes .stat .v{font:400 17px var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#apuntes .stat .s{font-size:13px;color:var(--ink2)}
+#apuntes .good{color:var(--ok);font-weight:700}#apuntes .bad{color:var(--bad);font-weight:700}
+#apuntes .cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px}
+#apuntes .cheat>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+#apuntes .cheat h4{margin:0 0 6px}
+#apuntes .cheat p{font:400 14px var(--f-mono);margin:4px 0;overflow-wrap:anywhere}
+#apuntes .steps li{padding-left:38px}
+#apuntes footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+/* glosario de símbolos */
+.sym{cursor:help;text-decoration:underline dotted color-mix(in srgb,var(--accent) 55%,transparent) 1px;text-underline-offset:3px;background-image:linear-gradient(var(--accent),var(--accent));background-repeat:no-repeat;background-position:0 100%;background-size:0% 2px}
+.sym.arming{background-size:100% 2px;transition:background-size 1.2s linear}
+@media (prefers-reduced-motion:reduce){.sym.arming{transition:none}}
+#symtip{position:fixed;z-index:50;max-width:min(320px,calc(100vw - 16px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:10px 12px;box-shadow:0 10px 30px rgba(10,20,50,.18);font:400 14px/1.45 var(--f-body);pointer-events:none}
+#symtip .st-h{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+#symtip .st-s{font:600 17px var(--f-mono);color:var(--accent);white-space:nowrap}
+#symtip .st-n{font-weight:700}
+#symtip .st-d{color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){#symtip:not([hidden]){animation:tipin .15s ease-out}@keyframes tipin{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}}
+</style>
+
+<header class="top">
+  <div class="wrap" style="padding-block:0">
+    <div class="brand">
+      <div>
+        <small>IQS · Global Economy &amp; 4.0 · Topic 1</small>
+        <h1>Global <span>Economy</span></h1>
+      </div>
+      <div class="sync" id="sync"><i></i><span>Guardando en este navegador</span></div>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs">
+      <button role="tab" data-tab="practica">Práctica</button>
+      <button role="tab" data-tab="teoria">Teoría</button>
+      <button role="tab" data-tab="apuntes">Apuntes</button>
+      <button role="tab" data-tab="flash">Flashcards</button>
+      <button role="tab" data-tab="examen">Examen</button>
+      <button role="tab" data-tab="progreso">Progreso</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="view"></main>
+<div class="wrap" id="apuntes" hidden>
+<div class="ap-wrap">
+<nav class="toc" aria-label="Índice">
+  <h2>Índice</h2>
+  <ol>
+    <li class="grp">Parte I · El lenguaje común</li>
+    <li><a href="#t1">1 · La economía como sistema</a></li>
+    <li><a href="#t2">2 · PIB y valor añadido</a></li>
+    <li><a href="#t3">3 · Nominal, real e inflación</a></li>
+    <li><a href="#t4">4 · Tipo de interés</a></li>
+    <li><a href="#t5">5 · Dinero y bancos</a></li>
+    <li><a href="#t6">6 · Oferta y demanda</a></li>
+    <li><a href="#t7">7 · Capacidad y productividad</a></li>
+    <li><a href="#t8">8 · Stock, flujo y riqueza</a></li>
+    <li class="grp">Parte II · Los actores</li>
+    <li><a href="#t9">9 · Hogares, empresas, gobierno</a></li>
+    <li><a href="#t10">10 · Bancos y banco central</a></li>
+    <li class="grp">Parte III · Interacciones</li>
+    <li><a href="#t11">11 · Flujo circular</a></li>
+    <li><a href="#t12">12 · Identidades y equilibrio</a></li>
+    <li class="grp">Parte IV · Shocks</li>
+    <li><a href="#t13">13 · Analizar un shock</a></li>
+    <li><a href="#t14">14 · Lente 4.0 y pensiones</a></li>
+    <li><a href="#t15">15 · Método de examen</a></li>
+    <li class="grp">Ejercicios resueltos</li>
+    <li><a href="#e1">Cadena de valor</a></li>
+    <li><a href="#e2">PIB nominal y real</a></li>
+    <li><a href="#e3">Tipo de interés real</a></li>
+    <li><a href="#e4">Multiplicador bancario</a></li>
+    <li><a href="#e5">Identidades</a></li>
+    <li><a href="#e6">Productividad y CLU</a></li>
+    <li><a href="#e7">Trace the shock</a></li>
+    <li><a href="#e8">Who is affected?</a></li>
+    <li><a href="#e9">Demanda vs costes</a></li>
+    <li><a href="#e10">Pensiones</a></li>
+    <li class="grp">Herramientas</li>
+    <li><a href="#lab">Trazador de shocks</a></li>
+    <li><a href="#calc">Calculadora de identidades</a></li>
+    <li><a href="#form">Formulario</a></li>
+    <li><a href="#glos">Glosario ES–EN</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <p class="eyebrow">Global Economy &amp; 4.0 · Prof. Ramon Xifré · IQS – Universitat Ramon Llull</p>
+  <h2 class="ap-h1">Topic 1 · La economía como sistema interconectado</h2>
+  <p class="lede">Apuntes completos del tema 1: el lenguaje común (PIB, dinero, precios y tipos), los cinco actores de una economía cerrada, cómo sus decisiones se encadenan y cómo seguir un shock hasta el PIB. Con diagramas, ejercicios resueltos y respuestas modelo en inglés para el examen.</p>
+  <div class="hero-eq">
+    <span>Y = C + I + G</span>
+    <span>S + T = I + G</span>
+    <span>r ≈ i − πᵉ</span>
+    <span>m = 1/ℓ</span>
+  </div>
+</header>
+
+<div class="part">Parte I · El lenguaje común</div>
+
+<section id="t1">
+  <h2><span class="n">1</span>La economía como sistema de decisiones</h2>
+  <p class="quote">Una economía no es una lista de mercados separados. Es un <em>sistema de decisiones</em> en el que la acción de un actor se convierte en la restricción, la renta, el coste o la oportunidad de otro.</p>
+  <p>El objetivo del tema es dibujar ese sistema con la claridad suficiente para razonar con él. Al final deberías poder explicar cualquier acontecimiento macroeconómico como una <strong>cadena de decisiones enlazadas</strong>.</p>
+  <div class="pair">
+    <div><h4>1 · Lenguaje</h4><p>PIB, dinero, inflación, tipos de interés, oferta y demanda.</p></div>
+    <div><h4>2 · Actores</h4><p>Hogares, empresas, gobierno, bancos comerciales y banco central.</p></div>
+    <div><h4>3 · Interacciones</h4><p>Renta, gasto, impuestos, crédito, salarios, precios y expectativas.</p></div>
+    <div><h4>4 · Shocks</h4><p>Cómo un cambio recorre el sistema y acaba afectando al PIB.</p></div>
+  </div>
+
+  <h3>El modelo de hoy: una economía cerrada</h3>
+  <ul>
+    <li><strong>Economía cerrada</strong> (<em>closed economy</em>): sin exportaciones, sin importaciones y sin endeudamiento con el exterior.</li>
+    <li>Toda la producción nacional se produce, se vende, se cobra y se gasta dentro del país.</li>
+    <li>Es una <strong>simplificación</strong>, no la creencia de que los países estén aislados. En el Tema 2 se abre la economía.</li>
+  </ul>
+  <div class="formula"><span class="lbl">Identidad central</span>Y = C + I + G
+
+Y = PIB    C = consumo    I = inversión    G = compras públicas</div>
+
+  <h3>La producción es la restricción última</h3>
+  <div class="pair">
+    <div><h4>Derechos nominales (nominal claims)</h4><p>Dinero, depósitos, acciones y bonos influyen en <strong>quién puede comprar</strong> bienes y servicios.</p></div>
+    <div><h4>Recursos reales (real resources)</h4><p>Los bienes y servicios determinan <strong>lo que la sociedad puede consumir</strong> de verdad.</p></div>
+  </div>
+  <p><strong>Más dinero no crea, por sí solo, más producción.</strong> A largo plazo la restricción presupuestaria real de una economía es su producción nacional, no el número de activos financieros que existan (Moss, cap. 1).</p>
+</section>
+
+<section id="t2">
+  <h2><span class="n">2</span>PIB: tres maneras de ver la misma economía</h2>
+  <p>Antes de dibujar la economía hace falta un lenguaje común para <strong>flujos</strong> (renta, gasto, crédito), <strong>precios</strong> (salarios, tipos de interés, precios) y <strong>cantidades</strong> (producción, trabajo, bienes).</p>
+  <figure class="dgm">
+    <div class="scroll">
+    <svg viewBox="0 0 680 190" role="img" aria-label="El PIB se puede medir como producción, como renta o como gasto: son tres vistas de un mismo proceso circular">
+      <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="20" y="30" width="170" height="58" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <rect x="255" y="30" width="170" height="58" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <rect x="490" y="30" width="170" height="58" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <line x1="190" y1="59" x2="253" y2="59" marker-end="url(#ar1)"/>
+        <line x1="425" y1="59" x2="488" y2="59" marker-end="url(#ar1)"/>
+        <path d="M575,88 C575,175 105,175 105,90" marker-end="url(#ar1)"/>
+      </g>
+      <g fill="currentColor" font-family="Source Sans 3, system-ui, sans-serif" text-anchor="middle">
+        <text x="105" y="55" font-size="16" font-weight="700">Producción</text>
+        <text x="105" y="75" font-size="12.5" fill="var(--muted)">valor añadido</text>
+        <text x="340" y="55" font-size="16" font-weight="700">Renta</text>
+        <text x="340" y="75" font-size="12.5" fill="var(--muted)">salarios, beneficios, rentas</text>
+        <text x="575" y="55" font-size="16" font-weight="700">Gasto</text>
+        <text x="575" y="75" font-size="12.5" fill="var(--muted)">C + I + G</text>
+        <text x="221" y="50" font-size="11.5" fill="var(--muted)">se paga</text>
+        <text x="456" y="50" font-size="11.5" fill="var(--muted)">se gasta</text>
+        <text x="340" y="170" font-size="12" fill="var(--muted)">el gasto compra lo producido y financia la siguiente producción</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>En una economía cerrada, lo que se produce, lo que se gana y lo que se gasta son tres vistas de un mismo proceso circular: las tres medidas dan el mismo PIB.</figcaption>
+  </figure>
+  <p>El PIB de un país se puede medir como lo que se <strong>produce</strong>, lo que se <strong>gana</strong> o lo que se <strong>gasta</strong>.</p>
+
+  <h3>Cómo evita el PIB contar dos veces</h3>
+  <p>Ejemplo de clase (Moss, cap. 1): una explotación forestal, una fábrica de muebles y una tienda.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Etapa</th><th class="num">Ventas</th><th class="num">Inputs</th><th class="num">Valor añadido</th></tr></thead>
+    <tbody>
+      <tr><td>Explotación forestal</td><td class="num">$1.000</td><td class="num">$0</td><td class="num">$1.000</td></tr>
+      <tr><td>Fábrica de muebles</td><td class="num">$2.500</td><td class="num">$1.000</td><td class="num">$1.500</td></tr>
+      <tr><td>Tienda (retailer)</td><td class="num">$3.000</td><td class="num">$2.500</td><td class="num">$500</td></tr>
+      <tr class="sum"><td>Total</td><td class="num">$6.500</td><td></td><td class="num">$3.000</td></tr>
+    </tbody>
+  </table></div>
+  <div class="formula"><span class="lbl">Regla de medición</span>Valor añadido = valor de las ventas − coste de los inputs no laborales</div>
+  <p>Sumar todas las ventas da $6.500 y cuenta la madera tres veces y los muebles dos (<em>double counting</em>). El valor añadido y el gasto final dan lo mismo: <span class="ans">$3.000</span>.</p>
+  <div class="note"><b>Por qué no se restan los salarios.</b> Los salarios no son un input «no laboral»: forman parte del valor añadido, porque son la renta de quien ha trabajado. Por eso el valor añadido de todas las etapas coincide con la suma de salarios, beneficios y rentas (la vista de la renta).</div>
+
+  <h3>El PIB no es todo lo bueno</h3>
+  <div class="pair">
+    <div><h4>El PIB incluye</h4><ul><li>bienes y servicios <strong>finales</strong></li><li>producción <strong>de mercado</strong></li><li>valor añadido <strong>dentro del periodo</strong></li></ul></div>
+    <div><h4>El PIB no recoge o distorsiona</h4><ul><li>el trabajo doméstico no remunerado</li><li>la distribución de la renta</li><li>el daño medioambiental</li></ul></div>
+  </div>
+  <p>El PIB es una medida potente de la <strong>producción</strong>, no una medida completa del <strong>bienestar</strong>.</p>
+</section>
+
+<section id="t3">
+  <h2><span class="n">3</span>PIB nominal, PIB real e inflación</h2>
+  <div class="pair">
+    <div><h4>PIB nominal</h4><p>Valor de la producción a <strong>precios corrientes</strong>: <span class="m">P × Q</span>.</p></div>
+    <div><h4>PIB real</h4><p>Cantidad producida valorada a <strong>precios constantes</strong> (los de un año base).</p></div>
+  </div>
+  <ul class="chain" aria-label="El PIB nominal puede subir por dos motivos">
+    <li><span class="nd">Más cantidad (Q)</span></li>
+    <li><span class="nd">o precios más altos (P)</span></li>
+    <li class="out"><span class="nd">El PIB nominal sube</span></li>
+  </ul>
+  <p>El PIB nominal puede subir por cualquiera de los dos motivos. El PIB real aísla los cambios en <span class="m">Q</span>: por eso es el que se usa para hablar de crecimiento económico.</p>
+  <div class="formula"><span class="lbl">Cómo se calcula (con varios bienes)</span>PIB nominal del año t  = Σ Pₜ · Qₜ      (precios de ese año)
+PIB real del año t     = Σ P_base · Qₜ   (precios del año base)
+<span class="lbl" style="margin-top:8px">Complemento útil</span>Subida de precios (deflactor) = PIB nominal / PIB real
+Crecimiento real ≈ crecimiento nominal − inflación</div>
+
+  <h3>Inflación: cuando sube el nivel de precios</h3>
+  <p><strong>Inflación</strong> es un aumento del nivel general de precios; <strong>deflación</strong>, una disminución.</p>
+  <ul class="chain" aria-label="Con la misma renta nominal y precios más altos, el dinero compra menos">
+    <li><span class="nd">La misma renta nominal</span></li>
+    <li><span class="nd">Nivel de precios más alto</span></li>
+    <li class="out"><span class="nd">El dinero compra menos</span></li>
+  </ul>
+  <ul>
+    <li>Una inflación <strong>baja y estable</strong> facilita planificar.</li>
+    <li>Una inflación <strong>alta o impredecible</strong> cambia lo que se pide de salario, cómo se fijan precios, cuánto se ahorra y cuánto se pide prestado.</li>
+  </ul>
+  <div class="formula"><span class="lbl">Poder adquisitivo del dinero</span>poder adquisitivo ≈ 1 / P
+Si P sube un 5 %, 1 € compra 1/1,05 = 0,952 → un 4,8 % menos</div>
+</section>
+
+<section id="t4">
+  <h2><span class="n">4</span>El tipo de interés: el precio del tiempo</h2>
+  <p>El tipo de interés es el precio de trasladar poder adquisitivo entre <strong>hoy</strong> y <strong>mañana</strong>.</p>
+  <div class="pair">
+    <div><h4>Para quien pide prestado</h4><p>Un tipo más alto encarece los préstamos.</p></div>
+    <div><h4>Para quien ahorra</h4><p>Un tipo más alto hace más atractivo ahorrar.</p></div>
+  </div>
+  <div class="formula"><span class="lbl">Tipo de interés real</span><span class="key">r ≈ i − πᵉ</span>
+
+i  = tipo nominal (el que figura en el contrato)
+πᵉ = inflación esperada
+<span class="lbl" style="margin-top:8px">Versión exacta (complemento)</span>1 + r = (1 + i) / (1 + πᵉ)</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th class="num">i</th><th class="num">πᵉ</th><th class="num">r ≈ i − πᵉ</th><th>Lectura</th></tr></thead>
+    <tbody>
+      <tr><td class="num">5 %</td><td class="num">3 %</td><td class="num">2 %</td><td>El ahorro gana un 2 % de poder adquisitivo; el préstamo cuesta un 2 % real.</td></tr>
+      <tr><td class="num">4 %</td><td class="num">4 %</td><td class="num">0 %</td><td>El ahorro solo mantiene su poder adquisitivo.</td></tr>
+      <tr><td class="num">3 %</td><td class="num">6 %</td><td class="num">−3 %</td><td>Tipo real negativo: el ahorro pierde poder adquisitivo y endeudarse sale barato en términos reales.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>El dinero tiene tres precios macroeconómicos</h3>
+  <div class="pair">
+    <div><h4>En el tiempo</h4><p><strong>Tipo de interés</strong>: el coste de conseguir poder adquisitivo hoy en vez de más tarde.</p></div>
+    <div><h4>Entre monedas</h4><p><strong>Tipo de cambio</strong>: el precio de una moneda en términos de otra (Tema 2).</p></div>
+    <div><h4>Frente a los bienes</h4><p><strong>Nivel de precios</strong>: cuando P sube, el poder adquisitivo del dinero baja.</p></div>
+  </div>
+  <p>Este tema de economía cerrada se centra en los tipos de interés y en P.</p>
+</section>
+
+<section id="t5">
+  <h2><span class="n">5</span>Dinero y bancos</h2>
+  <h3>El dinero reduce el coste del intercambio</h3>
+  <div class="pair">
+    <div><h4>Trueque</h4><p>Exige una <strong>doble coincidencia de deseos</strong>: cada parte tiene que querer justo lo que ofrece la otra.</p></div>
+    <div><h4>Economía monetaria</h4><p>Un medio de cambio aceptado por todos <strong>separa vender de comprar</strong> y permite muchos más intercambios.</p></div>
+  </div>
+  <ul class="chain" aria-label="Vender trigo, recibir dinero, comprar una comida">
+    <li><span class="nd">Vendo trigo</span></li>
+    <li><span class="nd">Recibo dinero</span></li>
+    <li class="out"><span class="nd">Compro una comida</span></li>
+  </ul>
+  <p>El dinero es la forma de riqueza <strong>más líquida</strong> porque ya es un medio de pago.</p>
+
+  <h3>El dinero es más que los billetes</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Medida</th><th>Qué contiene</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Efectivo</strong> (currency)</td><td>Billetes y monedas de curso legal.</td></tr>
+      <tr><td><strong>Base monetaria</strong> (monetary base)</td><td>Efectivo + reservas de los bancos comerciales en el banco central.</td></tr>
+      <tr><td><strong>M1</strong></td><td>Efectivo en manos del público + depósitos a la vista que se usan para pagar.</td></tr>
+      <tr><td><strong>Dinero amplio</strong> (broader money)</td><td>M1 + depósitos menos líquidos y activos casi-dinero.</td></tr>
+    </tbody>
+  </table></div>
+  <p>El dinero se define por su <strong>liquidez y aceptación</strong>, no solo por su forma física.</p>
+
+  <h3>Cómo amplían el dinero los bancos comerciales</h3>
+  <ul class="chain" aria-label="Depósito, reserva, préstamo, gasto y nuevo depósito">
+    <li><span class="nd"><small>1</small>Depósito en efectivo de $100</span></li>
+    <li><span class="nd"><small>2</small>El banco guarda una reserva</span></li>
+    <li><span class="nd"><small>3</small>El banco presta $90</span></li>
+    <li class="out"><span class="nd"><small>4</small>Se gasta y se vuelve a depositar</span></li>
+  </ul>
+  <div class="formula"><span class="lbl">Multiplicador estilizado de Moss</span><span class="key">m = 1 / tasa de fuga</span>      (fuga = ℓ)
+
+Fuga del 10 %  ⇒  m = 1 / 0,10 = 10
+Depósitos: 100 + 90 + 81 + 72,9 + … = 100 · 10 = 1000
+Préstamos nuevos en total = 1000 − 100 = 900</div>
+  <figure class="chart" id="fig-mult"></figure>
+  <div class="lab-tool">
+    <div class="ctrls">
+      <label for="mu-d">Depósito inicial ($)<input id="mu-d" type="number" step="10" min="1" value="100"></label>
+      <label for="mu-l">Tasa de fuga ℓ (%)<input id="mu-l" type="number" step="1" min="1" max="100" value="10"></label>
+    </div>
+    <div class="stats" id="mu-stats"></div>
+  </div>
+  <div class="note warn"><b>El multiplicador no es mecánico.</b> Cuánto efectivo guarda el público, las reservas, el capital de los bancos, el riesgo, la regulación y la demanda de préstamos lo cambian. Si los hogares guardan más efectivo, la fuga sube y m baja.</div>
+
+  <h3>Lenguaje cuidadoso: los bancos no solo «pasan» ahorros</h3>
+  <ul class="chain" aria-label="Los hogares ahorran, los bancos prestan, las empresas invierten">
+    <li><span class="nd">Hogares ahorran</span></li>
+    <li><span class="nd">depósitos → bancos comerciales</span></li>
+    <li><span class="nd">préstamos → empresas</span></li>
+    <li class="out"><span class="nd">Inversión</span></li>
+  </ul>
+  <p>Un préstamo nuevo normalmente <strong>crea un depósito a la vista nuevo</strong>, que forma parte de la oferta monetaria. Pero el crédito sigue limitado por el capital, el riesgo, la regulación, la financiación y la devolución esperada (Moss, cap. 2).</p>
+
+  <h3>Crecimiento del dinero: ¿más producción o más precios?</h3>
+  <div class="pair">
+    <div><h4>Con recursos ociosos</h4><p>Más liquidez puede bajar los tipos a corto plazo, subir el consumo y la inversión y <strong>aumentar la producción</strong> efectiva.</p></div>
+    <div><h4>Con la capacidad al límite</h4><p>Si el gasto crece más deprisa que la capacidad productiva, <strong>sube el nivel de precios</strong>; la inflación esperada puede luego subir los tipos nominales.</p></div>
+  </div>
+  <div class="note"><b>Ceteris paribus.</b> Son relaciones de referencia. Si a la vez sube la demanda de dinero o los bancos prestan menos, el efecto inmediato puede debilitarse o invertirse.</div>
+</section>
+
+<section id="t6">
+  <h2><span class="n">6</span>Un mercado: la demanda se encuentra con la oferta</h2>
+  <p>El resultado de un mercado es <strong>un precio y una cantidad</strong>. Los dos importan para el PIB. Mueve las curvas para ver qué pasa con el punto de equilibrio (<em>market-clearing point</em>).</p>
+  <figure class="chart" id="fig-sd"></figure>
+  <div class="presets" role="group" aria-label="Desplazar curvas">
+    <button type="button" data-sd="d+">Demanda a la derecha</button>
+    <button type="button" data-sd="d-">Demanda a la izquierda</button>
+    <button type="button" data-sd="s+">Oferta a la derecha</button>
+    <button type="button" data-sd="s-">Oferta a la izquierda</button>
+    <button type="button" data-sd="0">Volver al inicio</button>
+  </div>
+  <div class="pair">
+    <div><h4>La demanda aumenta cuando los compradores…</h4><ul><li>tienen más renta</li><li>se sienten más seguros (confianza)</li><li>tienen el crédito más fácil</li><li>esperan que los precios suban</li></ul></div>
+    <div><h4>La oferta aumenta cuando las empresas…</h4><ul><li>acceden a inputs más baratos</li><li>mejoran su productividad</li><li>invierten en capacidad</li><li>esperan una demanda estable</li></ul></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Desplazamiento</th><th>Precio</th><th>Cantidad</th><th>Ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td>Demanda → derecha</td><td>sube</td><td>sube</td><td>Más renta o crédito más fácil.</td></tr>
+      <tr><td>Demanda → izquierda</td><td>baja</td><td>baja</td><td>Cae la confianza.</td></tr>
+      <tr><td>Oferta → derecha</td><td>baja</td><td>sube</td><td>Inputs más baratos, más productividad.</td></tr>
+      <tr><td>Oferta → izquierda</td><td>sube</td><td>baja</td><td>Se encarece la energía.</td></tr>
+    </tbody>
+  </table></div>
+  <p>En macroeconomía muchas decisiones de demanda <strong>se mueven juntas</strong>: si cae la confianza, caen a la vez las compras de coches, de casas y de muebles. Por el lado de la oferta, la tecnología y el coste de los inputs dan forma a la capacidad productiva de toda la economía.</p>
+</section>
+
+<section id="t7">
+  <h2><span class="n">7</span>Capacidad, productividad y mercados de factores</h2>
+  <h3>Tres fuentes de la producción potencial</h3>
+  <div class="pair">
+    <div><h4>Trabajo (L)</h4><p>Horas trabajadas, participación, educación y habilidades.</p></div>
+    <div><h4>Capital (K)</h4><p>Plantas, equipos, infraestructuras y software productivo.</p></div>
+    <div><h4>PTF (A, TFP)</h4><p>La eficiencia con la que se combinan trabajo y capital.</p></div>
+  </div>
+  <div class="formula"><span class="lbl">Producción potencial</span>Y* = F(L, K; A)</div>
+  <p>El crecimiento a largo plazo exige <strong>más inputs, mejores inputs o una forma más eficiente de usarlos</strong> (Moss, cap. 1).</p>
+
+  <h3>La productividad conecta salarios, costes y producción</h3>
+  <div class="formula"><span class="lbl">Productividad del trabajo</span>productividad = producción real / horas trabajadas
+<span class="lbl" style="margin-top:8px">Coste laboral unitario (CLU, unit labour cost)</span>CLU = remuneración del trabajo / producción real</div>
+  <ul>
+    <li>Si crece la productividad, son compatibles <strong>salarios reales más altos y más producción</strong>.</li>
+    <li>Si los salarios crecen <strong>más deprisa que la productividad</strong>, sube el CLU y puede presionar sobre los precios o sobre los beneficios.</li>
+  </ul>
+  <div class="formula"><span class="lbl">Atajo para variaciones pequeñas</span>% CLU ≈ % salario por hora − % productividad</div>
+  <p>La productividad no es simplemente «trabajar más duro»: el capital, la formación, la organización y la tecnología importan.</p>
+
+  <h3>Mercados de factores: trabajo, capital, energía, datos</h3>
+  <p>Los hogares ofrecen trabajo a las empresas y las empresas les pagan salarios. Un salario es <strong>un coste para la empresa y una renta para el hogar</strong>: eso es interconexión en una línea. Los mercados de factores fijan a la vez costes y rentas.</p>
+</section>
+
+<section id="t8">
+  <h2><span class="n">8</span>Stock, flujo y riqueza</h2>
+  <div class="pair">
+    <div><h4>Flujo (flow)</h4><p>Se mide <strong>por periodo</strong>. Ej.: renta al mes, PIB al año, consumo de este trimestre, déficit del año.</p></div>
+    <div><h4>Stock</h4><p>Se mide <strong>en un momento</strong>. Ej.: riqueza hoy, deuda hoy, stock de capital hoy.</p></div>
+  </div>
+  <p><strong>Los flujos cambian los stocks; los stocks influyen en los flujos futuros.</strong> El déficit de cada año (flujo) aumenta la deuda pública (stock); una deuda alta (stock) obliga a pagar intereses cada año (flujo).</p>
+
+  <h3>La riqueza es un derecho sobre la producción futura</h3>
+  <div class="pair">
+    <div><h4>Riqueza financiera</h4><p>Acciones, bonos y depósitos dan a sus dueños derechos sobre renta futura y, por tanto, sobre bienes y servicios futuros.</p></div>
+    <div><h4>Riqueza productiva</h4><p>Capital físico, capital humano y conocimiento útil pueden aumentar la capacidad futura de producir.</p></div>
+  </div>
+  <p>Un activo financiero puede <strong>redistribuir</strong> los derechos sobre la producción; solo la capacidad productiva puede <strong>agrandar</strong> la producción disponible para satisfacerlos (Moss, cap. 1).</p>
+
+  <h3>La primera regla del pensamiento sistémico</h3>
+  <ul class="chain" aria-label="Decisión, flujo, resultado y retroalimentación">
+    <li><span class="nd">Decisión</span></li>
+    <li><span class="nd">Flujo</span></li>
+    <li class="out"><span class="nd">Resultado</span></li>
+  </ul>
+  <p class="loop">↺ el resultado retroalimenta la siguiente decisión</p>
+  <p>La economía se mueve porque los actores <strong>reaccionan</strong> a los resultados de los demás.</p>
+</section>
+
+<div class="part">Parte II · Los actores de una economía cerrada</div>
+
+<section id="t9">
+  <h2><span class="n">9</span>Hogares, empresas y gobierno</h2>
+  <figure class="dgm">
+    <div class="scroll">
+    <svg viewBox="0 0 720 360" role="img" aria-label="Mapa de los cinco actores: hogares y empresas intercambian trabajo, gasto, bienes y salarios; el gobierno compra, cobra impuestos y paga transferencias; los bancos reciben depósitos y prestan; el banco central fija el tipo oficial y las reservas">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      <marker id="ar2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
+      <g stroke-width="1.5">
+        <rect x="290" y="30" width="140" height="44" rx="8" style="fill:var(--accent);stroke:var(--accent)"/>
+        <rect x="290" y="290" width="140" height="44" rx="8" style="fill:var(--accent);stroke:var(--accent)"/>
+        <rect x="40" y="160" width="140" height="44" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+        <rect x="540" y="160" width="140" height="44" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+        <rect x="540" y="30" width="140" height="44" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-width="1.4">
+        <line x1="150" y1="160" x2="286" y2="62" marker-end="url(#ar2)"/>
+        <line x1="300" y1="76" x2="184" y2="172" marker-end="url(#ar2)"/>
+        <line x1="180" y1="196" x2="296" y2="290" marker-end="url(#ar2)"/>
+        <line x1="288" y1="306" x2="150" y2="206" marker-end="url(#ar2)"/>
+        <line x1="570" y1="160" x2="434" y2="62" marker-end="url(#ar2)"/>
+        <line x1="420" y1="76" x2="536" y2="172" marker-end="url(#ar2)"/>
+        <line x1="540" y1="196" x2="424" y2="290" marker-end="url(#ar2)"/>
+        <line x1="432" y1="306" x2="570" y2="206" marker-end="url(#ar2)"/>
+        <line x1="345" y1="288" x2="345" y2="78" marker-end="url(#ar2)"/>
+        <line x1="375" y1="76" x2="375" y2="286" marker-end="url(#ar2)"/>
+        <line x1="610" y1="74" x2="610" y2="156" style="stroke:var(--accent)" stroke-width="2" marker-end="url(#ar2a)"/>
+      </g>
+      <g font-family="Source Sans 3, system-ui, sans-serif" font-size="15" font-weight="700" text-anchor="middle">
+        <text x="360" y="57" style="fill:var(--accent-ink)">Empresas</text>
+        <text x="360" y="317" style="fill:var(--accent-ink)">Hogares</text>
+        <text x="110" y="187" fill="currentColor">Gobierno</text>
+        <text x="610" y="187" fill="currentColor">Bancos comerciales</text>
+        <text x="610" y="57" fill="currentColor">Banco central</text>
+      </g>
+      <g font-family="Source Sans 3, system-ui, sans-serif" font-size="12" style="fill:var(--muted)">
+        <text x="210" y="100" text-anchor="end">compras públicas (G)</text>
+        <text x="252" y="140">impuestos</text>
+        <text x="250" y="236">transferencias</text>
+        <text x="210" y="276" text-anchor="end">impuestos</text>
+        <text x="510" y="100">préstamos</text>
+        <text x="468" y="140" text-anchor="end">devolución</text>
+        <text x="470" y="236" text-anchor="end">préstamos</text>
+        <text x="510" y="276">depósitos</text>
+        <text x="338" y="190" text-anchor="end">trabajo, gasto C</text>
+        <text x="382" y="190">bienes, salarios</text>
+        <text x="618" y="110" style="fill:var(--accent)">tipo oficial,</text>
+        <text x="618" y="125" style="fill:var(--accent)">reservas</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Los cinco actores domésticos. Cada flecha es a la vez un pago para uno y una renta, un ingreso o un activo para otro: por eso el sistema no tiene un «pagador final».</figcaption>
+  </figure>
+
+  <h3>El sistema no tiene pagador final</h3>
+  <ul>
+    <li>El <strong>gasto</strong> de un actor es la <strong>renta</strong> de otro.</li>
+    <li>El <strong>coste</strong> de un actor es el <strong>ingreso</strong> de otro.</li>
+    <li>La <strong>deuda</strong> de un actor es el <strong>activo</strong> de otro.</li>
+  </ul>
+  <p>Por eso la macroeconomía es a la vez <strong>contabilidad y comportamiento</strong>.</p>
+
+  <h3>Actor 1 · Hogares</h3>
+  <p>Deciden <strong>cuánto trabajo ofrecer</strong>, <strong>cuánto consumir</strong>, <strong>cuánto ahorrar</strong> y <strong>si piden prestado o invierten</strong>. Son a la vez trabajadores y clientes.</p>
+  <p>Lo que pueden gastar depende de la renta, los impuestos, el crédito, la riqueza y la confianza.</p>
+  <div class="formula"><span class="lbl">Restricción presupuestaria (versión sencilla)</span>Renta disponible YD = salarios + beneficios + transferencias − impuestos</div>
+  <p>El consumo no es solo una cuestión de deseo: también de <strong>capacidad y expectativas</strong>.</p>
+
+  <h3>Actor 2 · Empresas</h3>
+  <p>Deciden <strong>qué producir</strong>, <strong>cuántos trabajadores contratar</strong>, <strong>qué precio cobrar</strong> y <strong>si invierten en capacidad</strong>. Transforman inputs en valor añadido.</p>
+  <div class="formula"><span class="lbl">La lente del beneficio</span>Beneficio = ingresos − costes</div>
+  <div class="pair">
+    <div><h4>Los ingresos dependen de</h4><p>la demanda del mercado, los precios, la renta de los clientes y los competidores.</p></div>
+    <div><h4>Los costes dependen de</h4><p>los salarios, los precios de los inputs, los tipos de interés, la tecnología y los impuestos.</p></div>
+  </div>
+  <p>La empresa <strong>invierte cuando los ingresos futuros esperados justifican el coste de hoy</strong>.</p>
+
+  <h3>Actor 3 · Gobierno</h3>
+  <p>Decide <strong>impuestos</strong>, <strong>gasto público</strong>, <strong>transferencias</strong>, <strong>regulación e inversión pública</strong>. Es a la vez comprador y legislador (<em>buyer and rule-maker</em>).</p>
+  <div class="formula"><span class="lbl">Déficit público</span>Déficit = G + transferencias − T</div>
+  <div class="pair">
+    <div><h4>Parecido a un hogar</h4><p>Un déficit significa que el gasto supera a los ingresos durante un periodo.</p></div>
+    <div><h4>Distinto de un hogar</h4><p>El gasto y los impuestos del Estado también cambian la renta nacional, el empleo y la recaudación futura.</p></div>
+  </div>
+  <div class="note"><b>Ojo con G.</b> G son las compras de bienes y servicios (obra pública, sanidad, educación). Las transferencias (pensiones, subsidios) no son compras: pasan renta a los hogares, que luego deciden si la gastan. Por eso aparecen por separado en el déficit.</div>
+</section>
+
+<section id="t10">
+  <h2><span class="n">10</span>Bancos comerciales y banco central</h2>
+  <h3>Actor 4 · Bancos comerciales</h3>
+  <p>Deciden <strong>a quién prestan</strong>, <strong>a qué tipo de interés</strong>, <strong>cuánto riesgo asumen</strong> y <strong>cuánta liquidez mantienen</strong>. Conectan los planes de hoy con la renta de mañana.</p>
+  <h4>El canal del crédito</h4>
+  <ul class="chain" aria-label="El banco aprueba un préstamo, se crea un depósito, el prestatario gasta y sube la renta del vendedor">
+    <li><span class="nd">El banco aprueba un préstamo</span></li>
+    <li><span class="nd">Se crea un depósito nuevo</span></li>
+    <li><span class="nd">El prestatario gasta</span></li>
+    <li class="out"><span class="nd">Renta del vendedor y PIB</span></li>
+  </ul>
+  <div class="note warn"><b>El riesgo.</b> El crédito puede subir el dinero y el gasto hoy, pero también crea deuda, riesgo de liquidez y obligaciones de pago mañana (Moss, cap. 2).</div>
+
+  <h3>Actor 5 · Banco central</h3>
+  <p>Decide el <strong>objetivo del tipo de interés oficial</strong> a corto plazo, la <strong>base monetaria y las reservas</strong> bancarias, las <strong>operaciones de mercado abierto y de liquidez</strong> y actúa como <strong>prestamista de última instancia</strong>. Controla directamente la base monetaria y usa ese control para dirigir los tipos a corto plazo. Sus tres palancas: tipo, liquidez y credibilidad.</p>
+  <h4>Tres herramientas tradicionales de política monetaria</h4>
+  <div class="pair">
+    <div><h4>Préstamos a los bancos</h4><p>Cambiar el tipo que cobra a los bancos altera su incentivo a pedirle reservas.</p></div>
+    <div><h4>Coeficiente de reservas</h4><p>Cambiar las reservas obligatorias altera la fuga del modelo estilizado del multiplicador.</p></div>
+    <div><h4>Operaciones de mercado abierto</h4><p>Comprar activos inyecta base monetaria; venderlos la retira.</p></div>
+  </div>
+  <p>En la práctica moderna, los bancos centrales usan estas operaciones para <strong>dirigir un tipo de interés a corto plazo</strong>.</p>
+  <h4>El dilema inflación–producción</h4>
+  <ul class="chain" aria-label="Presión inflacionista, tipo oficial más alto, crédito más caro, menos demanda">
+    <li><span class="nd">Presión inflacionista</span></li>
+    <li><span class="nd">Tipo oficial más alto</span></li>
+    <li><span class="nd">Crédito más caro</span></li>
+    <li class="out"><span class="nd">Menos demanda</span></li>
+  </ul>
+  <p>La política que baja la inflación también puede frenar el gasto y el empleo a corto plazo. Por las expectativas, <strong>no hay un intercambio permanente y fiable</strong> entre inflación y producción.</p>
+
+  <h3>La economía como balances enlazados</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Actor</th><th>Activos</th><th>Pasivos / derechos de otros</th></tr></thead>
+    <tbody>
+      <tr><td>Hogares</td><td>depósitos, viviendas, acciones</td><td>hipotecas, créditos al consumo</td></tr>
+      <tr><td>Empresas</td><td>capital, existencias, efectivo</td><td>préstamos bancarios, bonos, salarios pendientes</td></tr>
+      <tr><td>Bancos</td><td>préstamos, reservas</td><td>depósitos, capital propio (equity)</td></tr>
+      <tr><td>Gobierno</td><td>activos públicos, capacidad de recaudar</td><td>deuda pública</td></tr>
+      <tr><td>Banco central</td><td>activos de política monetaria</td><td>reservas, efectivo</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Todo activo financiero es el pasivo de otro.</strong> Una hipoteca es activo del banco y pasivo del hogar; un depósito, activo del hogar y pasivo del banco; las reservas, activo del banco comercial y pasivo del banco central.</p>
+
+  <h3>Mapa de actores: decisiones y variables macro</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Actor</th><th>Acciones principales</th><th>Variables afectadas</th></tr></thead>
+    <tbody>
+      <tr><td>Hogares</td><td>trabajar, consumir, ahorrar, pedir prestado</td><td>C, oferta de trabajo, depósitos</td></tr>
+      <tr><td>Empresas</td><td>contratar, producir, fijar precios, invertir</td><td>Y, empleo, I, precios</td></tr>
+      <tr><td>Gobierno</td><td>gravar, gastar, transferir, regular</td><td>G, renta disponible, déficit</td></tr>
+      <tr><td>Bancos comerciales</td><td>prestar, poner precio al riesgo, gestionar liquidez</td><td>crédito, inversión, gasto</td></tr>
+      <tr><td>Banco central</td><td>fijar el tipo oficial, proveer liquidez</td><td>tipos de interés, crédito, inflación</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="part">Parte III · Interacciones: cómo las acciones se convierten en resultados</div>
+
+<section id="t11">
+  <h2><span class="n">11</span>El flujo circular y las ocho interacciones</h2>
+  <div class="legend"><span><i style="background:var(--accent)"></i>flujo de dinero (€)</span><span><i class="dashed"></i>flujo real (bienes, trabajo)</span></div>
+  <figure class="dgm" style="margin-top:4px">
+    <div class="scroll">
+    <svg viewBox="0 0 720 290" role="img" aria-label="Flujo circular: los hogares gastan en consumo y reciben salarios y beneficios; a cambio, reciben bienes y servicios y aportan trabajo">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      <marker id="ar3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
+      <rect x="40" y="118" width="150" height="50" rx="8" style="fill:var(--accent);stroke:var(--accent)"/>
+      <rect x="530" y="118" width="150" height="50" rx="8" style="fill:var(--accent);stroke:var(--accent)"/>
+      <g fill="none" stroke-width="2">
+        <path d="M115,118 Q360,-12 603,114" style="stroke:var(--accent)" marker-end="url(#ar3a)"/>
+        <path d="M605,168 Q360,298 117,172" style="stroke:var(--accent)" marker-end="url(#ar3a)"/>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4">
+        <path d="M588,118 Q360,58 134,116" marker-end="url(#ar3)"/>
+        <path d="M132,168 Q360,228 586,170" marker-end="url(#ar3)"/>
+      </g>
+      <g font-family="Source Sans 3, system-ui, sans-serif" text-anchor="middle">
+        <text x="115" y="148" font-size="15" font-weight="700" style="fill:var(--accent-ink)">Hogares</text>
+        <text x="605" y="148" font-size="15" font-weight="700" style="fill:var(--accent-ink)">Empresas</text>
+        <text x="360" y="40" font-size="12.5" font-weight="600" style="fill:var(--accent)">gasto en consumo C (€)</text>
+        <text x="360" y="106" font-size="12.5" fill="currentColor">bienes y servicios</text>
+        <text x="360" y="190" font-size="12.5" fill="currentColor">trabajo</text>
+        <text x="360" y="256" font-size="12.5" font-weight="600" style="fill:var(--accent)">salarios, beneficios, rentas (€)</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>El motor más sencillo: las ventas de una empresa son el gasto de los hogares, y la renta de los hogares es un coste de la empresa. El dinero circula en un sentido y los bienes y el trabajo en el contrario.</figcaption>
+  </figure>
+
+  <h3>1 · Consumo y producción</h3>
+  <ul class="chain"><li><span class="nd">Renta de los hogares</span></li><li><span class="nd">Consumo</span></li><li><span class="nd">Ventas de las empresas</span></li><li class="out"><span class="nd">Producción</span></li></ul>
+  <p class="loop">↺ salarios y beneficios vuelven a la renta de los hogares</p>
+  <p><strong>Retroalimentación positiva:</strong> más renta puede subir el gasto; más gasto, la producción; más producción, la renta.</p>
+
+  <h3>2 · Mercado de trabajo y producción</h3>
+  <ul class="chain"><li><span class="nd">Sube la demanda</span></li><li><span class="nd">Las empresas contratan</span></li><li><span class="nd">Sube la renta salarial</span></li><li class="out"><span class="nd">Sube el PIB</span></li></ul>
+  <p><strong>Pero no para siempre:</strong> si la economía está cerca de su capacidad, más demanda puede subir los precios más que la producción.</p>
+
+  <h3>3 · Ahorro, banca e inversión</h3>
+  <ul class="chain"><li><span class="nd">Ahorro</span></li><li><span class="nd">Financiación bancaria</span></li><li><span class="nd">Crédito</span></li><li><span class="nd">Inversión</span></li><li class="out"><span class="nd">Producción futura</span></li></ul>
+  <p>La inversión conecta la demanda de hoy con la capacidad productiva de mañana. <strong>La prueba real</strong>: acumular derechos financieros no basta; el ahorro mejora el nivel de vida futuro cuando permite <strong>inversión productiva</strong> (menos consumo hoy → recursos para I → capital, habilidades, innovación → más producción mañana).</p>
+
+  <h3>4 · Los tipos de interés recorren el sistema</h3>
+  <ul class="chain"><li><span class="nd">Tipo oficial</span></li><li><span class="nd">Tipos bancarios</span></li><li><span class="nd">Endeudamiento</span></li><li><span class="nd">Gasto</span></li><li class="out"><span class="nd">PIB</span></li></ul>
+  <p><strong>Signo esperado:</strong> tipos más altos tienden a reducir el gasto sensible al crédito: vivienda, bienes duraderos e inversión empresarial.</p>
+
+  <h3>5 · Precios, salarios e inflación</h3>
+  <ul class="chain"><li><span class="nd">Costes de los inputs</span></li><li><span class="nd">Precios de las empresas</span></li><li><span class="nd">Reivindicaciones salariales</span></li><li class="out"><span class="nd">Inflación</span></li></ul>
+  <p class="loop">↺ las expectativas de inflación vuelven a subir los costes</p>
+  <p>La inflación puede <strong>autoalimentarse</strong> cuando las expectativas se adaptan.</p>
+
+  <h3>6 · Política fiscal y demanda</h3>
+  <ul class="chain"><li><span class="nd">Gasto público</span></li><li><span class="nd">Ventas de las empresas</span></li><li><span class="nd">Renta</span></li><li class="out"><span class="nd">Demanda privada</span></li></ul>
+  <p><strong>Intuición del multiplicador:</strong> el primer euro de gasto público puede generar renta y gasto privados adicionales, salvo que lo frenen la capacidad, la inflación o la financiación.</p>
+
+  <h3>7 · Impuestos y renta disponible</h3>
+  <ul class="chain"><li><span class="nd">Más impuestos</span></li><li><span class="nd">Menos renta disponible</span></li><li><span class="nd">Menos consumo</span></li><li class="out"><span class="nd">Menos ventas de las empresas</span></li></ul>
+  <p>Un cambio de impuestos nunca es solo un asunto de finanzas públicas: <strong>también es un shock de demanda</strong>.</p>
+
+  <h3>8 · Las expectativas mueven decisiones antes que los datos</h3>
+  <div class="pair">
+    <div><h4>Optimismo</h4><p>Los hogares compran bienes duraderos. Las empresas invierten. Los bancos prestan con más facilidad.</p></div>
+    <div><h4>Pesimismo</h4><p>Los hogares posponen el gasto. Las empresas retrasan contrataciones. Los bancos endurecen el crédito.</p></div>
+  </div>
+  <p>Las expectativas no son una nota a pie de página: <strong>forman parte del mecanismo de transmisión</strong>.</p>
+
+  <h3>Un bucle puede amplificar un cambio pequeño</h3>
+  <ul class="chain"><li><span class="nd">Cae la confianza</span></li><li><span class="nd">Cae el consumo</span></li><li><span class="nd">Caen las ventas</span></li><li class="out"><span class="nd">Cae la contratación</span></li></ul>
+  <p class="loop">↺ presión sobre la renta → la confianza cae más</p>
+  <p>Las recesiones suelen parecer <strong>bucles, no líneas rectas</strong>.</p>
+</section>
+
+<section id="t12">
+  <h2><span class="n">12</span>Producción potencial, fugas, inyecciones e identidades</h2>
+  <h3>La producción efectiva puede caer por debajo de la potencial</h3>
+  <div class="pair">
+    <div><h4>Producción potencial Y*</h4><p>Lo que el trabajo, el capital y la tecnología podrían producir de forma sostenible.</p></div>
+    <div><h4>Producción efectiva Y</h4><p>Lo que las empresas producen según la demanda actual y las expectativas.</p></div>
+  </div>
+  <div class="formula"><span class="lbl">Falta de demanda</span>Demanda insuficiente  ⇒  Y &lt; Y*</div>
+  <ul>
+    <li>Trabajadores y máquinas pueden quedarse <strong>ociosos</strong> aunque la capacidad productiva siga existiendo.</li>
+    <li>Los <strong>salarios y precios rígidos</strong> pueden retrasar la recuperación; la <strong>ilusión monetaria</strong> hace especialmente difícil bajar los salarios nominales (Moss, caps. 1–2).</li>
+  </ul>
+
+  <h3>Fugas e inyecciones en una economía cerrada</h3>
+  <div class="pair">
+    <div><h4>Fugas (leakages)</h4><p>Renta que no se gasta de inmediato en bienes nacionales:</p><ul><li>ahorro (S)</li><li>impuestos (T)</li></ul></div>
+    <div><h4>Inyecciones (injections)</h4><p>Gasto que se añade al flujo circular:</p><ul><li>inversión (I)</li><li>compras públicas (G)</li></ul></div>
+  </div>
+  <div class="formula"><span class="lbl">Las identidades juntas</span>Identidad del gasto          Y = C + I + G
+Identidad del uso de la renta  Y = C + S + T
+Por tanto                      <span class="key">S + T = I + G</span>
+<span class="lbl" style="margin-top:8px">Reordenando (complemento)</span>S − I = G − T     el ahorro privado que no financia inversión financia el déficit</div>
+  <div class="note"><b>Qué es T en las identidades.</b> Son los impuestos <em>netos</em>: impuestos menos transferencias. Así la renta disponible es YD = Y − T y el ahorro S = YD − C. Si el enunciado da impuestos y transferencias por separado, réstalos antes de usar S + T = I + G.</div>
+
+  <h3>La interconexión no siempre es armonía</h3>
+  <div class="pair">
+    <div><h4>Conflicto</h4><p>Salarios más altos ayudan a los hogares pero suben los costes de las empresas.</p></div>
+    <div><h4>Intercambio (trade-off)</h4><p>Menos inflación puede exigir una demanda más débil.</p></div>
+    <div><h4>Tiempo (timing)</h4><p>Los costes de la inversión llegan ahora; las mejoras de productividad, después.</p></div>
+  </div>
+  <p>Un buen razonamiento macro se fija en <strong>quién gana, quién paga y cuándo</strong>.</p>
+</section>
+
+<div class="part">Parte IV · Shocks: seguir la causa y el efecto</div>
+
+<section id="t13">
+  <h2><span class="n">13</span>Cómo analizar cualquier shock macroeconómico</h2>
+  <ul class="chain" aria-label="Método: shock, actor, decisión, flujo, PIB">
+    <li><span class="nd"><small>1</small>Shock</span></li>
+    <li><span class="nd"><small>2</small>Actor</span></li>
+    <li><span class="nd"><small>3</small>Decisión</span></li>
+    <li><span class="nd"><small>4</small>Flujo</span></li>
+    <li class="out"><span class="nd"><small>5</small>PIB</span></li>
+  </ul>
+  <div class="note warn"><b>La disciplina.</b> Nunca saltes del shock al PIB. Nombra siempre el actor y la decisión que transmiten el shock.</div>
+
+  <h3>Shock 1 · Los hogares se vuelven pesimistas</h3>
+  <ul class="chain"><li><span class="nd">Cae la confianza</span></li><li><span class="nd">Cae C</span></li><li><span class="nd">Caen las ventas</span></li><li><span class="nd">Se frena la contratación</span></li><li class="out"><span class="nd">Cae Y</span></li></ul>
+  <p><strong>Pregunta clave:</strong> ¿qué actor podría interrumpir este bucle, y cómo? (Resuelto en el <a href="#e7">ejercicio 7</a>.)</p>
+
+  <h3>Shock 2 · Suben los costes de los inputs</h3>
+  <ul class="chain"><li><span class="nd">Suben los costes de los inputs</span></li><li><span class="nd">Suben los costes de las empresas</span></li><li><span class="nd">Suben los precios</span></li><li><span class="nd">Cae la renta real</span></li><li class="out"><span class="nd">Presión sobre Y</span></li></ul>
+  <p><strong>Es distinto de una demanda débil:</strong> la economía puede tener a la vez más inflación y menos producción.</p>
+
+  <h3>Shock 3 · El banco central sube los tipos</h3>
+  <ul class="chain"><li><span class="nd">Sube el tipo oficial</span></li><li><span class="nd">Los préstamos cuestan más</span></li><li><span class="nd">Cae el endeudamiento</span></li><li><span class="nd">Caen C e I</span></li><li class="out"><span class="nd">La inflación se enfría</span></li></ul>
+  <p>La misma política puede reducir la presión inflacionista y frenar el crecimiento del PIB.</p>
+
+  <h3>Shock 4 · El gobierno invierte en infraestructuras</h3>
+  <ul class="chain"><li><span class="nd">Sube G</span></li><li><span class="nd">Sube la demanda</span></li><li><span class="nd">Empleo y renta</span></li><li><span class="nd">La capacidad sube más tarde</span></li><li class="out"><span class="nd">Sube Y</span></li></ul>
+  <p><strong>Dos horizontes:</strong> la infraestructura afecta a la demanda ahora y a la productividad después.</p>
+
+  <h3>Shock 5 · Los bancos endurecen los criterios de préstamo</h3>
+  <ul class="chain"><li><span class="nd">Sube el riesgo</span></li><li><span class="nd">Los bancos endurecen</span></li><li><span class="nd">Cae el crédito</span></li><li><span class="nd">Cae I</span></li><li class="out"><span class="nd">Cae Y</span></li></ul>
+  <p>Un shock financiero se convierte en un shock de la economía real cuando cambian el gasto y la inversión.</p>
+
+  <h3>El cuadro de mando del PIB</h3>
+  <figure class="dgm">
+    <div class="scroll">
+    <svg viewBox="0 0 640 300" role="img" aria-label="Cuadro de mando: el consumo de los hogares, la inversión de empresas y bancos y el gasto del gobierno forman Y; la inflación, el tipo de interés y el empleo se leen junto a Y">
+      <defs><marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g stroke-width="1.5">
+        <rect x="50" y="20" width="150" height="54" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+        <rect x="245" y="12" width="150" height="54" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+        <rect x="440" y="20" width="150" height="54" rx="8" style="fill:var(--accent-soft);stroke:var(--accent)"/>
+        <rect x="215" y="124" width="210" height="52" rx="8" style="fill:var(--out-soft);stroke:var(--out)" stroke-width="2"/>
+        <rect x="50" y="232" width="150" height="40" rx="8" style="fill:var(--card);stroke:var(--accent)"/>
+        <rect x="245" y="246" width="150" height="40" rx="8" style="fill:var(--card);stroke:var(--accent)"/>
+        <rect x="440" y="232" width="150" height="40" rx="8" style="fill:var(--card);stroke:var(--accent)"/>
+      </g>
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="140" y1="74" x2="250" y2="122" marker-end="url(#ar4)"/>
+        <line x1="320" y1="66" x2="320" y2="121" marker-end="url(#ar4)"/>
+        <line x1="500" y1="74" x2="390" y2="122" marker-end="url(#ar4)"/>
+        <g stroke-dasharray="5 4" style="stroke:var(--muted)">
+          <line x1="140" y1="232" x2="250" y2="179" marker-end="url(#ar4)"/>
+          <line x1="320" y1="246" x2="320" y2="179" marker-end="url(#ar4)"/>
+          <line x1="500" y1="232" x2="390" y2="179" marker-end="url(#ar4)"/>
+        </g>
+      </g>
+      <g font-family="Source Sans 3, system-ui, sans-serif" text-anchor="middle" fill="currentColor">
+        <text x="125" y="44" font-size="16" font-weight="700">C</text><text x="125" y="63" font-size="12" style="fill:var(--muted)">hogares</text>
+        <text x="320" y="36" font-size="16" font-weight="700">I</text><text x="320" y="55" font-size="12" style="fill:var(--muted)">empresas / bancos</text>
+        <text x="515" y="44" font-size="16" font-weight="700">G</text><text x="515" y="63" font-size="12" style="fill:var(--muted)">gobierno</text>
+        <text x="320" y="156" font-size="18" font-weight="700" font-family="JetBrains Mono, monospace">Y = C + I + G</text>
+        <text x="125" y="257" font-size="13.5">Inflación</text>
+        <text x="320" y="271" font-size="13.5">Tipo de interés</text>
+        <text x="515" y="257" font-size="13.5">Empleo</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Arriba, quién decide cada componente del gasto; abajo (línea discontinua), las variables que se leen junto al PIB para saber si el shock es de demanda, de costes o financiero.</figcaption>
+  </figure>
+
+  <h3>De las decisiones micro a los resultados macro</h3>
+  <ul class="chain"><li><span class="nd">Un hogar pospone una compra</span></li><li><span class="nd">+ una empresa retrasa una inversión</span></li><li><span class="nd">Muchas decisiones parecidas</span></li><li class="out"><span class="nd">Menos demanda agregada</span></li></ul>
+  <p>La macroeconomía empieza cuando las decisiones individuales se coordinan a gran escala.</p>
+</section>
+
+<section id="t14">
+  <h2><span class="n">14</span>Lente 4.0 y una aplicación: las pensiones</h2>
+  <h3>Business 4.0: información más rápida, retroalimentación más rápida</h3>
+  <div class="pair">
+    <div><h4>Datos</h4><p>Las empresas observan la demanda antes y ajustan precios, existencias y contratación.</p></div>
+    <div><h4>Plataformas</h4><p>El comportamiento del consumidor puede desplazarse rápido de un sector a otro.</p></div>
+    <div><h4>Automatización</h4><p>La productividad sube, pero la demanda de trabajo cambia por tareas.</p></div>
+  </div>
+  <p>Global Economy &amp; 4.0 trata de sistemas cuyos <strong>bucles de retroalimentación son cada vez más rápidos</strong>.</p>
+
+  <h3>El dilema de las pensiones es una cuestión de producción</h3>
+  <ul class="chain" aria-label="Trabajadores activos y jubilados se reparten la producción nacional del año">
+    <li><span class="nd">Trabajadores activos: producen y consumen</span></li>
+    <li class="out"><span class="nd">Producción nacional disponible este año</span></li>
+    <li><span class="nd">Jubilados: sobre todo consumen</span></li>
+  </ul>
+  <div class="pair">
+    <div><h4>Derechos distintos</h4><p>Una pensión de <strong>reparto</strong> (<em>pay-as-you-go</em>) es un derecho sobre la renta del trabajo actual; una de <strong>capitalización</strong> (<em>funded</em>) es un derecho sobre la renta a través de activos financieros.</p></div>
+    <div><h4>La misma restricción real</h4><p>Los dos sistemas se reparten la producción disponible <strong>en el momento en que se pagan</strong> las pensiones.</p></div>
+  </div>
+  <p>El ahorro y la inversión productiva pueden agrandar la producción de mañana; <strong>cambiar solo la etiqueta financiera no puede</strong> (Moss, cap. 1).</p>
+</section>
+
+<section id="t15">
+  <h2><span class="n">15</span>Método para una pregunta de examen</h2>
+  <ol class="steps">
+    <li><strong>Nombra el shock</strong> en una frase: qué cambia y para quién.</li>
+    <li><strong>Identifica el actor</strong> que reacciona primero (hogares, empresas, gobierno, bancos comerciales o banco central).</li>
+    <li><strong>Di la decisión</strong> que toma: recortar C, subir precios, prestar menos, comprar más…</li>
+    <li><strong>Sigue el flujo</strong>: ¿de quién es renta, ingreso o activo ese gasto o ese coste? Encadena al menos dos actores.</li>
+    <li><strong>Llega al PIB</strong> (y a la inflación, el empleo y los tipos): usa Y = C + I + G para decir qué componente se mueve.</li>
+    <li><strong>Busca el bucle</strong>: ¿se amplifica (menos renta → menos gasto) o se estabiliza (alguien reacciona en contra)?</li>
+    <li><strong>Añade el matiz</strong>: capacidad, inflación, financiación o expectativas. Y, si te lo piden, quién gana, quién paga y cuándo.</li>
+  </ol>
+  <h3>Mapa compacto para respuestas de examen</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Shock</th><th>Primera decisión</th><th>Transmisión probable</th></tr></thead>
+    <tbody>
+      <tr><td>Cae la confianza</td><td>los hogares recortan C</td><td>menos ventas, contratación y renta; Y cae</td></tr>
+      <tr><td>Suben los tipos</td><td>los bancos suben el tipo de los préstamos</td><td>menos endeudamiento, C e I; la demanda se enfría</td></tr>
+      <tr><td>Suben los costes de los inputs</td><td>las empresas suben precios o recortan producción</td><td>cae la renta real; se estrechan márgenes; sube la inflación</td></tr>
+      <tr><td>Sube G</td><td>el gobierno compra más</td><td>más ventas y renta ahora; la capacidad puede subir después</td></tr>
+      <tr><td>Se endurece el crédito</td><td>los bancos prestan menos</td><td>caen la inversión y el gasto en duraderos; Y cae</td></tr>
+      <tr><td>Suben los impuestos</td><td>los hogares tienen menos renta disponible</td><td>cae el consumo salvo que el gasto público lo compense</td></tr>
+    </tbody>
+  </table></div>
+  <p>Una buena respuesta nombra también el <strong>matiz</strong>: capacidad, inflación, financiación o expectativas.</p>
+  <div class="note warn"><b>Errores típicos.</b> Saltar del shock al PIB sin actor; confundir transferencias con G; olvidar que un shock de costes sube los precios mientras baja la producción; decir que más dinero crea producción sin mirar la capacidad; sumar ventas en lugar de valor añadido; mezclar stocks (deuda) con flujos (déficit).</div>
+  <h3>Lo que deberías saber hacer al acabar el tema</h3>
+  <ol>
+    <li>Explicar el PIB con el valor añadido, la renta y el gasto final.</li>
+    <li>Distinguir lo nominal de lo real en el PIB, los salarios y los tipos de interés.</li>
+    <li>Definir dinero, base monetaria y M1, y explicar la creación de depósitos.</li>
+    <li>Explicar el papel de los bancos, del banco central y de las herramientas de política monetaria.</li>
+    <li>Distinguir la producción efectiva de la potencial e identificar trabajo, capital y PTF.</li>
+    <li>Seguir un shock a través de decisiones, dinero, crédito, gasto, precios y producción.</li>
+  </ol>
+  <p class="quote">La economía es un sistema porque todo el mundo es el mercado de otro.</p>
+  <p><strong>Puente al Tema 2:</strong> se abren las fronteras. <span class="m">Y = C + I + G</span> pasa a ser <span class="m">Y = C + I + G + NX</span>, con exportaciones e importaciones. La lógica del sistema es la misma; entran actores y canales nuevos.</p>
+</section>
+
+<div class="part">Ejercicios resueltos</div>
+
+<article class="ex" id="e1">
+  <div class="ex-head"><h2>Cadena de valor: bosque, fábrica y tienda</h2><span class="ex-tag">Diapositiva 10 · PIB sin doble contabilización</span></div>
+  <p class="enun">Una explotación forestal vende madera por $1.000 sin usar inputs no laborales. Una fábrica la compra y vende muebles por $2.500. Una tienda compra esos muebles y los vende al público por $3.000.</p>
+  <dl>
+    <dt>a) Valor añadido de cada etapa</dt>
+    <dd><div class="formula">Bosque   1000 − 0    = 1000
+Fábrica  2500 − 1000 = 1500
+Tienda   3000 − 2500 =  500</div></dd>
+    <dt>b) PIB por la vía de la producción</dt>
+    <dd><span class="m">1000 + 1500 + 500 =</span> <span class="ans">$3.000</span></dd>
+    <dt>c) PIB por la vía del gasto</dt>
+    <dd>El único gasto <strong>final</strong> es lo que pagan los consumidores en la tienda: <span class="ans">$3.000</span>. Las otras compras son intermedias (inputs).</dd>
+    <dt>d) ¿Qué pasa si se suman todas las ventas?</dt>
+    <dd><span class="m">1000 + 2500 + 3000 = 6500</span>: se cuenta la madera tres veces y los muebles de fábrica dos. Sobran <span class="ans">$3.500</span> de doble contabilización.</dd>
+    <dt>e) PIB por la vía de la renta (supuesto añadido)</dt>
+    <dd>Si los salarios pagados en toda la cadena suman $1.800, los beneficios y rentas suman <span class="m">3000 − 1800 =</span> <span class="ans">$1.200</span>. Las tres vías dan los mismos $3.000 porque son tres vistas del mismo proceso circular.</dd>
+  </dl>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>GDP counts value added, not total sales: 1,000 + 1,500 + 500 = $3,000, which equals final expenditure at the retailer. Adding every sale ($6,500) double-counts intermediate inputs.</div>
+</article>
+
+<article class="ex" id="e2">
+  <div class="ex-head"><h2>PIB nominal, PIB real y precios</h2><span class="ex-tag">Datos de práctica · Nominal vs real</span></div>
+  <p class="enun">Una economía produce bicicletas y barras de pan. Año 1: 100 bicicletas a 200 € y 5000 barras a 2 €. Año 2: 105 bicicletas a 210 € y 5100 barras a 2,10 €. Toma el año 1 como base.</p>
+  <dl>
+    <dt>a) PIB nominal de cada año</dt>
+    <dd><div class="formula">Año 1: 100·200 + 5000·2    = 20 000 + 10 000 = 30 000 €
+Año 2: 105·210 + 5100·2,10 = 22 050 + 10 710 = 32 760 €</div>Crecimiento nominal: <span class="m">32 760 / 30 000 − 1 =</span> <span class="ans">9,2 %</span></dd>
+    <dt>b) PIB real del año 2 (precios del año 1)</dt>
+    <dd><div class="formula">105·200 + 5100·2 = 21 000 + 10 200 = 31 200 €</div>Crecimiento real: <span class="m">31 200 / 30 000 − 1 =</span> <span class="ans">4,0 %</span>. Es el aumento de las cantidades (Q).</dd>
+    <dt>c) ¿Qué parte se debe a los precios?</dt>
+    <dd><span class="m">32 760 / 31 200 = 1,05</span> ⇒ los precios han subido un <span class="ans">5 %</span>. Comprobación: <span class="m">1,04 · 1,05 = 1,092</span>. Con el atajo, 9,2 − 5 ≈ 4,2 %, cerca del 4,0 % exacto.</dd>
+    <dt>d) Poder adquisitivo</dt>
+    <dd>Con una subida de precios del 5 %, 1 € compra <span class="m">1/1,05 ≈ 0,952</span>: un 4,8 % menos. Un sueldo que suba menos del 5 % pierde poder adquisitivo.</dd>
+  </dl>
+</article>
+
+<article class="ex" id="e3">
+  <div class="ex-head"><h2>Tipo de interés real</h2><span class="ex-tag">Datos de práctica · r ≈ i − πᵉ</span></div>
+  <p class="enun">Un banco ofrece préstamos y depósitos al 5 % anual. La inflación esperada es del 3 %.</p>
+  <dl>
+    <dt>a) Tipo real</dt>
+    <dd><span class="m">r ≈ 5 − 3 =</span> <span class="ans">2 %</span>. Exacto: <span class="m">1,05/1,03 − 1 = 1,94 %</span>.</dd>
+    <dt>b) Coste real de un préstamo de 20 000 € a un año</dt>
+    <dd>Se pagan 1000 € de intereses nominales, pero el dinero devuelto vale un 3 % menos: el coste real es ≈ <span class="m">20 000 · 2 % =</span> <span class="ans">400 €</span> de poder adquisitivo.</dd>
+    <dt>c) La inflación esperada sube al 6 % y el banco mantiene el 5 %</dt>
+    <dd><span class="m">r ≈ 5 − 6 =</span> <span class="ans">−1 %</span>. El ahorrador pierde poder adquisitivo y el prestatario sale ganando en términos reales. Endeudarse resulta más atractivo y ahorrar menos.</dd>
+    <dt>d) ¿Qué tipo nominal haría falta para mantener r = 2 %?</dt>
+    <dd><span class="m">i ≈ r + πᵉ = 2 + 6 =</span> <span class="ans">8 %</span>. Por eso, cuando sube la inflación esperada, los tipos nominales tienden a subir (diapositiva 19).</dd>
+  </dl>
+</article>
+
+<article class="ex" id="e4">
+  <div class="ex-head"><h2>Multiplicador bancario de Moss</h2><span class="ex-tag">Diapositiva 18 · m = 1/fuga</span></div>
+  <p class="enun">Un cliente deposita $100 en efectivo. Los bancos guardan como reserva el 10 % de cada depósito y prestan el resto, que se gasta y vuelve a depositarse en el sistema.</p>
+  <dl>
+    <dt>a) Primeras rondas</dt>
+    <dd><div class="tbl-wrap"><table><thead><tr><th>Ronda</th><th class="num">Depósito</th><th class="num">Reserva (10 %)</th><th class="num">Préstamo</th></tr></thead><tbody>
+      <tr><td>1</td><td class="num">100</td><td class="num">10</td><td class="num">90</td></tr>
+      <tr><td>2</td><td class="num">90</td><td class="num">9</td><td class="num">81</td></tr>
+      <tr><td>3</td><td class="num">81</td><td class="num">8,1</td><td class="num">72,9</td></tr>
+      <tr><td>…</td><td class="num">…</td><td class="num">…</td><td class="num">…</td></tr></tbody></table></div></dd>
+    <dt>b) Multiplicador y depósitos totales</dt>
+    <dd><span class="m">m = 1/0,10 = 10</span> ⇒ depósitos totales como máximo <span class="m">100 · 10 =</span> <span class="ans">$1.000</span>; préstamos nuevos <span class="ans">$900</span>; reservas totales $100 (todo el efectivo inicial acaba como reserva).</dd>
+    <dt>c) El público decide guardar más efectivo: la fuga sube al 20 %</dt>
+    <dd><span class="m">m = 1/0,20 = 5</span> ⇒ depósitos totales <span class="ans">$500</span>. Más fuga, menos expansión.</dd>
+    <dt>d) ¿Por qué el resultado real puede ser menor?</dt>
+    <dd>El multiplicador es estilizado: si los bancos no encuentran prestatarios solventes, si les falta capital, si el riesgo sube o si la regulación aprieta, prestan menos de lo que permitiría la reserva. También depende de la demanda de préstamos.</dd>
+  </dl>
+</article>
+
+<article class="ex" id="e5">
+  <div class="ex-head"><h2>Identidades de una economía cerrada</h2><span class="ex-tag">Datos de práctica · S + T = I + G</span></div>
+  <p class="enun">En una economía cerrada (miles de millones de €): C = 600, I = 150, G = 250, impuestos = 300, transferencias = 80.</p>
+  <dl>
+    <dt>a) PIB</dt>
+    <dd><span class="m">Y = C + I + G = 600 + 150 + 250 =</span> <span class="ans">1000</span></dd>
+    <dt>b) Renta disponible y ahorro</dt>
+    <dd><div class="formula">YD = Y + transferencias − impuestos = 1000 + 80 − 300 = 780
+S  = YD − C = 780 − 600 = 180</div></dd>
+    <dt>c) Comprobación de fugas e inyecciones</dt>
+    <dd><div class="formula">T (neto) = 300 − 80 = 220
+S + T = 180 + 220 = 400        I + G = 150 + 250 = 400   ✓</div></dd>
+    <dt>d) Déficit público</dt>
+    <dd><span class="m">Déficit = G + transferencias − impuestos = 250 + 80 − 300 =</span> <span class="ans">30</span></dd>
+    <dt>e) ¿Quién financia el déficit?</dt>
+    <dd><span class="m">S − I = 180 − 150 = 30 = G − T</span>. El ahorro privado que no se usa para invertir (30) es justo lo que necesita el gobierno: la deuda pública nueva es un activo nuevo del sector privado.</dd>
+  </dl>
+</article>
+
+<article class="ex" id="e6">
+  <div class="ex-head"><h2>Productividad y coste laboral unitario</h2><span class="ex-tag">Datos de práctica · Diapositiva 24</span></div>
+  <p class="enun">Año 1: producción real 800 M€, 40 M de horas trabajadas, remuneración del trabajo 480 M€. Año 2: producción 824 M€, 40,4 M de horas, remuneración 504 M€.</p>
+  <dl>
+    <dt>a) Productividad del trabajo</dt>
+    <dd><div class="formula">Año 1: 800 / 40   = 20,00 €/hora
+Año 2: 824 / 40,4 = 20,40 €/hora   ⇒  +1,98 %</div></dd>
+    <dt>b) Coste laboral unitario</dt>
+    <dd><div class="formula">Año 1: 480 / 800 = 0,600 € por € producido
+Año 2: 504 / 824 = 0,612 € por € producido   ⇒  +1,94 %</div></dd>
+    <dt>c) Salario por hora</dt>
+    <dd><span class="m">480/40 = 12,00 €</span> y <span class="m">504/40,4 = 12,48 €</span>: <span class="ans">+3,96 %</span>. Atajo: % CLU ≈ 3,96 − 1,98 ≈ 1,98 % (exacto 1,94 %).</dd>
+    <dt>d) Interpretación</dt>
+    <dd>Los salarios por hora crecen el doble que la productividad, así que <span class="ans">sube el CLU</span>: las empresas tendrán que subir precios o aceptar menos beneficio. Si la productividad hubiera crecido un 4 %, la misma subida salarial sería compatible con precios estables.</dd>
+  </dl>
+</article>
+
+<article class="ex" id="e7">
+  <div class="ex-head"><h2>Class exercise: trace the shock</h2><span class="ex-tag">Diapositivas 64 y 73</span></div>
+  <p class="enun">Un grupo amplio de hogares espera que el paro suba el año que viene. Sigue el shock y escribe dos bucles de retroalimentación: uno estabilizador y otro amplificador.</p>
+  <dl>
+    <dt>a) La cadena</dt>
+    <dd><ul class="chain"><li><span class="nd"><small>Shock</small>Expectativa de más paro</span></li><li><span class="nd"><small>Actor</small>Hogares</span></li><li><span class="nd"><small>Decisión</small>Ahorran por precaución y posponen compras de duraderos</span></li><li><span class="nd"><small>Flujo</small>Cae C: caen las ventas de las empresas</span></li><li class="out"><span class="nd"><small>Resultado</small>Menos contratación, Y cae</span></li></ul></dd>
+    <dt>b) Bucle amplificador</dt>
+    <dd><ul class="chain"><li><span class="nd">Menos C</span></li><li><span class="nd">Menos ventas</span></li><li><span class="nd">Menos contratación</span></li><li class="out"><span class="nd">Sube el paro</span></li></ul><p class="loop">↺ más pesimismo → todavía menos C (la expectativa se autocumple)</p></dd>
+    <dt>c) Bucle estabilizador</dt>
+    <dd><ul class="chain"><li><span class="nd">Cae la demanda</span></li><li><span class="nd">Baja la presión inflacionista</span></li><li><span class="nd">El banco central baja el tipo oficial</span></li><li><span class="nd">Crédito más barato</span></li><li class="out"><span class="nd">C e I se recuperan</span></li></ul>
+    Otro estabilizador: el gobierno sostiene la renta disponible con prestaciones por desempleo o más G, y el consumo cae menos.</dd>
+    <dt>d) ¿Quién puede interrumpir el bucle?</dt>
+    <dd>El <strong>gobierno</strong> (más G, transferencias o menos impuestos), el <strong>banco central</strong> (bajar tipos, dar liquidez) y los <strong>bancos</strong> si mantienen el crédito. Matiz: si los hogares ya están muy endeudados, los tipos bajos funcionan peor.</dd>
+  </dl>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>Households expect higher unemployment, so they increase precautionary saving and postpone durable purchases. Consumption (C) falls, firms' sales fall and firms delay hiring, so income and GDP fall. Amplifying loop: lower hiring raises unemployment, which deepens pessimism and cuts C further. Stabilising loop: weaker demand eases inflation, the central bank cuts the policy rate, cheaper credit supports C and I; unemployment benefits also cushion disposable income.</div>
+</article>
+
+<article class="ex" id="e8">
+  <div class="ex-head"><h2>Class exercise: who is affected?</h2><span class="ex-tag">Diapositiva 74</span></div>
+  <p class="enun">Los bancos comerciales suben los tipos de interés de las hipotecas. ¿A quién afecta y cómo?</p>
+  <dl>
+    <dt>Hogares</dt>
+    <dd>Pedir una hipoteca sale más caro: baja la <strong>demanda de vivienda</strong> y el endeudamiento. Quien tiene hipoteca a tipo variable paga más cuota y le queda menos renta para consumir. Ahorrar se vuelve más atractivo.</dd>
+    <dt>Empresas</dt>
+    <dd>Caen las ventas de la <strong>construcción</strong> y de los <strong>bienes duraderos</strong> ligados a la vivienda (muebles, electrodomésticos). Con menos ventas esperadas, recortan inversión y contratación.</dd>
+    <dt>Gobierno</dt>
+    <dd>Recauda menos (IVA, impuestos sobre la compraventa de viviendas, IRPF si cae el empleo) y puede tener que pagar más prestaciones: <strong>presión política</strong> y sobre el déficit.</dd>
+    <dt>Banco central</dt>
+    <dd>Recibe <strong>señales</strong>: menos presión inflacionista, pero también posibles riesgos para la estabilidad financiera si suben los impagos.</dd>
+    <dt>Cadena hasta el PIB</dt>
+    <dd><ul class="chain"><li><span class="nd">Suben los tipos hipotecarios</span></li><li><span class="nd">Hogares piden menos hipotecas</span></li><li><span class="nd">Cae la demanda de vivienda</span></li><li><span class="nd">La construcción produce menos</span></li><li class="out"><span class="nd">Cae Y; se enfría la inflación</span></li></ul></dd>
+  </dl>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>Higher mortgage rates make borrowing costlier, so households demand fewer mortgages and less housing, and variable-rate borrowers have less disposable income. Construction and durable-goods firms sell less and cut investment and hiring. Government tax revenue falls and benefit spending may rise. The central bank sees weaker inflation pressure but watches financial stability. Overall, demand and GDP slow down.</div>
+</article>
+
+<article class="ex" id="e9">
+  <div class="ex-head"><h2>Shock de demanda vs shock de costes</h2><span class="ex-tag">Diapositivas 64, 65 y 43</span></div>
+  <p class="enun">Compara (A) una caída de la confianza de los hogares con (B) una subida fuerte del precio de la energía. ¿Qué pasa con la producción y con la inflación? ¿Qué dilema tiene el banco central en el caso B?</p>
+  <dl>
+    <dt>a) Caso A: demanda</dt>
+    <dd><ul class="chain"><li><span class="nd">Cae la confianza</span></li><li><span class="nd">Hogares recortan C</span></li><li><span class="nd">Caen ventas y contratación</span></li><li class="out"><span class="nd">Y ↓ e inflación ↓</span></li></ul>Producción y precios se mueven <strong>en la misma dirección</strong>.</dd>
+    <dt>b) Caso B: costes</dt>
+    <dd><ul class="chain"><li><span class="nd">Energía más cara</span></li><li><span class="nd">Empresas suben precios o producen menos</span></li><li><span class="nd">Cae la renta real</span></li><li class="out"><span class="nd">Y ↓ e inflación ↑</span></li></ul>Producción y precios se mueven <strong>en direcciones opuestas</strong>: más inflación y menos producción a la vez.</dd>
+    <dt>c) El dilema del banco central en B</dt>
+    <dd>Si sube el tipo oficial para frenar la inflación, encarece el crédito y la demanda cae todavía más; si no lo sube, la inflación puede contagiarse a las expectativas y a los salarios (bucle precios–salarios). En A no hay dilema: bajar tipos ayuda a la producción y la inflación ya está bajando.</dd>
+  </dl>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>A confidence shock is a demand shock: households cut C, so output and inflation both fall. An energy-cost shock hits firms' costs: firms raise prices or cut output, real income falls, so inflation rises while output falls. The central bank faces a trade-off in the cost shock: higher rates cool inflation but deepen the output loss.</div>
+</article>
+
+<article class="ex" id="e10">
+  <div class="ex-head"><h2>Aplicación: el dilema de las pensiones</h2><span class="ex-tag">Diapositiva 72 · Moss, cap. 1</span></div>
+  <p class="enun">Un político dice: «Si pasamos de un sistema de reparto a uno de capitalización, el envejecimiento dejará de ser un problema». Evalúa la frase.</p>
+  <dl>
+    <dt>a) Qué cambia</dt>
+    <dd>Cambia el <strong>tipo de derecho</strong>: en reparto, el jubilado tiene un derecho sobre la renta del trabajo actual (cotizaciones); en capitalización, un derecho sobre renta futura a través de activos financieros (acciones, bonos).</dd>
+    <dt>b) Qué no cambia</dt>
+    <dd>En los dos sistemas, las pensiones se pagan con <strong>la producción disponible cuando se cobran</strong>. Si hay menos trabajadores produciendo, hay menos bienes y servicios que repartir, se llame como se llame el derecho.</dd>
+    <dt>c) Qué ayudaría de verdad</dt>
+    <dd>Que el ahorro financie <strong>inversión productiva</strong> (capital, formación, tecnología) que aumente Y* en el futuro. Cambiar solo la etiqueta financiera redistribuye derechos, no agranda la producción.</dd>
+  </dl>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>The statement is misleading. Pay-as-you-go and funded pensions are different financial claims, but both are paid out of the national output available when benefits are paid. Ageing reduces the number of workers producing that output. Only saving that finances productive investment, raising future output, eases the real constraint.</div>
+</article>
+
+<div class="part">Herramientas</div>
+
+<section id="lab">
+  <h2>Trazador de shocks</h2>
+  <p>Elige un shock y sigue la cadena completa: quién reacciona, qué decide, por dónde pasa el flujo y qué le ocurre al cuadro de mando del PIB. Incluye el matiz y una respuesta modelo en inglés.</p>
+  <div class="lab-tool">
+    <div class="ctrls">
+      <label for="tr-sel">Shock<select id="tr-sel"></select></label>
+    </div>
+    <div class="presets" style="margin-top:12px"><button type="button" id="tr-rand">Otro shock al azar</button></div>
+    <div id="tr-out"></div>
+  </div>
+</section>
+
+<section id="calc">
+  <h2>Calculadora de identidades</h2>
+  <p>Introduce los datos de una economía cerrada y comprueba tus cuentas: PIB, renta disponible, ahorro, déficit y la igualdad de fugas e inyecciones. Viene cargada con el <a href="#e5">ejercicio 5</a>.</p>
+  <div class="lab-tool">
+    <div class="presets" role="group" aria-label="Cargar ejemplo">
+      <button type="button" data-id="600,150,250,300,80">Ejercicio 5</button>
+      <button type="button" data-id="700,200,300,250,50">Con déficit grande</button>
+      <button type="button" data-id="550,180,200,320,60">Con superávit</button>
+    </div>
+    <div class="ctrls">
+      <label for="id-c">Consumo C<input id="id-c" type="number" step="10" value="600"></label>
+      <label for="id-i">Inversión I<input id="id-i" type="number" step="10" value="150"></label>
+      <label for="id-g">Compras públicas G<input id="id-g" type="number" step="10" value="250"></label>
+      <label for="id-tx">Impuestos<input id="id-tx" type="number" step="10" value="300"></label>
+      <label for="id-tr">Transferencias<input id="id-tr" type="number" step="10" value="80"></label>
+    </div>
+    <div class="stats" id="id-stats"></div>
+  </div>
+</section>
+
+<section id="form">
+  <h2>Formulario resumen</h2>
+  <div class="cheat">
+    <div><h4>PIB</h4><p>Y = C + I + G</p><p>VA = ventas − inputs no laborales</p><p>PIB = Σ VA = gasto final = renta</p></div>
+    <div><h4>Nominal y real</h4><p>Nominal = Σ Pₜ·Qₜ</p><p>Real = Σ P_base·Qₜ</p><p>g real ≈ g nominal − π</p><p>poder adquisitivo ≈ 1/P</p></div>
+    <div><h4>Tipos de interés</h4><p>r ≈ i − πᵉ</p><p>1 + r = (1 + i)/(1 + πᵉ)</p><p>i ≈ r + πᵉ</p></div>
+    <div><h4>Dinero</h4><p>Base = efectivo + reservas</p><p>M1 = efectivo del público + depósitos a la vista</p><p>m = 1/ℓ ; depósitos = D·m</p></div>
+    <div><h4>Capacidad</h4><p>Y* = F(L, K; A)</p><p>productividad = Y real / horas</p><p>CLU = remuneración / Y real</p><p>% CLU ≈ % salario/hora − % productividad</p></div>
+    <div><h4>Actores</h4><p>YD = salarios + beneficios + transferencias − impuestos</p><p>Beneficio = ingresos − costes</p><p>Déficit = G + transferencias − T</p></div>
+    <div><h4>Identidades</h4><p>Y = C + S + T</p><p>S + T = I + G</p><p>S − I = G − T</p></div>
+    <div><h4>Shocks</h4><p>Shock → actor → decisión → flujo → PIB</p><p>Demanda: Y y π en la misma dirección</p><p>Costes: Y ↓ y π ↑</p></div>
+  </div>
+</section>
+
+<section id="glos">
+  <h2>Glosario español – inglés</h2>
+  <p>El curso se examina con la terminología de las diapositivas. Estos son los términos que más salen.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Español</th><th>English</th><th>En una línea</th></tr></thead>
+    <tbody>
+      <tr><td>PIB</td><td>GDP (Gross Domestic Product)</td><td>Valor de la producción final de un periodo.</td></tr>
+      <tr><td>Valor añadido</td><td>Value added</td><td>Ventas menos inputs no laborales.</td></tr>
+      <tr><td>Doble contabilización</td><td>Double counting</td><td>Sumar ventas intermedias y finales.</td></tr>
+      <tr><td>PIB nominal / real</td><td>Nominal / real GDP</td><td>A precios corrientes / constantes.</td></tr>
+      <tr><td>Nivel de precios</td><td>Price level</td><td>P; si sube, el dinero compra menos.</td></tr>
+      <tr><td>Inflación esperada</td><td>Expected inflation (πᵉ)</td><td>Resta al tipo nominal para obtener el real.</td></tr>
+      <tr><td>Tipo de interés oficial</td><td>Policy rate</td><td>El tipo a corto plazo que fija el banco central.</td></tr>
+      <tr><td>Base monetaria</td><td>Monetary base</td><td>Efectivo + reservas bancarias.</td></tr>
+      <tr><td>Depósitos a la vista</td><td>Demand deposits</td><td>Cuentas que se usan para pagar; parte de M1.</td></tr>
+      <tr><td>Tasa de fuga</td><td>Leakage rate</td><td>Lo que no se vuelve a prestar en cada ronda.</td></tr>
+      <tr><td>Operaciones de mercado abierto</td><td>Open-market operations</td><td>Compra o venta de activos por el banco central.</td></tr>
+      <tr><td>Prestamista de última instancia</td><td>Lender of last resort</td><td>El banco central presta liquidez en una crisis.</td></tr>
+      <tr><td>Producción potencial</td><td>Potential output (Y*)</td><td>Lo que se puede producir de forma sostenible.</td></tr>
+      <tr><td>Productividad total de los factores</td><td>Total factor productivity (TFP)</td><td>Eficiencia al combinar trabajo y capital.</td></tr>
+      <tr><td>Coste laboral unitario</td><td>Unit labour cost</td><td>Remuneración del trabajo por unidad de producción.</td></tr>
+      <tr><td>Renta disponible</td><td>Disposable income</td><td>Lo que queda tras impuestos y transferencias.</td></tr>
+      <tr><td>Transferencias</td><td>Transfers</td><td>Pensiones y subsidios: no son compras (G).</td></tr>
+      <tr><td>Fugas / inyecciones</td><td>Leakages / injections</td><td>S y T salen del flujo; I y G entran.</td></tr>
+      <tr><td>Retroalimentación</td><td>Feedback loop</td><td>Un resultado que cambia la siguiente decisión.</td></tr>
+      <tr><td>Salarios rígidos</td><td>Sticky wages</td><td>Tardan en ajustarse; retrasan la recuperación.</td></tr>
+      <tr><td>Ilusión monetaria</td><td>Money illusion</td><td>Fijarse en lo nominal en vez de lo real.</td></tr>
+      <tr><td>Pensiones de reparto / capitalización</td><td>Pay-as-you-go / funded pensions</td><td>Dos derechos distintos sobre la misma producción.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Apuntes elaborados a partir de las diapositivas del Topic 1 «The Economy as an Interconnected System» (Global Economy &amp; 4.0, Prof. Ramon Xifré, IQS – Universitat Ramon Llull), que citan a Moss, caps. 1–2. Los ejercicios marcados como «datos de práctica» usan números inventados para entrenar las fórmulas; las respuestas modelo en inglés son una propuesta de redacción.</footer>
+</main>
+</div>
+</div>
+
+<script>
+/* ---------- utilidades ---------- */
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+const rd=(x,d=2)=>Math.round(x*10**d)/10**d;
+const n=(x,d=2)=>Number(x).toLocaleString('es-ES',{maximumFractionDigits:d,minimumFractionDigits:0,useGrouping:true});
+const pc=(x,d=2)=>`${n(x,d)} %`;
+const fr=(a,b)=>`<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function parseNum(s){
+  s=String(s).trim().replace(/\s|€|%|\$/g,'').replace('−','-');
+  if(!s) return NaN;
+  if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.');
+  else if((s.match(/\./g)||[]).length>1) s=s.replace(/\./g,'');
+  return Number(s);
+}
+function tableHTML(head,rows,sumRow,cls){
+  return `<div class="tbl ${cls||''}"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}${sumRow?`<tr class="sum">${sumRow.map(c=>`<td>${c}</td>`).join('')}</tr>`:''}</tbody></table></div>`;
+}
+const ch=(label,options,ans,keep)=>({label,type:'choice',options:keep?options:shuffle(options),ans});
+const STEP5=['Shock','Actor','Decisión','Flujo','Resultado'];
+const chainHTML=(steps,labels)=>`<ul class="chain">${steps.map((s,i)=>`<li${i===steps.length-1?' class="out"':''}><span class="nd">${labels?`<small>${labels[i]}</small>`:''}${s}</span></li>`).join('')}</ul>`;
+
+/* ---------- temas ---------- */
+const TOPICS=[
+ {id:'pib',tag:'Parte I · Lenguaje común',name:'PIB y valor añadido',ap:'t2'},
+ {id:'real',tag:'Parte I · Lenguaje común',name:'PIB nominal, real e inflación',ap:'t3'},
+ {id:'interes',tag:'Parte I · Lenguaje común',name:'Tipo de interés real',ap:'t4'},
+ {id:'dinero',tag:'Parte I · Dinero',name:'Dinero y multiplicador bancario',ap:'t5'},
+ {id:'mercados',tag:'Parte I · Mercados',name:'Oferta y demanda',ap:'t6'},
+ {id:'productividad',tag:'Parte I · Capacidad',name:'Productividad y coste laboral unitario',ap:'t7'},
+ {id:'conceptos',tag:'Parte I · Riqueza',name:'Stock, flujo y qué mide el PIB',ap:'t8'},
+ {id:'actores',tag:'Parte II · Actores',name:'Actores y balances',ap:'t9'},
+ {id:'identidades',tag:'Parte III · Interacciones',name:'Identidades: S + T = I + G',ap:'t12'},
+ {id:'shocks',tag:'Parte IV · Shocks',name:'Transmisión de shocks',ap:'t13'},
+];
+const T=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
+const ACT=['Hogares','Empresas','Gobierno','Bancos comerciales','Banco central'];
+const CANALES=['Consumo (C)','Inversión (I)','Consumo e inversión vía crédito','Gasto público (G)','Costes y precios'];
+
+/* ---------- bancos de datos ---------- */
+const CHAINS=[
+ ['Explotación forestal','Fábrica de muebles','Tienda de muebles'],
+ ['Granja de trigo','Harinera','Panadería'],
+ ['Viñedo','Bodega','Distribuidor de vinos'],
+ ['Productor de algodón','Hilandería','Taller de confección','Tienda de ropa'],
+ ['Mina de litio','Fábrica de baterías','Fabricante de patinetes','Tienda de movilidad'],
+];
+const GOODS=[['bicicletas','barras de pan'],['portátiles','cortes de pelo'],['lavadoras','entradas de cine'],['coches','menús del día'],['móviles','cafés']];
+const MONEY=[
+ ['Billetes y monedas en manos del público','Ambas: base monetaria y M1','El efectivo forma parte de la base monetaria; el que está en manos del público, también de M1.'],
+ ['Reservas de un banco comercial en el banco central','Base monetaria (y no M1)','Las reservas son base monetaria, pero no las usa el público para pagar: no son M1.'],
+ ['Depósito a la vista (cuenta corriente) de un hogar','M1 (y no base monetaria)','Es dinero creado por los bancos comerciales: entra en M1, no en la base.'],
+ ['Depósito a plazo fijo de una empresa','Solo dinero amplio','Es menos líquido: no sirve directamente para pagar, así que solo cuenta en el dinero amplio.'],
+];
+const MONEY_OPTS=['Base monetaria (y no M1)','M1 (y no base monetaria)','Ambas: base monetaria y M1','Solo dinero amplio'];
+const EVENTS=[
+ {t:'Los hogares tienen más renta',c:'Demanda',d:1,w:'Con más renta los compradores quieren más unidades a cada precio.'},
+ {t:'Cae la confianza de los consumidores',c:'Demanda',d:-1,w:'Con menos confianza los compradores posponen las compras.'},
+ {t:'Los bancos facilitan el crédito al consumo',c:'Demanda',d:1,w:'Con crédito más fácil se puede comprar más a cada precio.'},
+ {t:'Los compradores esperan que el precio suba pronto',c:'Demanda',d:1,w:'Adelantan sus compras antes de la subida.'},
+ {t:'Los bancos endurecen el crédito al consumo',c:'Demanda',d:-1,w:'Sin financiación, muchos compradores no pueden comprar.'},
+ {t:'Sube el paro y cae la renta de los hogares',c:'Demanda',d:-1,w:'Con menos renta se compra menos a cada precio.'},
+ {t:'Se abaratan los inputs (materias primas, energía)',c:'Oferta',d:1,w:'Producir cada unidad cuesta menos: las empresas ofrecen más a cada precio.'},
+ {t:'Una nueva tecnología mejora la productividad',c:'Oferta',d:1,w:'Con los mismos recursos se produce más.'},
+ {t:'Las empresas invierten en más capacidad',c:'Oferta',d:1,w:'Con más capacidad productiva se puede ofrecer más.'},
+ {t:'Se encarece la energía',c:'Oferta',d:-1,w:'Producir cuesta más: las empresas ofrecen menos a cada precio.'},
+ {t:'Los salarios suben mucho más que la productividad',c:'Oferta',d:-1,w:'Sube el coste laboral unitario: cada unidad cuesta más de producir.'},
+ {t:'Una avería cierra varias fábricas del sector',c:'Oferta',d:-1,w:'Se pierde capacidad productiva.'},
+];
+const MARKETS=['coches eléctricos','viviendas','muebles','portátiles','bicicletas','café'];
+const STOCKFLOW=[
+ ['La riqueza de un hogar a 31 de diciembre','Stock','Se mide en una fecha concreta.'],
+ ['El consumo de los hogares este trimestre','Flujo','Es una cantidad por periodo (por trimestre).'],
+ ['La deuda pública a final de año','Stock','Es lo que se debe en un momento; el déficit de cada año (flujo) la hace crecer.'],
+ ['El déficit público de este año','Flujo','Es gasto menos ingresos durante un año.'],
+ ['El stock de capital (máquinas y edificios) de hoy','Stock','Es lo acumulado hasta hoy; la inversión (flujo) lo aumenta.'],
+ ['La inversión de las empresas este año','Flujo','Es gasto en capital nuevo durante el año.'],
+ ['El ahorro de una familia este mes','Flujo','Es la renta no consumida durante el mes.'],
+ ['Los depósitos de una empresa en el banco hoy','Stock','Es un saldo en una fecha.'],
+ ['El PIB del año','Flujo','Es producción por periodo.'],
+ ['El sueldo mensual de una trabajadora','Flujo','Es renta por mes.'],
+ ['Las hipotecas pendientes de los hogares hoy','Stock','Es deuda viva en una fecha.'],
+];
+const INPIB=[
+ ['Un corte de pelo pagado en una peluquería','Se suma al PIB','Servicio final de mercado producido en el periodo.'],
+ ['Cocinar en casa para la propia familia','No se suma al PIB','Trabajo doméstico no remunerado: no pasa por el mercado.'],
+ ['La harina que compra una panadería para hacer pan','No se suma al PIB','Bien intermedio: su valor ya va dentro del precio del pan. Sumarlo sería doble contabilización.'],
+ ['Una lavadora fabricada este año y vendida a un hogar','Se suma al PIB','Bien final producido en el periodo (entra en C).'],
+ ['El daño medioambiental que causa una fábrica','No se suma al PIB','El PIB no lo descuenta: es una de sus limitaciones como medida de bienestar.'],
+ ['Una fábrica nueva construida este año','Se suma al PIB','Es inversión (I): gasto final en capital nuevo.'],
+ ['La compra de acciones de una empresa en bolsa','No se suma al PIB','Es un activo financiero (un derecho nominal), no producción.'],
+ ['El sueldo de una médica de un hospital público','Se suma al PIB','Los servicios públicos forman parte de las compras públicas (G).'],
+ ['Las pensiones que paga el Estado','No se suma al PIB','Son transferencias: pasan renta, no compran producción. No forman parte de G.'],
+ ['Las clases de una academia privada este curso','Se suma al PIB','Servicio final de mercado.'],
+];
+const DECIDE=[
+ ['Fijar el objetivo del tipo de interés oficial','Banco central'],
+ ['Cuánto trabajo ofrecer y cuánto ahorrar','Hogares'],
+ ['Qué precio cobrar y si invertir en capacidad','Empresas'],
+ ['Impuestos, transferencias y gasto público','Gobierno'],
+ ['A quién prestar y cuánta liquidez mantener','Bancos comerciales'],
+ ['Actuar como prestamista de última instancia','Banco central'],
+ ['Comprar o vender activos en operaciones de mercado abierto','Banco central'],
+ ['Cuántos trabajadores contratar','Empresas'],
+ ['Regular un sector y hacer inversión pública','Gobierno'],
+ ['Pedir una hipoteca para comprar vivienda','Hogares'],
+ ['Poner precio al riesgo de un préstamo','Bancos comerciales'],
+];
+const BALANCE=[
+ ['Una hipoteca','Hogares','del banco que la concede'],
+ ['Un depósito a la vista','Bancos comerciales','del hogar o la empresa que lo tiene'],
+ ['Un bono del Estado (deuda pública)','Gobierno','de quien lo compra (hogares, bancos, fondos)'],
+ ['Las reservas de los bancos','Banco central','de los bancos comerciales'],
+ ['Los billetes en circulación','Banco central','de quien los tiene en el bolsillo'],
+ ['Un préstamo bancario a una empresa','Empresas','del banco que lo concede'],
+];
+/* dash: 1 sube, -1 baja, 0 sin efecto directo */
+const SHOCKS=[
+ {t:'Los hogares se vuelven pesimistas',actor:'Hogares',canal:'Consumo (C)',Y:'Baja',inf:'A la baja',
+  chain:['Cae la confianza','Hogares','Recortan el consumo y posponen compras','Caen las ventas y la contratación','Y cae (y con ella la renta)'],loop:'menos renta → la confianza cae todavía más',
+  dash:{C:-1,I:-1,G:0,Y:-1,inf:-1,emp:-1,r:0},
+  caveat:'Es un bucle amplificador: menos contratación significa menos renta y más pesimismo.',
+  stop:'El gobierno (más G o transferencias, menos impuestos) o el banco central (bajar tipos) pueden cortar el bucle.',
+  en:'Falling confidence leads households to cut consumption (C). Lower sales make firms delay hiring, so income and GDP fall, which can deepen pessimism (an amplifying loop). Inflation pressure eases. Government spending or lower policy rates could interrupt the loop.'},
+ {t:'Suben los costes de los inputs (p. ej. la energía)',actor:'Empresas',canal:'Costes y precios',Y:'Baja',inf:'Al alza',
+  chain:['Inputs más caros','Empresas','Suben precios o recortan producción','Cae la renta real de los hogares','Más inflación y presión a la baja sobre Y'],
+  dash:{C:-1,I:-1,G:0,Y:-1,inf:1,emp:-1,r:0},
+  caveat:'Es distinto de una demanda débil: puede haber a la vez más inflación y menos producción.',
+  stop:'El banco central tiene un dilema: subir tipos frena la inflación, pero hunde más la producción.',
+  en:'Higher input costs raise firms’ costs, so firms raise prices or cut output. Households’ real income falls and spending weakens. Unlike a demand shock, inflation rises while output falls, which creates a trade-off for the central bank.'},
+ {t:'El banco central sube el tipo oficial',actor:'Bancos comerciales',canal:'Consumo e inversión vía crédito',Y:'Baja',inf:'A la baja',
+  chain:['Sube el tipo oficial','Bancos comerciales','Suben el tipo de los préstamos','Menos endeudamiento: caen C e I','La inflación se enfría y Y crece menos'],
+  dash:{C:-1,I:-1,G:0,Y:-1,inf:-1,emp:-1,r:1},
+  caveat:'La misma política reduce la presión inflacionista y frena el PIB. Afecta sobre todo a la vivienda, los bienes duraderos y la inversión empresarial.',
+  stop:'Si el gobierno aumenta mucho el gasto a la vez, puede contrarrestar parte del efecto sobre la demanda.',
+  en:'A higher policy rate leads commercial banks to raise loan rates. Borrowing becomes costlier, so households and firms borrow less and cut C and I, especially housing, durables and business investment. Demand cools, inflation falls and GDP growth slows.'},
+ {t:'El gobierno invierte en infraestructuras',actor:'Gobierno',canal:'Gasto público (G)',Y:'Sube',inf:'Al alza',
+  chain:['Sube G','Gobierno','Compra obra pública a las empresas','Más empleo y renta: sube la demanda privada','Y sube; la capacidad aumenta más tarde'],
+  dash:{C:1,I:0,G:1,Y:1,inf:1,emp:1,r:0},
+  caveat:'Dos horizontes: demanda ahora, productividad después. Cerca del límite de capacidad sube más el precio que la producción, y también importa cómo se financia.',
+  stop:'El banco central podría subir tipos si ve presión inflacionista.',
+  en:'Higher public investment (G) raises firms’ sales now, so firms hire and household income and private demand rise (multiplier). Later, better infrastructure raises productivity and potential output. Caveats: capacity limits, inflation and how the spending is financed.'},
+ {t:'Los bancos endurecen los criterios de préstamo',actor:'Bancos comerciales',canal:'Consumo e inversión vía crédito',Y:'Baja',inf:'A la baja',
+  chain:['Aumenta el riesgo percibido','Bancos comerciales','Prestan menos','Caen la inversión y el gasto en duraderos','Y cae'],
+  dash:{C:-1,I:-1,G:0,Y:-1,inf:-1,emp:-1,r:0},
+  caveat:'Un shock financiero se vuelve real cuando cambian el gasto y la inversión.',
+  stop:'El banco central puede dar liquidez o bajar tipos; el gobierno, sostener la demanda.',
+  en:'Higher perceived risk leads banks to tighten lending standards. Households and firms get less credit, so investment and durable spending fall and GDP falls. A financial shock becomes a real-economy shock through spending.'},
+ {t:'Suben los impuestos sobre la renta',actor:'Hogares',canal:'Consumo (C)',Y:'Baja',inf:'A la baja',
+  chain:['Suben los impuestos','Hogares','Menos renta disponible: recortan el consumo','Caen las ventas de las empresas','Y baja salvo que el gasto público lo compense'],
+  dash:{C:-1,I:0,G:0,Y:-1,inf:-1,emp:-1,r:0},
+  caveat:'Un cambio de impuestos no es solo un asunto de finanzas públicas: también es un shock de demanda. Depende de qué haga el gobierno con lo recaudado.',
+  stop:'Si el gobierno gasta lo recaudado (más G), la caída de la demanda se compensa en parte.',
+  en:'Higher income taxes reduce households’ disposable income, so they cut consumption. Firms’ sales fall and GDP falls, unless the government spends the extra revenue. A tax change is also a demand shock.'},
+ {t:'Muchos hogares esperan que el paro suba el año próximo',actor:'Hogares',canal:'Consumo (C)',Y:'Baja',inf:'A la baja',
+  chain:['Expectativa de más paro','Hogares','Ahorran por precaución y posponen compras','Caen C y las ventas: menos contratación','Y cae y el paro sube'],loop:'la expectativa se autocumple',
+  dash:{C:-1,I:-1,G:0,Y:-1,inf:-1,emp:-1,r:0},
+  caveat:'Las expectativas mueven decisiones antes de que cambien los datos.',
+  stop:'Las prestaciones por desempleo sostienen la renta; el banco central puede bajar tipos.',
+  en:'Households expect higher unemployment, so they raise precautionary saving and postpone purchases. Consumption falls, firms’ sales fall and hiring slows, so GDP falls and unemployment rises: the expectation becomes self-fulfilling. Unemployment benefits and lower rates can stabilise demand.'},
+ {t:'Las empresas se vuelven optimistas sobre sus ventas futuras',actor:'Empresas',canal:'Inversión (I)',Y:'Sube',inf:'Al alza',
+  chain:['Mejoran las expectativas','Empresas','Invierten y contratan','Más I y más renta para los hogares','Y sube; más capacidad en el futuro'],
+  dash:{C:1,I:1,G:0,Y:1,inf:1,emp:1,r:0},
+  caveat:'Con optimismo los bancos también prestan con más facilidad. Si la economía está al límite de capacidad, sube la inflación.',
+  stop:'Si hay mucha presión en precios, el banco central puede subir tipos.',
+  en:'Optimistic firms expect higher future revenue, so they invest and hire. Investment (I) and household income rise, which raises consumption and GDP. Over time the new capital raises capacity; near full capacity, inflation pressure rises.'},
+ {t:'El banco central baja el tipo oficial',actor:'Bancos comerciales',canal:'Consumo e inversión vía crédito',Y:'Sube',inf:'Al alza',
+  chain:['Baja el tipo oficial','Bancos comerciales','Abaratan los préstamos','Más endeudamiento: suben C e I','Y crece más; presión al alza en precios'],
+  dash:{C:1,I:1,G:0,Y:1,inf:1,emp:1,r:-1},
+  caveat:'Si los hogares están pesimistas o muy endeudados, pueden no pedir prestado aunque sea barato.',
+  stop:'Bancos que no quieren asumir riesgo pueden frenar la transmisión.',
+  en:'A lower policy rate leads banks to cut loan rates. Cheaper credit encourages borrowing, so C and I rise and GDP grows faster, with more inflation pressure. The effect is weaker if households are pessimistic or highly indebted.'},
+ {t:'Una nueva tecnología mejora la productividad',actor:'Empresas',canal:'Costes y precios',Y:'Sube',inf:'A la baja',
+  chain:['Mejora la productividad (A)','Empresas','Producen más con los mismos inputs','Bajan los costes unitarios; los salarios reales pueden subir','Suben Y* e Y con menos presión en precios'],
+  dash:{C:1,I:1,G:0,Y:1,inf:-1,emp:0,r:0},
+  caveat:'La automatización cambia la demanda de trabajo por tareas: unos empleos ganan y otros pierden (lente 4.0).',
+  stop:'Hace falta formación para que los trabajadores pasen a las tareas nuevas.',
+  en:'Higher productivity lets firms produce more with the same inputs, so unit costs fall. Output and potential output rise while price pressure eases, and real wages can rise. Automation changes labour demand by task.'},
+ {t:'El gobierno recorta el gasto público',actor:'Gobierno',canal:'Gasto público (G)',Y:'Baja',inf:'A la baja',
+  chain:['Baja G','Gobierno','Compra menos a las empresas','Menos ventas, empleo y renta','Y cae (multiplicador a la inversa)'],
+  dash:{C:-1,I:0,G:-1,Y:-1,inf:-1,emp:-1,r:0},
+  caveat:'Reduce el déficit a corto plazo, pero si cae la renta también cae la recaudación: el presupuesto público no es como el de un hogar.',
+  stop:'El banco central puede bajar tipos para sostener la demanda privada.',
+  en:'Lower government purchases (G) reduce firms’ sales, so firms cut jobs and household income and consumption fall. GDP falls by more than the initial cut. Tax revenue also falls, so the deficit shrinks less than expected.'},
+ {t:'Los bancos relajan los criterios de préstamo',actor:'Bancos comerciales',canal:'Consumo e inversión vía crédito',Y:'Sube',inf:'Al alza',
+  chain:['Baja el riesgo percibido','Bancos comerciales','Prestan más','Suben la inversión y el gasto en duraderos','Y sube'],
+  dash:{C:1,I:1,G:0,Y:1,inf:1,emp:1,r:0},
+  caveat:'Más crédito hoy es más deuda mañana: riesgo de liquidez y obligaciones de pago.',
+  stop:'Regulación y banco central vigilan la estabilidad financiera.',
+  en:'Lower perceived risk leads banks to lend more. New loans create deposits, households and firms spend on durables and investment, and GDP rises. But credit also creates debt and repayment obligations tomorrow.'},
+];
+
+/* ---------- generadores ---------- */
+const GEN={
+pib(){
+  const st=pick(CHAINS),k=st.length;
+  const va=st.map((_,i)=>i?R(3,15)*100:R(6,20)*100);
+  const sales=[];let acc=0;va.forEach((v,i)=>{acc+=v;sales[i]=acc;});
+  const gdp=sales[k-1],sum=sales.reduce((a,b)=>a+b,0),W=Math.round(gdp*(0.5+Math.random()*0.2)/100)*100,j=R(1,k-1);
+  const last=`Las ventas de la última etapa (${st[k-1]})`;
+  return {topic:'pib',
+    statement:`<p>Cadena de producción de una economía cerrada (en €). Ninguna etapa usa más inputs no laborales que lo que compra a la etapa anterior.</p>${tableHTML(['Etapa','Ventas','Compra a la etapa anterior'],st.map((s,i)=>[s,n(sales[i]),n(i?sales[i-1]:0)]),null,'lft')}<p>a) ¿Cuál es el valor añadido de «${st[j]}»?<br>b) ¿Cuánto es el PIB?<br>c) ¿Cuánto da la suma de todas las ventas y cuánto se contaría de más?<br>d) Si los salarios de toda la cadena suman <b>${n(W)} €</b>, ¿cuánto suman los beneficios y rentas?<br>e) ¿Qué gasto final coincide con el PIB?</p>`,
+    fields:[
+      {label:`Valor añadido de «${st[j]}»`,unit:'€',ans:va[j]},
+      {label:'PIB (suma de valores añadidos)',unit:'€',ans:gdp},
+      {label:'Suma de todas las ventas',unit:'€',ans:sum},
+      {label:'Valor contado de más',unit:'€',ans:sum-gdp},
+      {label:'Beneficios y rentas',unit:'€',ans:gdp-W},
+      ch('Gasto final que coincide con el PIB',[last,'La suma de las ventas de todas las etapas',`Las ventas de la primera etapa (${st[0]})`],last)],
+    solution:`<ol class="steps">
+      <li>Valor añadido de cada etapa = ventas − lo que compra a la anterior:${tableHTML(['Etapa','Ventas','Inputs','Valor añadido'],st.map((s,i)=>[s,n(sales[i]),n(i?sales[i-1]:0),n(va[i])]),['Total',n(sum),'',n(gdp)],'lft')}<span class="m hl">VA de ${st[j]} = ${n(sales[j])} − ${n(sales[j-1])} = ${n(va[j])} €</span></li>
+      <li>PIB = suma de valores añadidos = ${va.map(v=>n(v)).join(' + ')} = <span class="hl">${n(gdp)} €</span>. Coincide con las ventas finales de ${st[k-1]}.</li>
+      <li>Suma de ventas = ${sales.map(v=>n(v)).join(' + ')} = <span class="hl">${n(sum)} €</span>. Se cuentan de más ${n(sum)} − ${n(gdp)} = <span class="hl">${n(sum-gdp)} €</span>: las compras intermedias (doble contabilización).</li>
+      <li>Vía de la renta: PIB = salarios + beneficios y rentas ⇒ ${n(gdp)} − ${n(W)} = <span class="hl">${n(gdp-W)} €</span>.</li>
+      <li>El gasto final es lo que pagan los compradores de la última etapa: <b>${st[k-1]}</b>.</li></ol>`};
+},
+real(){
+  for(;;){
+    const [ga,gb]=pick(GOODS);
+    const qa=R(8,40)*10,pa=R(15,60)*10,qb=R(20,90)*100,pb=pick([1.5,2,2.5,3,4,5]);
+    const qa2=Math.round(qa*(1+pick([-4,-2,0,2,3,5,6,8])/100)),pa2=Math.round(pa*(1+pick([0,1,2,3,4,5,6,8])/100));
+    const qb2=Math.round(qb*(1+pick([-3,0,1,2,4,5])/100)/10)*10,pb2=rd(pb*(1+pick([0,2,3,4,5,6,8,10])/100),2);
+    const N1=qa*pa+qb*pb,N2=qa2*pa2+qb2*pb2,R2=qa2*pa+qb2*pb;
+    const gn=(N2/N1-1)*100,gr=(R2/N1-1)*100,def=(N2/R2-1)*100;
+    if(Math.abs(def)<0.3||Math.abs(gr)<0.2)continue;
+    return {topic:'real',
+      statement:`<p>Una economía produce solo ${ga} y ${gb}. Precios en €.</p>${tableHTML(['Bien','Q año 1','P año 1','Q año 2','P año 2'],[[ga,n(qa),n(pa),n(qa2),n(pa2)],[gb,n(qb),n(pb),n(qb2),n(pb2)]],null,'lft')}<p>Con el año 1 como base, calcula el PIB nominal de los dos años, el PIB real del año 2, el crecimiento real y cuánto han subido los precios (deflactor). Porcentajes con dos decimales.</p>`,
+      fields:[{label:'PIB nominal del año 1',unit:'€',ans:N1},{label:'PIB nominal del año 2',unit:'€',ans:N2},{label:'PIB real del año 2 (precios del año 1)',unit:'€',ans:R2},{label:'Crecimiento real',unit:'%',ans:gr,tolAbs:.06},{label:'Subida de precios (deflactor)',unit:'%',ans:def,tolAbs:.06}],
+      solution:`<ol class="steps">
+        <li>Nominal año 1 = ${n(qa)}·${n(pa)} + ${n(qb)}·${n(pb)} = <span class="hl">${n(N1)} €</span></li>
+        <li>Nominal año 2 (precios y cantidades del año 2) = ${n(qa2)}·${n(pa2)} + ${n(qb2)}·${n(pb2)} = <span class="hl">${n(N2)} €</span> → crecimiento nominal ${pc(gn)}</li>
+        <li>Real año 2 (cantidades del año 2 a precios del año 1) = ${n(qa2)}·${n(pa)} + ${n(qb2)}·${n(pb)} = <span class="hl">${n(R2)} €</span></li>
+        <li>Crecimiento real = ${fr(n(R2),n(N1))} − 1 = <span class="hl">${pc(gr)}</span>: es el cambio en las cantidades (Q).</li>
+        <li>Precios: ${fr(n(N2),n(R2))} − 1 = <span class="hl">${pc(def)}</span>. Comprobación: (1 + ${n(gr/100,4)})·(1 + ${n(def/100,4)}) = ${n((1+gr/100)*(1+def/100),4)} = 1 + crecimiento nominal.</li></ol>`};
+  }
+},
+interes(){
+  for(;;){
+    const i=pick([1,1.5,2,2.5,3,3.5,4,4.5,5,6,7]),pe=pick([0.5,1,1.5,2,2.5,3,4,5,6]);
+    const r=i-pe;if(Math.abs(r)<0.01)continue;
+    const L=R(5,40)*1000,tgt=pick([1,1.5,2,2.5,3]),up=pick([1,2,3]);
+    const sav=r>0?'Gana poder adquisitivo':'Pierde poder adquisitivo';
+    return {topic:'interes',
+      statement:`<p>Un banco paga y cobra un tipo nominal del <b>${n(i)} %</b> anual. La inflación esperada para el año es del <b>${n(pe)} %</b>.</p><p>a) ¿Cuál es el tipo de interés real aproximado?<br>b) Una empresa pide <b>${n(L)} €</b> a un año. ¿Cuál es el coste real aproximado del préstamo, en euros de poder adquisitivo? (negativo si sale ganando)<br>c) ¿Qué tipo nominal haría falta para un tipo real del <b>${n(tgt)} %</b>?<br>d) ¿Qué le pasa a quien ahorra a este tipo?<br>e) Si la inflación esperada sube al ${n(pe+up)} % y el banco mantiene el ${n(i)} %, ¿qué le pasa al tipo real?</p>`,
+      fields:[{label:'Tipo real r',unit:'%',ans:r},{label:'Coste real del préstamo',unit:'€',ans:L*r/100},{label:`Tipo nominal para r = ${n(tgt)} %`,unit:'%',ans:tgt+pe},ch('Quien ahorra…',['Gana poder adquisitivo','Pierde poder adquisitivo','Mantiene su poder adquisitivo'],sav,true),ch('El tipo real…',['Sube','Baja','No cambia'],'Baja',true)],
+      solution:`<ol class="steps">
+        <li><span class="m">r ≈ i − πᵉ = ${n(i)} − ${n(pe)} = <span class="hl">${pc(r)}</span></span>. Versión exacta: ${fr(`1 + ${n(i/100,4)}`,`1 + ${n(pe/100,4)}`)} − 1 = ${pc(((1+i/100)/(1+pe/100)-1)*100)}.</li>
+        <li>Coste real ≈ ${n(L)} · ${pc(r)} = <span class="hl">${n(L*r/100)} €</span>. ${r<0?'Es negativo: lo que se devuelve compra menos de lo que se pidió, así que el prestatario sale ganando.':'Se pagan intereses nominales de '+n(L*i/100)+' €, pero la inflación se come '+n(L*pe/100)+' €.'}</li>
+        <li><span class="m">i ≈ r + πᵉ = ${n(tgt)} + ${n(pe)} = <span class="hl">${pc(tgt+pe)}</span></span></li>
+        <li>Con r ${r>0?'positivo':'negativo'}, quien ahorra <span class="hl">${sav.toLowerCase()}</span>.</li>
+        <li>Con πᵉ = ${n(pe+up)} %: <span class="m">r ≈ ${n(i)} − ${n(pe+up)} = ${pc(i-pe-up)}</span> → el tipo real <span class="hl">baja</span>. Si el banco quiere mantener r, tiene que subir i.</li></ol>`};
+  }
+},
+dinero(){
+  const D=pick([100,200,500,1000,2000,5000]),l=pick([5,8,10,12.5,20,25]),q=1-l/100;
+  const m=100/l,tot=D*m,loan1=D*q,item=pick(MONEY);
+  return {topic:'dinero',
+    statement:`<p>Un cliente deposita <b>${n(D)} $</b> en efectivo en un banco. En el modelo estilizado de Moss, en cada ronda se «fuga» el <b>${n(l)} %</b> (reservas y efectivo que no vuelve al banco) y el resto se presta, se gasta y se vuelve a depositar.</p><p>a) ¿Cuál es el multiplicador?<br>b) ¿Cuántos depósitos se crean como máximo en total?<br>c) ¿Cuánto presta el banco en la primera ronda?<br>d) ¿Cuántos préstamos nuevos se crean en total?<br>e) Clasifica: <b>${item[0]}</b>.</p>`,
+    fields:[{label:'Multiplicador m',unit:'',ans:m},{label:'Depósitos totales máximos',unit:'$',ans:tot},{label:'Préstamo de la 1.ª ronda',unit:'$',ans:loan1},{label:'Préstamos nuevos en total',unit:'$',ans:tot-D},ch(`${item[0]}: forma parte de…`,MONEY_OPTS,item[1],true)],
+    solution:`<ol class="steps">
+      <li><span class="m">m = ${fr('1','fuga')} = ${fr('1',n(l/100,3))} = <span class="hl">${n(m,4)}</span></span></li>
+      <li>Depósitos: ${n(D)} + ${n(D*q)} + ${n(D*q*q)} + … = ${n(D)} · ${n(m,4)} = <span class="hl">${n(tot)} $</span></li>
+      <li>Primera ronda: el banco guarda ${n(D*l/100)} y presta ${n(D)} · ${n(q,3)} = <span class="hl">${n(loan1)} $</span></li>
+      <li>Préstamos nuevos = depósitos totales − depósito inicial = ${n(tot)} − ${n(D)} = <span class="hl">${n(tot-D)} $</span>. Todo el efectivo inicial acaba como fuga (reservas o efectivo fuera del banco).</li>
+      <li>${item[2]} → <span class="hl"><b>${item[1]}</b></span>.</li></ol>
+      <div class="warn"><b>Matiz:</b> el multiplicador no es mecánico. Capital, riesgo, regulación y demanda de préstamos pueden hacer que se preste menos.</div>`};
+},
+mercados(){
+  const e=pick(EVENTS),mk=pick(MARKETS);
+  const dir=e.d>0?'Derecha (aumenta)':'Izquierda (disminuye)';
+  const P=e.c==='Demanda'?(e.d>0?'Sube':'Baja'):(e.d>0?'Baja':'Sube');
+  const Q=e.d>0?'Sube':'Baja';
+  return {topic:'mercados',
+    statement:`<p>Mercado de <b>${mk}</b>. Partimos del equilibrio y ocurre lo siguiente:</p><p class="ev">«${e.t}»</p><p>¿Qué curva se desplaza, hacia dónde, y qué les pasa al precio y a la cantidad de equilibrio?</p>`,
+    fields:[ch('Curva que se desplaza',['Demanda','Oferta'],e.c,true),ch('Hacia dónde',['Derecha (aumenta)','Izquierda (disminuye)'],dir,true),ch('Precio de equilibrio',['Sube','Baja'],P,true),ch('Cantidad de equilibrio',['Sube','Baja'],Q,true)],
+    solution:`<ol class="steps">
+      <li>¿Afecta a los compradores o a los vendedores? → <span class="hl"><b>${e.c}</b></span>. ${e.w}</li>
+      <li>Se desplaza hacia la <span class="hl">${dir.toLowerCase()}</span>.</li>
+      <li>Nuevo equilibrio: precio <span class="hl">${P.toLowerCase()}</span> y cantidad <span class="hl">${Q.toLowerCase()}</span>.${e.c==='Oferta'?' Con la oferta, precio y cantidad se mueven en sentidos contrarios.':' Con la demanda, precio y cantidad se mueven en el mismo sentido.'}</li></ol>${miniSD(e.c,e.d)}`};
+},
+productividad(){
+  for(;;){
+    const Y1=R(40,120)*10,H1=R(20,60),W1=Math.round(Y1*pick([.5,.55,.6,.65]));
+    const gy=pick([1,1.5,2,2.5,3,4]),gh=pick([-1,-0.5,0,0.5,1,2]),gw=pick([1,2,3,4,5,6]);
+    const Y2=rd(Y1*(1+gy/100),1),H2=rd(H1*(1+gh/100),2),W2=rd(W1*(1+gw/100),1);
+    const p1=Y1/H1,p2=Y2/H2,dp=(p2/p1-1)*100,c1=W1/Y1,c2=W2/Y2,dc=(c2/c1-1)*100;
+    if(Math.abs(dc)<0.3)continue;
+    const v=dc>0?'Sube el CLU: presión sobre precios o beneficios':'Baja el CLU: margen para subir salarios o bajar precios';
+    const wh1=W1/H1,wh2=W2/H2;
+    return {topic:'productividad',
+      statement:`<p>Datos de una economía (producción real y remuneración en millones de €, horas en millones):</p>${tableHTML(['Año','Producción real','Horas trabajadas','Remuneración del trabajo'],[['Año 1',n(Y1),n(H1),n(W1)],['Año 2',n(Y2,1),n(H2),n(W2,1)]],null,'lft')}<p>Calcula la productividad del trabajo de cada año, su variación y la variación del coste laboral unitario (porcentajes con dos decimales). ¿Qué indica?</p>`,
+      fields:[{label:'Productividad año 1',unit:'€/h',ans:p1},{label:'Productividad año 2',unit:'€/h',ans:p2},{label:'Variación de la productividad',unit:'%',ans:dp,tolAbs:.06},{label:'Variación del CLU',unit:'%',ans:dc,tolAbs:.06},ch('¿Qué indica?',['Sube el CLU: presión sobre precios o beneficios','Baja el CLU: margen para subir salarios o bajar precios','El CLU no cambia'],v,true)],
+      solution:`<ol class="steps">
+        <li>Productividad = producción real / horas: <span class="m">${n(Y1)}/${n(H1)} = <span class="hl">${n(p1,3)}</span></span> y <span class="m">${n(Y2,1)}/${n(H2)} = <span class="hl">${n(p2,3)}</span></span> €/h → <span class="hl">${pc(dp)}</span></li>
+        <li>CLU = remuneración / producción real: <span class="m">${n(W1)}/${n(Y1)} = ${n(c1,4)}</span> y <span class="m">${n(W2,1)}/${n(Y2,1)} = ${n(c2,4)}</span> → <span class="hl">${pc(dc)}</span></li>
+        <li>Salario por hora: ${n(wh1,3)} → ${n(wh2,3)} € (${pc((wh2/wh1-1)*100)}). Atajo: % CLU ≈ % salario/hora − % productividad = ${pc((wh2/wh1-1)*100)} − ${pc(dp)} ≈ ${pc((wh2/wh1-1)*100-dp)}.</li>
+        <li><span class="hl"><b>${v}</b></span>.</li></ol>`};
+  }
+},
+conceptos(){
+  const a=shuffle(STOCKFLOW).slice(0,2),b=shuffle(INPIB).slice(0,2);
+  return {topic:'conceptos',
+    statement:`<p>Clasifica cada elemento. Los dos primeros: ¿son un <b>stock</b> (se mide en un momento) o un <b>flujo</b> (se mide por periodo)? Los dos últimos: ¿<b>se suman al PIB</b> de este año?</p>`,
+    fields:[...a.map(x=>ch(x[0],['Stock','Flujo'],x[1],true)),...b.map(x=>ch(x[0],['Se suma al PIB','No se suma al PIB'],x[1],true))],
+    solution:`<ol class="steps">${[...a,...b].map(x=>`<li>${x[0]} → <span class="hl"><b>${x[1]}</b></span>. ${x[2]}</li>`).join('')}</ol>`};
+},
+actores(){
+  const a=shuffle(DECIDE).slice(0,3),b=shuffle(BALANCE).slice(0,2);
+  return {topic:'actores',
+    statement:`<p>En una economía cerrada hay cinco actores: hogares, empresas, gobierno, bancos comerciales y banco central.</p><p>a) ¿Qué actor toma cada una de estas tres decisiones?<br>b) En los balances enlazados, ¿de quién es <b>pasivo</b> cada uno de los dos últimos elementos?</p>`,
+    fields:[...a.map(x=>ch(x[0],ACT,x[1],true)),...b.map(x=>ch(`${x[0]}: ¿pasivo de quién?`,ACT,x[1],true))],
+    solution:`<ol class="steps">${a.map(x=>`<li>${x[0]} → <span class="hl"><b>${x[1]}</b></span></li>`).join('')}${b.map(x=>`<li>${x[0]}: pasivo de <span class="hl"><b>${x[1].toLowerCase()}</b></span> y activo ${x[2]}. Todo activo financiero es el pasivo de otro.</li>`).join('')}</ol>`};
+},
+identidades(){
+  for(;;){
+    const C=R(45,75)*10,I=R(10,30)*10,G=R(12,30)*10,Tx=R(15,35)*10,Tr=R(3,12)*10;
+    if(Tx<=Tr+20)continue;
+    const Y=C+I+G,YD=Y+Tr-Tx,S=YD-C,def=G+Tr-Tx;
+    if(S<=0)continue;
+    return {topic:'identidades',
+      statement:`<p>Economía cerrada (miles de millones de €):</p>${tableHTML(['Consumo C','Inversión I','Compras públicas G','Impuestos','Transferencias'],[[n(C),n(I),n(G),n(Tx),n(Tr)]])}<p>Calcula el PIB, la renta disponible, el ahorro privado, el déficit público (negativo si hay superávit) y comprueba cuánto vale S − I.</p>`,
+      fields:[{label:'PIB Y',unit:'',ans:Y},{label:'Renta disponible YD',unit:'',ans:YD},{label:'Ahorro privado S',unit:'',ans:S},{label:'Déficit público',unit:'',ans:def},{label:'S − I',unit:'',ans:S-I}],
+      solution:`<ol class="steps">
+        <li><span class="m">Y = C + I + G = ${n(C)} + ${n(I)} + ${n(G)} = <span class="hl">${n(Y)}</span></span></li>
+        <li><span class="m">YD = Y + transferencias − impuestos = ${n(Y)} + ${n(Tr)} − ${n(Tx)} = <span class="hl">${n(YD)}</span></span></li>
+        <li><span class="m">S = YD − C = ${n(YD)} − ${n(C)} = <span class="hl">${n(S)}</span></span></li>
+        <li><span class="m">Déficit = G + transferencias − impuestos = ${n(G)} + ${n(Tr)} − ${n(Tx)} = <span class="hl">${n(def)}</span></span>${def<0?' (superávit)':''}</li>
+        <li>Con T neto = ${n(Tx)} − ${n(Tr)} = ${n(Tx-Tr)}: <span class="m">S + T = ${n(S)} + ${n(Tx-Tr)} = ${n(S+Tx-Tr)}</span> y <span class="m">I + G = ${n(I)} + ${n(G)} = ${n(I+G)}</span> ✓</li>
+        <li><span class="m">S − I = ${n(S)} − ${n(I)} = <span class="hl">${n(S-I)}</span> = G − T</span>: ${def>0?'el ahorro privado que no financia inversión financia el déficit.':'el superávit público financia inversión privada por encima del ahorro privado.'}</li></ol>`};
+  }
+},
+shocks(){
+  const s=pick(SHOCKS);
+  return {topic:'shocks',
+    statement:`<p>Aplica el método <b>shock → actor → decisión → flujo → PIB</b> a este shock en una economía cerrada:</p><p class="ev">«${s.t}»</p>`,
+    fields:[ch('Actor que toma la primera decisión',ACT,s.actor,true),ch('Canal principal hacia el PIB',CANALES,s.canal,true),ch('Efecto sobre Y a corto plazo',['Sube','Baja'],s.Y,true),ch('Presión sobre la inflación',['Al alza','A la baja'],s.inf,true)],
+    solution:`${chainHTML(s.chain,STEP5)}${s.loop?`<p class="loop">↺ ${s.loop}</p>`:''}<p><b>Matiz:</b> ${s.caveat}</p><p><b>¿Quién puede frenarlo?</b> ${s.stop}</p><div class="en" lang="en"><b>Exam answer (EN)</b>${s.en}</div>`};
+},
+};
+
+function miniSD(c,d){
+  const k=2/3,sh=30*d,dxD=c==='Demanda'?sh:0,dxS=c==='Oferta'?sh:0;
+  const ln=(x0,y0,x1,y1,col,ghost)=>`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" style="stroke:var(${col})" stroke-width="2"${ghost?' stroke-dasharray="5 4" opacity=".5"':''}/>`;
+  const Dl=(dx,g)=>ln(60+dx,25,240+dx,145,'--s-d',g),Sl=(dx,g)=>ln(60+dx,145,240+dx,25,'--s-s',g);
+  const E=(a,b)=>{const u=90+(a+b)/2;return [60+u,25+(u-a)*k];};
+  const [x0,y0]=E(0,0),[x1,y1]=E(dxD,dxS);
+  const lab=(x,y,t,col)=>`<text x="${x}" y="${y}" text-anchor="end" font-size="12" font-weight="700" style="fill:var(${col})">${t}</text>`;
+  const labs=c==='Demanda'?lab(240,162,'D₀','--s-d')+lab(240+dxD,d>0?162:150,'D₁','--s-d')+lab(240,18,'S','--s-s'):lab(240,18,'S₀','--s-s')+lab(240+dxS,d>0?18:30,'S₁','--s-s')+lab(240,162,'D','--s-d');
+  return `<svg viewBox="0 0 280 190" style="width:280px;max-width:100%;height:auto;display:block;margin:10px 0;color:var(--ink)" role="img" aria-label="Desplazamiento de la ${c.toLowerCase()} hacia la ${d>0?'derecha':'izquierda'}">
+    <g stroke="currentColor" stroke-width="1.2"><line x1="30" y1="10" x2="30" y2="172"/><line x1="30" y1="172" x2="272" y2="172"/></g>
+    <text x="36" y="14" font-size="11" fill="currentColor">P</text><text x="270" y="186" font-size="11" text-anchor="end" fill="currentColor">Q</text>
+    ${c==='Demanda'?Dl(0,1)+Dl(dxD,0)+Sl(0,0):Sl(0,1)+Sl(dxS,0)+Dl(0,0)}
+    <g stroke="currentColor" stroke-dasharray="2 3" opacity=".55"><line x1="30" y1="${y1}" x2="${x1}" y2="${y1}"/><line x1="${x1}" y1="${y1}" x2="${x1}" y2="172"/></g>
+    <circle cx="${x0}" cy="${y0}" r="4" style="fill:var(--card);stroke:var(--ink)" stroke-width="1.5"/>
+    <circle cx="${x1}" cy="${y1}" r="4.5" style="fill:var(--ink);stroke:var(--card)" stroke-width="2"/>
+    ${labs}</svg>`;
+}
+
+/* ---------- teoría ---------- */
+const THEORY={
+pib:`<p>El PIB mide el valor de la producción <b>final</b> de un país en un periodo. En una economía cerrada se puede medir de tres formas y las tres dan lo mismo: lo que se produce, lo que se gana y lo que se gasta.</p>
+<h3>Fórmulas</h3>
+<div class="formula">Valor añadido = ventas − coste de los inputs no laborales<br>PIB = Σ valores añadidos = gasto final (C + I + G) = salarios + beneficios + rentas</div>
+<h3>Procedimiento</h3>
+<ol class="steps"><li>Para cada etapa, resta a sus ventas lo que compra a la etapa anterior.</li><li>Suma los valores añadidos: es el PIB.</li><li>Comprueba que coincide con las ventas de la última etapa (el gasto final).</li><li>Si te dan los salarios, el resto del PIB son beneficios y rentas.</li></ol>
+<h3>Ejemplo de clase</h3>
+<div class="formula">Bosque 1000 · Fábrica 2500 − 1000 = 1500 · Tienda 3000 − 2500 = 500<br>PIB = 3000 (sumar todas las ventas daría 6500)</div>
+<div class="warn"><b>Ojo:</b> los salarios no se restan: son parte del valor añadido (la renta del trabajo). Y el PIB mide producción, no bienestar: deja fuera el trabajo doméstico, la distribución y el daño medioambiental.</div>`,
+real:`<p>El PIB nominal puede subir porque se produce más o porque los precios suben. El PIB real separa las dos cosas valorando las cantidades a precios de un año base.</p>
+<h3>Fórmulas</h3>
+<div class="formula">PIB nominal = Σ Pₜ·Qₜ &nbsp;(precios corrientes)<br>PIB real = Σ P<sub>base</sub>·Qₜ &nbsp;(precios constantes)<br>Subida de precios = nominal / real − 1<br>(1 + g nominal) = (1 + g real)·(1 + π) &nbsp;⇒&nbsp; g real ≈ g nominal − π<br>Poder adquisitivo del dinero ≈ 1/P</div>
+<h3>Procedimiento</h3>
+<ol class="steps"><li>Nominal de cada año: multiplica cantidades y precios del mismo año.</li><li>Real del año 2: cantidades del año 2 por precios del año base.</li><li>Crecimiento real = real año 2 / nominal año 1 − 1 (en el año base, real = nominal).</li><li>La subida de precios es el cociente nominal / real del año 2.</li></ol>
+<h3>Ejemplo</h3>
+<div class="formula">Año 1: 100 bicis a 200 € + 5000 panes a 2 € = 30 000 €<br>Año 2: 105·210 + 5100·2,10 = 32 760 € (nominal, +9,2 %)<br>Real año 2: 105·200 + 5100·2 = 31 200 € (+4,0 %) · precios +5 %</div>
+<div class="warn"><b>Ojo:</b> inflación es la subida del nivel <b>general</b> de precios, no la de un solo bien. Una inflación baja y estable facilita planificar; alta o impredecible distorsiona salarios, precios, ahorro y deuda.</div>`,
+interes:`<p>El tipo de interés es el precio de trasladar poder adquisitivo entre hoy y mañana. Lo que importa para decidir es el tipo <b>real</b>: el nominal corregido por la inflación esperada.</p>
+<h3>Fórmulas</h3>
+<div class="formula">r ≈ i − πᵉ<br>Exacta: 1 + r = (1 + i) / (1 + πᵉ)<br>Tipo nominal necesario: i ≈ r + πᵉ</div>
+<h3>Cómo leerlo</h3>
+${tableHTML(['Situación','Para quien ahorra','Para quien pide prestado'],[['r > 0','gana poder adquisitivo','paga un coste real'],['r = 0','lo mantiene','no paga coste real'],['r < 0','pierde poder adquisitivo','sale ganando']],null,'lft')}
+<h3>Ejemplo</h3>
+<div class="formula">i = 5 %, πᵉ = 3 % → r ≈ 2 %<br>Si πᵉ sube al 6 % y i sigue en 5 % → r ≈ −1 %</div>
+<div class="note">El dinero tiene tres precios: tipo de interés (tiempo), tipo de cambio (monedas) y nivel de precios (bienes)</div>`,
+dinero:`<p>El dinero reduce el coste del intercambio: evita la doble coincidencia de deseos del trueque. Se define por su liquidez y aceptación, no por su forma física.</p>
+<h3>Medidas</h3>
+${tableHTML(['Medida','Contiene'],[['Base monetaria','efectivo + reservas de los bancos en el banco central'],['M1','efectivo en manos del público + depósitos a la vista'],['Dinero amplio','M1 + depósitos menos líquidos y casi-dinero']],null,'lft')}
+<h3>Multiplicador estilizado de Moss</h3>
+<div class="formula">m = 1 / tasa de fuga<br>Depósitos totales = depósito inicial · m<br>Préstamo de la ronda 1 = depósito · (1 − fuga)<br>Préstamos nuevos = depósitos totales − depósito inicial</div>
+<h3>Ejemplo de clase</h3>
+<div class="formula">$100 de efectivo, fuga 10 % → el banco guarda 10 y presta 90<br>m = 10 → depósitos 1000 → préstamos nuevos 900</div>
+<div class="warn"><b>Ojo:</b> el multiplicador no es mecánico (efectivo del público, reservas, capital, riesgo, regulación, demanda de préstamos). Y un préstamo nuevo <b>crea</b> un depósito nuevo: los bancos no solo pasan ahorros.</div>`,
+mercados:`<p>Un mercado da un resultado: un precio y una cantidad. Cuando algo cambia, primero decide si afecta a los compradores (demanda) o a los vendedores (oferta).</p>
+<h3>Qué desplaza cada curva</h3>
+${tableHTML(['Curva','Aumenta (derecha) cuando…'],[['Demanda','más renta, más confianza, crédito más fácil, se esperan subidas de precio'],['Oferta','inputs más baratos, más productividad, más capacidad, demanda estable esperada']],null,'lft')}
+<h3>Resultado</h3>
+${tableHTML(['Desplazamiento','P','Q'],[['Demanda → derecha','sube','sube'],['Demanda → izquierda','baja','baja'],['Oferta → derecha','baja','sube'],['Oferta → izquierda','sube','baja']],null,'lft')}
+<h3>Procedimiento</h3>
+<ol class="steps"><li>¿Quién cambia su comportamiento: compradores o vendedores?</li><li>¿Quieren comprar o vender más (derecha) o menos (izquierda) a cada precio?</li><li>Lee el nuevo cruce: demanda mueve P y Q en el mismo sentido; oferta, en sentidos contrarios.</li></ol>
+<div class="note">En macro, muchas decisiones de demanda se mueven juntas</div>`,
+productividad:`<p>La producción potencial depende de trabajo, capital y de la eficiencia con que se combinan. La productividad conecta salarios, costes y producción.</p>
+<h3>Fórmulas</h3>
+<div class="formula">Y* = F(L, K; A)<br>Productividad = producción real / horas trabajadas<br>CLU = remuneración del trabajo / producción real<br>% CLU ≈ % salario por hora − % productividad</div>
+<h3>Interpretación</h3>
+<ul><li>Si los salarios crecen igual que la productividad, el CLU no cambia: salarios reales más altos sin presión en precios.</li><li>Si los salarios crecen más que la productividad, sube el CLU: presión sobre precios o beneficios.</li></ul>
+<h3>Ejemplo</h3>
+<div class="formula">800/40 = 20 €/h → 824/40,4 = 20,40 €/h (+1,98 %)<br>CLU 480/800 = 0,600 → 504/824 = 0,612 (+1,94 %)</div>
+<div class="warn"><b>Ojo:</b> productividad no es «trabajar más duro»: capital, formación, organización y tecnología cuentan.</div>`,
+conceptos:`<p>Dos lentes distintas: el <b>flujo</b> se mide por periodo y el <b>stock</b> en un momento. Los flujos cambian los stocks y los stocks influyen en los flujos futuros.</p>
+${tableHTML(['Flujo (por periodo)','Stock (en un momento)'],[['PIB del año','stock de capital hoy'],['inversión del año','capital acumulado'],['déficit del año','deuda pública hoy'],['ahorro del mes','riqueza hoy']],null,'lft')}
+<h3>¿Se suma al PIB?</h3>
+${tableHTML(['Sí','No'],[['bienes y servicios finales','bienes intermedios (ya están en el final)'],['producción de mercado','trabajo doméstico no remunerado'],['inversión en capital nuevo (I)','compraventa de activos financieros'],['servicios públicos (G)','transferencias (pensiones, subsidios)'],['—','daño medioambiental (no se resta)']],null,'lft')}
+<div class="warn"><b>Idea de fondo:</b> los activos financieros son derechos nominales sobre la producción futura; redistribuyen quién puede comprar, pero solo la capacidad productiva agranda lo que hay para repartir.</div>`,
+actores:`<p>Cinco actores domésticos. El gasto de uno es la renta de otro, el coste de uno es el ingreso de otro y la deuda de uno es el activo de otro: el sistema no tiene pagador final.</p>
+${tableHTML(['Actor','Decide'],[['Hogares','trabajo, consumo, ahorro, endeudamiento'],['Empresas','qué producir, contratación, precios, inversión'],['Gobierno','impuestos, gasto, transferencias, regulación'],['Bancos comerciales','a quién prestar, a qué tipo, riesgo, liquidez'],['Banco central','tipo oficial, base monetaria, mercado abierto, prestamista de última instancia']],null,'lft')}
+<h3>Fórmulas</h3>
+<div class="formula">Renta disponible YD = salarios + beneficios + transferencias − impuestos<br>Beneficio = ingresos − costes<br>Déficit = G + transferencias − T</div>
+<h3>Balances enlazados</h3>
+${tableHTML(['Elemento','Activo de','Pasivo de'],[['Hipoteca','banco','hogar'],['Depósito','hogar','banco'],['Deuda pública','quien la compra','gobierno'],['Reservas','banco comercial','banco central'],['Efectivo','quien lo tiene','banco central']],null,'lft')}`,
+identidades:`<p>En una economía cerrada, la renta que no se gasta en consumo (fugas: ahorro e impuestos) tiene que coincidir con el gasto que entra por otras vías (inyecciones: inversión y compras públicas).</p>
+<h3>Fórmulas</h3>
+<div class="formula">Gasto: Y = C + I + G<br>Uso de la renta: Y = C + S + T<br>⇒ S + T = I + G &nbsp;⇔&nbsp; S − I = G − T<br>T = impuestos − transferencias (netos) · YD = Y − T · S = YD − C</div>
+<h3>Procedimiento</h3>
+<ol class="steps"><li>Y = C + I + G.</li><li>YD = Y + transferencias − impuestos.</li><li>S = YD − C.</li><li>Déficit = G + transferencias − impuestos.</li><li>Comprueba S + T = I + G y que S − I = déficit.</li></ol>
+<h3>Ejemplo</h3>
+<div class="formula">C 600, I 150, G 250, impuestos 300, transferencias 80<br>Y = 1000 · YD = 780 · S = 180 · déficit = 30 · S − I = 30</div>
+<div class="note">Demanda insuficiente ⇒ Y &lt; Y*: hay trabajadores y máquinas ociosos</div>`,
+shocks:`<p>Para analizar cualquier shock, nunca saltes directamente al PIB. Nombra el actor y la decisión que lo transmiten.</p>
+<div class="formula">Shock → actor → decisión → flujo → PIB (y bucle)</div>
+<h3>Mapa compacto</h3>
+${tableHTML(['Shock','Primera decisión','Transmisión'],[['Cae la confianza','hogares recortan C','ventas, contratación y renta caen; Y cae'],['Suben los tipos','bancos suben tipos de préstamo','menos endeudamiento, C e I; la demanda se enfría'],['Costes de inputs','empresas suben precios o recortan','cae la renta real; sube la inflación'],['Sube G','el gobierno compra más','más ventas y renta; capacidad después'],['Crédito más duro','bancos prestan menos','caen I y duraderos; Y cae'],['Suben impuestos','menos renta disponible','cae C salvo que G compense']],null,'lft')}
+<h3>Firma de cada tipo de shock</h3>
+<ul><li><b>Demanda</b> (confianza, tipos, impuestos, crédito, G): Y y la inflación se mueven en la <b>misma</b> dirección.</li><li><b>Costes</b> (energía, inputs): Y baja y la inflación sube a la vez.</li></ul>
+<div class="warn"><b>Para nota:</b> nombra el matiz (capacidad, inflación, financiación o expectativas) y quién podría cortar el bucle.</div>`,
+};
+
+/* ---------- flashcards ---------- */
+const CARDS=[
+ ['pib','¿Qué es el PIB (GDP)?','El valor de la producción final de un país en un periodo'],
+ ['pib','Tres maneras de medir el PIB','Producción (valor añadido), renta (salarios, beneficios, rentas) y gasto (C + I + G)'],
+ ['pib','Valor añadido','Ventas − coste de los inputs no laborales'],
+ ['pib','¿Por qué no se suman todas las ventas?','Se contarían varias veces los bienes intermedios (double counting)'],
+ ['pib','Ejemplo de clase: bosque 1000, muebles 2500, tienda 3000','PIB = 1000 + 1500 + 500 = 3000 $ (sumar ventas daría 6500 $)'],
+ ['pib','¿Qué no recoge bien el PIB?','Trabajo doméstico no remunerado, distribución de la renta y daño medioambiental'],
+ ['pib','Identidad de una economía cerrada','Y = C + I + G'],
+ ['real','PIB nominal','Valor de la producción a precios corrientes: P × Q'],
+ ['real','PIB real','Cantidades valoradas a precios constantes (de un año base)'],
+ ['real','¿Por qué puede subir el PIB nominal?','Porque se produce más (Q) o porque suben los precios (P)'],
+ ['real','Inflación y deflación','Subida y bajada del nivel general de precios'],
+ ['real','Poder adquisitivo del dinero','Se mueve al revés que el nivel de precios: ≈ 1/P'],
+ ['real','Crecimiento real aproximado','Crecimiento nominal − inflación'],
+ ['real','¿Por qué es mala una inflación alta o impredecible?','Cambia salarios, precios, ahorro y endeudamiento y dificulta planificar'],
+ ['interes','¿Qué es el tipo de interés?','El precio de mover poder adquisitivo entre hoy y mañana (el precio del tiempo)'],
+ ['interes','Tipo de interés real','r ≈ i − πᵉ'],
+ ['interes','¿Qué es πᵉ?','La inflación esperada'],
+ ['interes','Tipos más altos: efecto en prestatarios y ahorradores','Los préstamos son más caros y ahorrar es más atractivo'],
+ ['interes','i = 3 % y πᵉ = 6 %','r ≈ −3 %: el ahorro pierde poder adquisitivo y endeudarse sale barato en términos reales'],
+ ['interes','Tres precios macro del dinero','Tipo de interés (tiempo), tipo de cambio (monedas) y nivel de precios (bienes)'],
+ ['dinero','¿Por qué el dinero reduce el coste del intercambio?','Evita la doble coincidencia de deseos del trueque: separa vender de comprar'],
+ ['dinero','Base monetaria','Efectivo + reservas de los bancos comerciales en el banco central'],
+ ['dinero','M1','Efectivo en manos del público + depósitos a la vista'],
+ ['dinero','Dinero amplio','M1 + depósitos menos líquidos y activos casi-dinero'],
+ ['dinero','¿Qué define el dinero?','Su liquidez y su aceptación, no su forma física'],
+ ['dinero','Multiplicador de Moss','m = 1 / tasa de fuga; con un 10 % de fuga, m = 10'],
+ ['dinero','¿Es fijo el multiplicador?','No: depende del efectivo del público, reservas, capital, riesgo, regulación y demanda de préstamos'],
+ ['dinero','¿Un banco solo presta ahorros que ya existen?','No: un préstamo nuevo crea un depósito nuevo, aunque lo limitan capital, riesgo, regulación y financiación'],
+ ['dinero','Más dinero con recursos ociosos','Puede bajar tipos, subir C e I y aumentar la producción'],
+ ['dinero','Más dinero con la capacidad al límite','Sube el nivel de precios; la inflación esperada puede subir los tipos nominales'],
+ ['mercados','Resultado de un mercado','Un precio y una cantidad (el punto de equilibrio)'],
+ ['mercados','La demanda aumenta cuando los compradores…','tienen más renta, más confianza, crédito más fácil o esperan subidas de precio'],
+ ['mercados','La oferta aumenta cuando las empresas…','acceden a inputs más baratos, mejoran productividad, invierten en capacidad o esperan demanda estable'],
+ ['mercados','Demanda a la derecha','Suben el precio y la cantidad'],
+ ['mercados','Oferta a la derecha','Baja el precio y sube la cantidad'],
+ ['mercados','Se encarece la energía','La oferta se desplaza a la izquierda: sube el precio y baja la cantidad'],
+ ['productividad','Producción potencial','Y* = F(L, K; A)'],
+ ['productividad','Tres fuentes de la producción potencial','Trabajo (L), capital (K) y productividad total de los factores (A, TFP)'],
+ ['productividad','Productividad del trabajo','Producción real / horas trabajadas'],
+ ['productividad','Coste laboral unitario (ULC)','Remuneración del trabajo / producción real'],
+ ['productividad','Salarios que suben más que la productividad','Sube el CLU: presión sobre precios o beneficios'],
+ ['productividad','¿Productividad = trabajar más duro?','No: también cuentan capital, formación, organización y tecnología'],
+ ['conceptos','Flujo','Se mide por periodo: renta mensual, PIB anual, consumo del trimestre'],
+ ['conceptos','Stock','Se mide en un momento: riqueza hoy, deuda hoy, stock de capital hoy'],
+ ['conceptos','Relación entre stocks y flujos','Los flujos cambian los stocks; los stocks influyen en los flujos futuros'],
+ ['conceptos','Riqueza financiera','Acciones, bonos y depósitos: derechos sobre renta y producción futuras'],
+ ['conceptos','Riqueza productiva','Capital físico, capital humano y conocimiento útil: aumentan la capacidad futura'],
+ ['conceptos','¿Más dinero crea más producción por sí solo?','No: a largo plazo la restricción real es la producción nacional'],
+ ['conceptos','Primera regla del pensamiento sistémico','Decisión → flujo → resultado → retroalimentación en la siguiente decisión'],
+ ['actores','Los cinco actores de una economía cerrada','Hogares, empresas, gobierno, bancos comerciales y banco central'],
+ ['actores','«El sistema no tiene pagador final»','El gasto de uno es la renta de otro; el coste, el ingreso; la deuda, el activo'],
+ ['actores','Renta disponible','Salarios + beneficios + transferencias − impuestos'],
+ ['actores','¿Cuándo invierte una empresa?','Cuando los ingresos futuros esperados justifican el coste de hoy'],
+ ['actores','Déficit público','G + transferencias − T'],
+ ['actores','¿Por qué el presupuesto público no es como el de un hogar?','Su gasto e impuestos cambian la renta nacional, el empleo y la recaudación futura'],
+ ['actores','Tres herramientas tradicionales del banco central','Préstamos a los bancos, coeficiente de reservas y operaciones de mercado abierto'],
+ ['actores','Operación de mercado abierto','Comprar activos inyecta base monetaria; venderlos la retira'],
+ ['actores','Dilema del banco central','Bajar la inflación puede frenar gasto y empleo a corto plazo'],
+ ['actores','Una hipoteca en los balances','Activo del banco y pasivo del hogar'],
+ ['actores','Las reservas bancarias en los balances','Activo de los bancos comerciales y pasivo del banco central'],
+ ['identidades','Identidad del gasto','Y = C + I + G'],
+ ['identidades','Identidad del uso de la renta','Y = C + S + T'],
+ ['identidades','Fugas e inyecciones en equilibrio','S + T = I + G'],
+ ['identidades','Fugas (leakages)','Ahorro (S) e impuestos (T): renta que no se gasta en bienes nacionales'],
+ ['identidades','Inyecciones (injections)','Inversión (I) y compras públicas (G)'],
+ ['identidades','Producción efectiva vs potencial','Y según la demanda; Y* lo sostenible. Falta de demanda ⇒ Y < Y*'],
+ ['identidades','¿Por qué puede tardar la recuperación?','Salarios y precios rígidos; la ilusión monetaria dificulta bajar salarios nominales'],
+ ['identidades','Ahorro privado neto y déficit','S − I = G − T'],
+ ['shocks','Método para analizar un shock','Shock → actor → decisión → flujo → PIB'],
+ ['shocks','La disciplina del método','Nunca saltar del shock al PIB: nombrar el actor y la decisión'],
+ ['shocks','Shock de costes vs demanda débil','El de costes da a la vez más inflación y menos producción'],
+ ['shocks','Sube el tipo oficial','Préstamos más caros → menos endeudamiento → caen C e I → la inflación se enfría'],
+ ['shocks','Inversión pública en infraestructuras','Demanda ahora y productividad después'],
+ ['shocks','Endurecimiento del crédito','Un shock financiero se vuelve real cuando cambian el gasto y la inversión'],
+ ['shocks','Matices de una buena respuesta','Capacidad, inflación, financiación o expectativas'],
+ ['shocks','Lente 4.0','Datos, plataformas y automatización aceleran los bucles de retroalimentación'],
+ ['shocks','Dilema de las pensiones','Reparto o capitalización: ambas se pagan con la producción disponible cuando se cobran'],
+].map(([t,q,a],i)=>({id:'c'+i,t,q,a}));
+
+/* ---------- progreso y guardado ---------- */
+const LS='ge-progress-v1';
+const blank=()=>({v:1,updated:0,topics:{},cards:{},exams:[]});
+let P=blank();
+try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.v===1)P=s;}catch(e){}
+let dbRef=null,saveTimer=null,saving=Promise.resolve();
+function setSync(on,txt){const el=document.getElementById('sync');el.classList.toggle('on',on);el.querySelector('span').textContent=txt;}
+function save(){
+  P.updated=Date.now();
+  try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}
+  if(!dbRef)return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{const body=JSON.parse(JSON.stringify(P));saving=saving.then(()=>dbRef.set(body)).then(()=>setSync(true,'Guardado en tu cuenta')).catch(()=>setSync(false,'Sin conexión: guardado en este navegador'));},1200);
+}
+(async()=>{
+  try{
+    if(!window.claude?.use)return;
+    const [db,user]=await Promise.all([claude.use('db'),claude.use('user')]);
+    const uid=user?await user.id():null;
+    if(!db||!uid)return;
+    const ref=db.doc('data/users/'+uid+'/progress');
+    const snap=await ref.get();
+    const remote=snap.exists?snap.data():null;
+    dbRef=ref;
+    if(remote&&remote.v===1&&(remote.updated||0)>=(P.updated||0)){P=JSON.parse(JSON.stringify(remote));try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}render();}
+    else if(P.updated){await ref.set(JSON.parse(JSON.stringify(P)));}
+    setSync(true,'Guardado en tu cuenta');
+  }catch(e){}
+})();
+function record(topic,ok){
+  const t=P.topics[topic]||(P.topics[topic]={att:0,ok:0,hist:[]});
+  t.att++;if(ok)t.ok++;t.hist=[...t.hist,ok?1:0].slice(-12);save();
+}
+
+/* ---------- comprobación ---------- */
+function checkField(f,raw){
+  if(f.type==='choice')return raw===f.ans;
+  const u=parseNum(raw);if(!isFinite(u))return false;
+  return Math.abs(u-f.ans)<=Math.max(f.tolAbs??.011,(f.tolRel??.003)*Math.abs(f.ans));
+}
+const shown=f=>f.type==='choice'?f.ans:n(f.ans,2);
+function fieldsHTML(ex,pfx){
+  return `<div class="fields">${ex.fields.map((f,i)=>`<div class="field" id="${pfx}w${i}"><label for="${pfx}f${i}">${f.label}</label><div class="inrow">${f.type==='choice'
+    ?`<select id="${pfx}f${i}"><option value="">Elige…</option>${f.options.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`
+    :`<input id="${pfx}f${i}" inputmode="decimal" autocomplete="off" placeholder="0,00">`}${f.unit?`<span class="unit">${f.unit}</span>`:''}</div><div class="fb"></div></div>`).join('')}</div>`;
+}
+function grade(ex,pfx,reveal){
+  let good=0;
+  ex.fields.forEach((f,i)=>{
+    const w=document.getElementById(pfx+'w'+i),v=document.getElementById(pfx+'f'+i).value,ok=checkField(f,v);
+    if(ok)good++;
+    w.classList.toggle('ok',ok);w.classList.toggle('bad',!ok);
+    w.querySelector('.fb').textContent=ok?'✓ Correcto':(reveal?`✗ Era: ${shown(f)}`:(String(v).trim()?'✗ Revísalo':'✗ Sin respuesta'));
+  });
+  return good;
+}
+
+/* ---------- glosario de símbolos ---------- */
+const GL={
+ Y:['PIB (output, GDP)','Valor de la producción final en un periodo. En economía cerrada, Y = C + I + G.'],
+ 'Y*':['Producción potencial','Lo que trabajo, capital y tecnología podrían producir de forma sostenible: Y* = F(L, K; A).'],
+ C:['Consumo','Gasto de los hogares en bienes y servicios.'],
+ I:['Inversión','Gasto en capital nuevo: fábricas, equipos, software, vivienda. Une la demanda de hoy con la capacidad de mañana.'],
+ G:['Compras públicas','Bienes y servicios que compra el gobierno. No incluye transferencias (pensiones, subsidios).'],
+ S:['Ahorro privado','Renta disponible que no se consume: S = YD − C. Es una fuga del flujo circular.'],
+ T:['Impuestos (netos)','En las identidades, impuestos menos transferencias. Es una fuga del flujo circular.'],
+ P:['Precio / nivel de precios','En un mercado, el precio del bien. En macro, el nivel general de precios: si sube, el dinero compra menos (≈ 1/P).'],
+ Q:['Cantidad','Cantidad producida o intercambiada. PIB nominal = P × Q.'],
+ YD:['Renta disponible','Salarios + beneficios + transferencias − impuestos.'],
+ NX:['Exportaciones netas','Exportaciones − importaciones. Entra en el Tema 2 (economía abierta).'],
+ r:['Tipo de interés real','El nominal corregido por la inflación esperada: r ≈ i − πᵉ.'],
+ i:['Tipo de interés nominal','El tipo que figura en el contrato del préstamo o del depósito.'],
+ 'πᵉ':['Inflación esperada','Subida del nivel de precios que se espera para el periodo.'],
+ 'π':['Inflación','Tasa de aumento del nivel general de precios.'],
+ m:['Multiplicador bancario','En el modelo estilizado de Moss, m = 1 / tasa de fuga.'],
+ 'ℓ':['Tasa de fuga','Parte de cada depósito que no vuelve a prestarse (reservas, efectivo que guarda el público).'],
+ L:['Trabajo (labour)','Horas trabajadas, participación, educación y habilidades.'],
+ K:['Capital','Plantas, equipos, infraestructuras y software productivo.'],
+ A:['Productividad total de los factores (TFP)','Eficiencia con la que se combinan trabajo y capital.'],
+ F:['Función de producción','Cómo se combinan L, K y A para producir.'],
+ M1:['M1','Efectivo en manos del público + depósitos a la vista.'],
+ PIB:['Producto interior bruto (GDP)','Valor de la producción final de un país en un periodo.'],
+ CLU:['Coste laboral unitario (ULC)','Remuneración del trabajo / producción real.'],
+ VA:['Valor añadido','Ventas − coste de los inputs no laborales.'],
+};
+const GSEL='.m,.formula,.hero-eq,.cheat p,.card-fc .a,.field label';
+const RUN=/[A-Za-zÁÉÍÓÚáéíóúñÑπᵉℓ*0-9]+/g;
+function makeSym(key,txt){const sp=document.createElement('span');sp.className='sym';sp.dataset.k=key;sp.textContent=txt;return sp;}
+function annotate(root){
+  const tops=[...root.querySelectorAll(GSEL)].filter(el=>!el.parentElement.closest(GSEL)&&!el.closest('.nosym,svg'));
+  for(const top of tops){
+    const w=document.createTreeWalker(top,NodeFilter.SHOW_TEXT);const nodes=[];
+    while(w.nextNode()){const t=w.currentNode;if(!t.parentElement.closest('.sym,sub,sup'))nodes.push(t);}
+    for(const t of nodes){
+      const txt=t.data,pieces=[];let last=0,hit=false;
+      for(const mt of txt.matchAll(RUN)){
+        const k=mt[0];if(!Object.prototype.hasOwnProperty.call(GL,k))continue;
+        if(mt.index>last)pieces.push(document.createTextNode(txt.slice(last,mt.index)));
+        pieces.push(makeSym(k,k));last=mt.index+k.length;hit=true;
+      }
+      if(!hit)continue;
+      if(last<txt.length)pieces.push(document.createTextNode(txt.slice(last)));
+      t.replaceWith(...pieces);
+    }
+  }
+}
+const tip=document.createElement('div');tip.id='symtip';tip.hidden=true;tip.setAttribute('role','tooltip');document.body.appendChild(tip);
+let tipTimer=null,armed=null;
+function showTip(sp){
+  const g=GL[sp.dataset.k];if(!g)return;
+  tip.innerHTML=`<div class="st-h"><span class="st-s">${esc(sp.dataset.k)}</span><span class="st-n">${esc(g[0])}</span></div><div class="st-d">${esc(g[1])}</div>`;
+  tip.hidden=false;
+  const r=sp.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;
+  let top=r.bottom+8;if(top+h>innerHeight-8)top=r.top-h-8;
+  tip.style.top=Math.max(8,top)+'px';
+  tip.style.left=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8)+'px';
+}
+function hideTip(){clearTimeout(tipTimer);if(armed)armed.classList.remove('arming');armed=null;tip.hidden=true;}
+document.addEventListener('pointerover',e=>{
+  if(e.pointerType==='touch')return;
+  const sp=e.target.closest&&e.target.closest('.sym');if(!sp||sp===armed)return;
+  hideTip();armed=sp;sp.classList.add('arming');tipTimer=setTimeout(()=>showTip(sp),1200);
+});
+document.addEventListener('pointerout',e=>{
+  if(!armed)return;const sp=e.target.closest&&e.target.closest('.sym');
+  if(sp!==armed||(e.relatedTarget&&armed.contains(e.relatedTarget)))return;hideTip();
+});
+document.addEventListener('click',e=>{
+  const sp=e.target.closest&&e.target.closest('.sym');
+  if(sp&&matchMedia('(hover: none)').matches){e.preventDefault();hideTip();showTip(sp);}
+  else if(!sp)hideTip();
+});
+addEventListener('scroll',hideTip,{passive:true});
+
+/* ---------- vistas ---------- */
+const S={tab:'practica',topic:'pib',ex:null,checked:false,solved:false,fcTopic:'all',fc:null,flip:false,exam:null};
+try{const t=localStorage.getItem('ge-tab');if(t&&['practica','teoria','apuntes','flash','examen','progreso'].includes(t))S.tab=t;}catch(e){}
+const view=document.getElementById('view');
+
+function chipsHTML(sel,withAll){
+  return `<div class="chips">${withAll?`<button class="chip" data-topic="all" aria-pressed="${sel==='all'}">Todos</button>`:''}${TOPICS.map(t=>`<button class="chip" data-topic="${t.id}" aria-pressed="${sel===t.id}">${t.name}</button>`).join('')}</div>`;
+}
+
+function renderPractica(){
+  if(!S.ex||S.ex.topic!==S.topic){S.ex=GEN[S.topic]();S.checked=false;S.solved=false;}
+  const ex=S.ex,t=T[ex.topic];
+  view.innerHTML=chipsHTML(S.topic)+`
+  <section class="sheet">
+    <div class="eyebrow">${t.tag} · ${t.name}</div>
+    <div class="statement" style="margin-top:10px">${ex.statement}</div>
+    <p class="muted" style="font-size:14px;margin-top:6px">Usa coma o punto para los decimales. Se aceptan pequeñas diferencias por redondeo. Cada vez que pidas otro ejercicio cambian los datos.</p>
+    ${fieldsHTML(ex,'p')}
+    <div class="actions">
+      <button class="btn primary" id="bCheck">Comprobar</button>
+      <button class="btn" id="bSol">${S.solved?'Ocultar solución':'Ver solución'}</button>
+      <button class="btn" id="bNew">Otro ejercicio</button>
+    </div>
+    <div id="verdict"></div>
+    <div class="solution" id="sol" ${S.solved?'':'hidden'}><h3 style="margin-top:0">Solución paso a paso</h3>${ex.solution}</div>
+  </section>`;
+  bindChips(id=>{S.topic=id;S.ex=null;render();});
+  document.getElementById('bCheck').onclick=()=>{
+    const g=grade(ex,'p',S.solved),all=g===ex.fields.length;
+    if(!S.checked){record(ex.topic,all);S.checked=true;}
+    document.getElementById('verdict').innerHTML=`<div class="verdict ${all?'ok':'bad'}">${all?'¡Todo correcto! Prueba otro.':`${g} de ${ex.fields.length} correctos. Corrige lo marcado o mira la solución.`}</div>`;
+  };
+  document.getElementById('bSol').onclick=()=>{
+    S.solved=!S.solved;
+    if(S.solved&&!S.checked){record(ex.topic,false);S.checked=true;}
+    document.getElementById('sol').hidden=!S.solved;
+    document.getElementById('bSol').textContent=S.solved?'Ocultar solución':'Ver solución';
+  };
+  document.getElementById('bNew').onclick=()=>{S.ex=null;render();window.scrollTo({top:0});};
+}
+
+function renderTeoria(){
+  const t=T[S.topic];
+  view.innerHTML=chipsHTML(S.topic)+`<section><div class="eyebrow" style="margin-top:12px">${t.tag}</div><h2>${t.name}</h2>${THEORY[t.id]}
+  <div class="actions"><button class="btn primary" id="bGo">Practicar este tema</button><button class="btn" id="bAp">Leer los apuntes completos</button></div></section>`;
+  bindChips(id=>{S.topic=id;render();});
+  document.getElementById('bGo').onclick=()=>{S.tab='practica';S.ex=null;render();window.scrollTo({top:0});};
+  document.getElementById('bAp').onclick=()=>goApuntes(t.ap);
+}
+
+function nextCard(){
+  const pool=CARDS.filter(c=>S.fcTopic==='all'||c.t===S.fcTopic);
+  const box=c=>P.cards[c.id]||1;
+  const min=Math.min(...pool.map(box));
+  const cand=Math.random()<.7?pool.filter(c=>box(c)===min):pool;
+  let c=pick(cand);if(S.fc&&cand.length>1&&c.id===S.fc.id)c=pick(cand.filter(x=>x.id!==S.fc.id));
+  S.fc=c;S.flip=false;
+}
+function renderFlash(){
+  if(!S.fc||(S.fcTopic!=='all'&&S.fc.t!==S.fcTopic))nextCard();
+  const c=S.fc,pool=CARDS.filter(x=>S.fcTopic==='all'||x.t===S.fcTopic);
+  const counts=[1,2,3,4,5].map(b=>pool.filter(x=>(P.cards[x.id]||1)===b).length);
+  view.innerHTML=chipsHTML(S.fcTopic,true)+`
+  <section class="sheet card-fc" id="fc" tabindex="0" aria-live="polite">
+    <div class="eyebrow">${T[c.t].name} · caja ${P.cards[c.id]||1}</div>
+    <div class="q">${esc(c.q)}</div>
+    ${S.flip?`<div class="a formula" style="text-align:center">${esc(c.a)}</div>`:`<div class="muted">Piensa la respuesta y toca la tarjeta para darle la vuelta</div>`}
+  </section>
+  <div class="actions" ${S.flip?'':'hidden'}>
+    <button class="btn" id="bNo">No la sabía</button>
+    <button class="btn primary" id="bYes">La sabía</button>
+  </div>
+  <h3>Cajas de repaso</h3>
+  <p class="muted" style="font-size:14px">Si la sabes, la tarjeta sube de caja y aparece menos. Si fallas, vuelve a la caja 1.</p>
+  <div class="boxes">${counts.map((k,i)=>`<div class="box"><b>${k}</b>Caja ${i+1}${i===0?' · nuevas':i===4?' · dominadas':''}</div>`).join('')}</div>`;
+  bindChips(id=>{S.fcTopic=id;S.fc=null;render();});
+  const fc=document.getElementById('fc');
+  const flip=()=>{S.flip=true;renderFlash();};
+  fc.onclick=flip;fc.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}};
+  if(S.flip){
+    document.getElementById('bYes').onclick=()=>{P.cards[c.id]=Math.min(5,(P.cards[c.id]||1)+1);save();nextCard();renderFlash();};
+    document.getElementById('bNo').onclick=()=>{P.cards[c.id]=1;save();nextCard();renderFlash();};
+  }
+  annotate(view);
+}
+
+let timerId=null;
+function renderExamen(){
+  const E=S.exam;
+  if(!E){
+    const last=P.exams.slice(-1)[0];
+    view.innerHTML=`<section><h2>Simulacro de examen</h2>
+      <p>Cinco ejercicios de temas variados, con datos nuevos cada vez: cálculos (PIB, tipos, multiplicador, identidades…) y preguntas de razonamiento (shocks, actores, mercados). Tienes 30 minutos. No verás si aciertas hasta que entregues.</p>
+      <p class="muted">Ten a mano la calculadora y papel, como en el examen de verdad.</p>
+      ${last?`<p>Último simulacro: <b>${n(last.score,1)} / 10</b> (${new Date(last.date).toLocaleDateString('es-ES')}).</p>`:''}
+      <div class="actions"><button class="btn primary" id="bStart">Empezar examen</button></div></section>`;
+    document.getElementById('bStart').onclick=()=>{
+      const ids=shuffle(TOPICS.map(t=>t.id)).slice(0,5);
+      S.exam={list:ids.map(id=>GEN[id]()),end:Date.now()+30*60*1000,done:false,score:0,res:[]};
+      render();window.scrollTo({top:0});
+    };
+    return;
+  }
+  view.innerHTML=`<div class="exam-head"><div><div class="eyebrow">Simulacro</div><b>${E.done?'Corregido':'5 ejercicios'}</b></div>
+    ${E.done?`<div class="score">${n(E.score,1)}<span class="muted" style="font-size:20px"> / 10</span></div>`:`<div class="timer" id="timer">30:00</div><button class="btn primary" id="bEnd">Entregar</button>`}</div>
+    ${E.list.map((ex,k)=>`<section class="sheet"><div class="eyebrow">Ejercicio ${k+1} · ${T[ex.topic].name}${E.done?` · ${E.res[k]}/${ex.fields.length}`:''}</div>
+      <div class="statement" style="margin-top:10px">${ex.statement}</div>${fieldsHTML(ex,'e'+k)}
+      ${E.done?`<details class="solution"><summary class="btn" style="display:inline-block">Ver solución</summary><div style="margin-top:12px">${ex.solution}</div></details>`:''}</section>`).join('')}
+    ${E.done?`<div class="actions"><button class="btn primary" id="bAgain">Hacer otro simulacro</button><button class="btn" id="bExit">Salir</button></div>`:''}`;
+  if(E.answers)E.list.forEach((ex,k)=>ex.fields.forEach((f,i)=>{document.getElementById(`e${k}f${i}`).value=E.answers[k][i]||'';}));
+  if(E.done){E.list.forEach((ex,k)=>{grade(ex,'e'+k,true);ex.fields.forEach((_,i)=>document.getElementById(`e${k}f${i}`).disabled=true);});
+    document.getElementById('bAgain').onclick=()=>{S.exam=null;render();document.getElementById('bStart').click();};
+    document.getElementById('bExit').onclick=()=>{S.exam=null;render();};
+    return;}
+  const finish=()=>{
+    clearInterval(timerId);
+    E.answers=E.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`).value));
+    let tot=0;E.res=E.list.map((ex,k)=>{const g=ex.fields.filter((f,i)=>checkField(f,E.answers[k][i])).length;tot+=g/ex.fields.length;record(ex.topic,g===ex.fields.length);return g;});
+    E.score=tot/E.list.length*10;E.done=true;
+    P.exams=[...P.exams,{date:Date.now(),score:rd(E.score,2)}].slice(-20);save();
+    render();window.scrollTo({top:0});
+  };
+  document.getElementById('bEnd').onclick=finish;
+  clearInterval(timerId);
+  const tick=()=>{const s=Math.max(0,Math.round((E.end-Date.now())/1000)),el=document.getElementById('timer');
+    if(!el){clearInterval(timerId);return;}
+    el.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;if(s===0)finish();};
+  tick();timerId=setInterval(tick,1000);
+}
+
+function renderProgreso(){
+  const stat=id=>P.topics[id]||{att:0,ok:0,hist:[]};
+  const rate=s=>s.hist.length?s.hist.reduce((a,b)=>a+b,0)/s.hist.length:null;
+  const rows=TOPICS.map(t=>{const s=stat(t.id),r=rate(s);
+    const pill=r===null?'<span class="pill new">Sin empezar</span>':r<.6?'<span class="pill weak">Repasar</span>':r>=.85?'<span class="pill good">Dominado</span>':'';
+    return `<div class="prow"><div class="nm">${t.name}<small>${t.tag} · ${s.att} intento${s.att===1?'':'s'}</small></div>
+      <div class="barcell"><div class="bar"><span style="width:${r===null?0:Math.round(r*100)}%"></span></div><div class="dots">${s.hist.map(h=>`<i class="${h?'y':'n'}"></i>`).join('')}</div></div>
+      <div class="pct">${r===null?'—':Math.round(r*100)+' %'}<div>${pill}</div></div></div>`;}).join('');
+  const weakest=[...TOPICS].sort((a,b)=>(rate(stat(a.id))??-1)-(rate(stat(b.id))??-1))[0];
+  const mastered=CARDS.filter(c=>(P.cards[c.id]||1)>=4).length;
+  view.innerHTML=`<section><h2>Tu progreso</h2>
+    <p class="muted">El porcentaje se calcula con tus 12 últimos ejercicios de cada tema. Un ejercicio cuenta como acertado si todos sus apartados están bien a la primera.</p>
+    <div class="actions"><button class="btn primary" id="bWeak">Practicar el tema más flojo: ${weakest.name}</button></div>
+    <h3>Por tema</h3>${rows}
+    <h3>Flashcards</h3><p><b>${mastered}</b> de ${CARDS.length} tarjetas en las cajas 4–5.</p>
+    <h3>Simulacros</h3>${P.exams.length?tableHTML(['Fecha','Nota'],P.exams.slice().reverse().slice(0,8).map(e=>[new Date(e.date).toLocaleDateString('es-ES'),n(e.score,1)])):'<p class="muted">Aún no has hecho ningún simulacro.</p>'}</section>`;
+  document.getElementById('bWeak').onclick=()=>{S.topic=weakest.id;S.tab='practica';S.ex=null;render();window.scrollTo({top:0});};
+}
+
+function goApuntes(id){
+  S.tab='apuntes';try{localStorage.setItem('ge-tab',S.tab);}catch(e){}render();
+  const el=document.getElementById(id);if(el)el.scrollIntoView();else window.scrollTo({top:0});
+}
+function bindChips(fn){view.querySelectorAll('.chip').forEach(b=>b.onclick=()=>fn(b.dataset.topic));}
+function render(){
+  if(S.tab!=='examen')clearInterval(timerId);
+  if(S.exam&&!S.exam.done&&S.tab!=='examen'&&document.getElementById('e0f0'))S.exam.answers=S.exam.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`)?.value||''));
+  document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===S.tab)));
+  const ap=document.getElementById('apuntes');
+  ap.hidden=S.tab!=='apuntes';view.hidden=S.tab==='apuntes';
+  if(S.tab==='apuntes')return;
+  ({practica:renderPractica,teoria:renderTeoria,flash:renderFlash,examen:renderExamen,progreso:renderProgreso})[S.tab]();
+  annotate(view);
+}
+document.getElementById('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(S.exam&&!S.exam.done&&S.tab==='examen')S.exam.answers=S.exam.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`).value));
+  S.tab=b.dataset.tab;try{localStorage.setItem('ge-tab',S.tab);}catch(e){}render();window.scrollTo({top:0});};
+annotate(document.getElementById('apuntes'));
+render();
+</script>
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const f=(v,d=1)=>(Math.abs(v)<1e-9?0:v).toLocaleString('es-ES',{maximumFractionDigits:d,minimumFractionDigits:0});
+  function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+  function txt(parent,attrs,t){const e=el('text',attrs,parent);e.textContent=t;return e;}
+  function niceStep(span,n){const raw=span/n,mag=Math.pow(10,Math.floor(Math.log10(raw))),r=raw/mag;return (r<1.5?1:r<3?2:r<7?5:10)*mag;}
+  function legend(fig,items){const lg=document.createElement('div');lg.className='legend';lg.innerHTML=items.map(([c,t,d])=>`<span><i class="${d?'dashed':''}" style="background:var(${c})"></i>${t}</span>`).join('');fig.appendChild(lg);}
+  function tipBox(fig){const t=document.createElement('div');t.className='tip';t.hidden=true;fig.appendChild(t);return t;}
+  function placeTip(fig,svg,tip,xSvg,W,html){
+    tip.innerHTML=html;tip.hidden=false;
+    const r=svg.getBoundingClientRect(),fr=fig.getBoundingClientRect(),left=xSvg/W*r.width+(r.left-fr.left);
+    tip.style.top=(r.top-fr.top+16)+'px';
+    tip.style.left=(left>r.width*.6?left-tip.offsetWidth-12:left+12)+'px';
+  }
+
+  /* ---------- oferta y demanda ---------- */
+  const sd={d:0,s:0};
+  const Dp=(q,s)=>85-0.7*q+s,Sp=(q,s)=>15+0.7*q+s;
+  const eq=(a,b)=>{const q=(70+a-b)/1.4;return [q,Sp(q,b)];};
+  function drawSD(){
+    const fig=document.getElementById('fig-sd');fig.innerHTML='';
+    const W=640,H=330,m={l:46,r:92,t:14,b:38};
+    const sx=q=>m.l+q/100*(W-m.l-m.r),sy=p=>m.t+(100-p)/100*(H-m.t-m.b);
+    const moved=sd.d!==0||sd.s!==0;
+    legend(fig,[['--s-d','Demanda'],['--s-s','Oferta']].concat(moved?[['--muted','posición inicial',1]]:[]));
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Gráfica de oferta y demanda con el punto de equilibrio'},fig);
+    const cid='sdc'+Math.random().toString(36).slice(2);
+    el('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b},el('clipPath',{id:cid},el('defs',{},svg)));
+    const ax=el('g',{class:'ax'},svg);
+    for(let v=0;v<=100;v+=20){
+      el('line',{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),'stroke-width':1},ax);txt(ax,{x:m.l-8,y:sy(v)+4,'text-anchor':'end'},String(v));
+      el('line',{x1:sx(v),x2:sx(v),y1:H-m.b,y2:H-m.b+5,'stroke-width':1},ax);txt(ax,{x:sx(v),y:H-m.b+18,'text-anchor':'middle'},String(v));
+    }
+    txt(ax,{x:W-m.r,y:H-4,'text-anchor':'end'},'cantidad Q (índice)');
+    const g=el('g',{'clip-path':`url(#${cid})`},svg);
+    const path=(fn,s)=>{let d='';for(let q=0;q<=100;q+=2)d+=(q?'L':'M')+sx(q).toFixed(1)+','+sy(fn(q,s)).toFixed(1);return d;};
+    if(sd.d!==0)el('path',{d:path(Dp,0),fill:'none',stroke:'var(--s-d)','stroke-width':2,'stroke-dasharray':'5 4',opacity:.45},g);
+    if(sd.s!==0)el('path',{d:path(Sp,0),fill:'none',stroke:'var(--s-s)','stroke-width':2,'stroke-dasharray':'5 4',opacity:.45},g);
+    el('path',{d:path(Dp,sd.d),fill:'none',stroke:'var(--s-d)','stroke-width':2.2},g);
+    el('path',{d:path(Sp,sd.s),fill:'none',stroke:'var(--s-s)','stroke-width':2.2},g);
+    // etiquetas directas al final de cada curva
+    const yD=Math.max(0,Math.min(100,Dp(100,sd.d))),yS=Math.max(0,Math.min(100,Sp(100,sd.s)));
+    txt(svg,{x:W-m.r+8,y:sy(yS)+4,class:'lab'},'Oferta');
+    txt(svg,{x:W-m.r+8,y:sy(yD)+4,class:'lab'},'Demanda');
+    const [q0,p0]=eq(0,0),[q1,p1]=eq(sd.d,sd.s);
+    el('line',{x1:m.l,x2:sx(q1),y1:sy(p1),y2:sy(p1),stroke:'var(--muted)','stroke-dasharray':'3 3','stroke-width':1},svg);
+    el('line',{x1:sx(q1),x2:sx(q1),y1:sy(p1),y2:H-m.b,stroke:'var(--muted)','stroke-dasharray':'3 3','stroke-width':1},svg);
+    if(moved)el('circle',{cx:sx(q0),cy:sy(p0),r:4.5,fill:'var(--card)',stroke:'var(--ink)','stroke-width':1.5},svg);
+    el('circle',{cx:sx(q1),cy:sy(p1),r:5,fill:'var(--ink)',stroke:'var(--card)','stroke-width':2},svg);
+    txt(svg,{x:sx(q1)+8,y:sy(p1)-10,class:'dotlab'},`equilibrio Q=${f(q1)} P=${f(p1)}`);
+    txt(svg,{x:m.l+6,y:m.t+12,class:'dotlab'},'precio P (índice)');
+    // capa de lectura
+    const cross=el('line',{y1:m.t,y2:H-m.b,stroke:'var(--ink2)','stroke-width':1,opacity:0},svg);
+    const hit=el('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:'transparent'},svg);
+    const tip=tipBox(fig);
+    const move=ev=>{const r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width*W;let q=Math.round((px-m.l)/(W-m.l-m.r)*100);q=Math.max(0,Math.min(100,q));
+      cross.setAttribute('x1',sx(q));cross.setAttribute('x2',sx(q));cross.setAttribute('opacity',.5);
+      const a=Dp(q,sd.d),b=Sp(q,sd.s);
+      placeTip(fig,svg,tip,sx(q),W,`<b>Q = ${q}</b><br><span style="color:var(--s-d)">●</span> los compradores pagarían ${f(a)}<br><span style="color:var(--s-s)">●</span> los vendedores piden ${f(b)}<br>${a>b+0.05?'exceso de demanda: el precio tiende a subir':a<b-0.05?'exceso de oferta: el precio tiende a bajar':'equilibrio'}`);};
+    hit.addEventListener('pointermove',move);hit.addEventListener('pointerdown',move);
+    hit.addEventListener('pointerleave',()=>{tip.hidden=true;cross.setAttribute('opacity',0);});
+    const cap=document.createElement('figcaption');
+    const arr=(a,b)=>Math.abs(a-b)<0.05?'igual':(b>a?'sube':'baja');
+    cap.textContent=moved?`Nuevo equilibrio: cantidad ${f(q1)} (antes ${f(q0)}, ${arr(q0,q1)}) y precio ${f(p1)} (antes ${f(p0)}, ${arr(p0,p1)}). Línea discontinua: posición inicial.`:'Equilibrio inicial: Q = 50 y P = 50 (unidades de índice). Pulsa los botones para desplazar las curvas; pasa el dedo o el ratón para leer cada cantidad.';
+    fig.appendChild(cap);
+  }
+  document.querySelectorAll('[data-sd]').forEach(b=>b.addEventListener('click',()=>{
+    const k=b.dataset.sd,c=v=>Math.max(-20,Math.min(20,v));
+    if(k==='0'){sd.d=0;sd.s=0;}else if(k==='d+')sd.d=c(sd.d+10);else if(k==='d-')sd.d=c(sd.d-10);else if(k==='s+')sd.s=c(sd.s-10);else if(k==='s-')sd.s=c(sd.s+10);
+    drawSD();
+  }));
+  drawSD();
+
+  /* ---------- multiplicador ---------- */
+  function drawMult(){
+    const fig=document.getElementById('fig-mult'),stats=document.getElementById('mu-stats');
+    const num=id=>parseFloat(String(document.getElementById(id).value).replace(',','.'));
+    const D=num('mu-d'),l=num('mu-l');
+    if(!(D>0)||!(l>0&&l<=100)){fig.innerHTML='';stats.innerHTML='<div class="stat"><div class="k">Revisa los datos</div><div class="s">El depósito tiene que ser positivo y la fuga estar entre 1 y 100 %.</div></div>';return;}
+    const q=1-l/100,mm=100/l,lim=D*mm,r90=q===0?1:Math.ceil(Math.log(0.1)/Math.log(q)),N=Math.min(60,Math.max(20,r90+3)),cum=[],dep=[];
+    for(let k=1;k<=N;k++){dep.push(D*Math.pow(q,k-1));cum.push(D*(1-Math.pow(q,k))/(l/100));}
+    fig.innerHTML='';
+    legend(fig,[['--s-d','Depósitos acumulados tras cada ronda'],['--muted','Límite D · m',1]]);
+    const W=640,H=300,m={l:58,r:20,t:24,b:36},ymax=lim*1.1;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`Depósitos acumulados ronda a ronda: tienden a ${f(lim,0)}`},fig);
+    const sy=v=>m.t+(ymax-v)/ymax*(H-m.t-m.b),band=(W-m.l-m.r)/N;
+    const ax=el('g',{class:'ax'},svg),st=niceStep(ymax,5);
+    for(let v=0;v<=ymax+1e-9;v+=st){el('line',{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),'stroke-width':1},ax);txt(ax,{x:m.l-8,y:sy(v)+4,'text-anchor':'end'},f(v,0));}
+    const xs=N>30?10:5;for(let k=1;k<=N;k++)if(k===1||k%xs===0)txt(ax,{x:m.l+band*(k-.5),y:H-m.b+18,'text-anchor':'middle'},String(k));
+    txt(ax,{x:W-m.r,y:H-4,'text-anchor':'end'},'ronda');
+    const bars=cum.map((v,i)=>{const x=m.l+band*i+1,w=Math.max(1,band-2),y=sy(v),h=sy(0)-y,rr=Math.min(4,w/2,h);
+      return el('path',{d:`M${x},${sy(0)}V${y+rr}Q${x},${y} ${x+rr},${y}H${x+w-rr}Q${x+w},${y} ${x+w},${y+rr}V${sy(0)}Z`,fill:'var(--s-d)'},svg);});
+    el('line',{x1:m.l,x2:W-m.r,y1:sy(lim),y2:sy(lim),stroke:'var(--muted)','stroke-dasharray':'5 4','stroke-width':1.5},svg);
+    txt(svg,{x:W-m.r,y:sy(lim)-6,'text-anchor':'end',class:'dotlab'},`límite ${f(D,0)} · ${f(mm,2)} = ${f(lim,0)}`);
+    const tip=tipBox(fig);
+    const hit=el('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:'transparent'},svg);
+    const move=ev=>{const r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)/r.width*W;let k=Math.floor((px-m.l)/band);k=Math.max(0,Math.min(N-1,k));
+      bars.forEach((b,i)=>b.setAttribute('opacity',i===k?1:.55));
+      placeTip(fig,svg,tip,m.l+band*(k+.5),W,`<b>Ronda ${k+1}</b><br>depósito nuevo: ${f(dep[k],2)}<br>acumulado: ${f(cum[k],2)}<br>${f(cum[k]/lim*100,1)} % del límite`);};
+    hit.addEventListener('pointermove',move);hit.addEventListener('pointerdown',move);
+    hit.addEventListener('pointerleave',()=>{tip.hidden=true;bars.forEach(b=>b.setAttribute('opacity',1));});
+    const cap=document.createElement('figcaption');cap.textContent=`Cada barra suma el depósito nuevo de esa ronda a los anteriores. Con una fuga del ${f(l)} % los depósitos se acercan a ${f(lim,0)}; el 90 % se alcanza en la ronda ${r90}.`;fig.appendChild(cap);
+    const card=(k,v,s)=>`<div class="stat"><div class="k">${k}</div><div class="v">${v}</div>${s?`<div class="s">${s}</div>`:''}</div>`;
+    stats.innerHTML=card('Multiplicador',`m = ${f(mm,2)}`,`1 / ${f(l/100,3)}`)+card('Depósitos totales',f(lim,2),'depósito inicial · m')+card('Préstamos nuevos',f(lim-D,2),'depósitos − depósito inicial')+card('Préstamo de la 1.ª ronda',f(D*q,2),`el banco guarda ${f(D*l/100,2)}`);
+  }
+  ['mu-d','mu-l'].forEach(id=>document.getElementById(id).addEventListener('input',drawMult));
+  drawMult();
+
+  /* ---------- trazador de shocks ---------- */
+  const DASH=[['C','Consumo'],['I','Inversión'],['G','Gasto público'],['Y','PIB'],['inf','Inflación'],['emp','Empleo'],['r','Tipos de interés']];
+  const sel=document.getElementById('tr-sel'),out=document.getElementById('tr-out');
+  sel.innerHTML=SHOCKS.map((s,i)=>`<option value="${i}">${s.t}</option>`).join('');
+  function trace(i){
+    const s=SHOCKS[i];
+    out.innerHTML=`<h3>${s.t}</h3>${chainHTML(s.chain,STEP5)}${s.loop?`<p class="loop">↺ ${s.loop}</p>`:''}
+      <h4>Cuadro de mando a corto plazo</h4>
+      <div class="dash">${DASH.map(([k,lab])=>{const v=s.dash[k];return `<div class="${v>0?'up':v<0?'dn':''}"><b>${v>0?'↑':v<0?'↓':'—'}</b>${lab}${v===0?'<br><span style="font-weight:400">sin efecto directo</span>':''}</div>`;}).join('')}</div>
+      <p><strong>Canal:</strong> ${s.canal}. <strong>Matiz:</strong> ${s.caveat}</p>
+      <p><strong>¿Quién puede frenarlo o reforzarlo?</strong> ${s.stop}</p>
+      <div class="en" lang="en"><b>Exam answer (EN)</b>${s.en}</div>`;
+  }
+  sel.addEventListener('change',()=>trace(+sel.value));
+  document.getElementById('tr-rand').addEventListener('click',()=>{let i;do{i=Math.floor(Math.random()*SHOCKS.length);}while(String(i)===sel.value&&SHOCKS.length>1);sel.value=String(i);trace(i);});
+  trace(0);
+
+  /* ---------- calculadora de identidades ---------- */
+  const ids=['c','i','g','tx','tr'],inp={};ids.forEach(k=>inp[k]=document.getElementById('id-'+k));
+  function idRun(){
+    const v={};ids.forEach(k=>v[k]=parseFloat(String(inp[k].value).replace(',','.'))||0);
+    const Y=v.c+v.i+v.g,Tn=v.tx-v.tr,YD=Y-Tn,Sv=YD-v.c,def=v.g+v.tr-v.tx;
+    const card=(k,val,s)=>`<div class="stat"><div class="k">${k}</div><div class="v">${val}</div>${s?`<div class="s">${s}</div>`:''}</div>`;
+    let h=card('PIB Y',f(Y,2),'C + I + G');
+    h+=card('Impuestos netos T',f(Tn,2),'impuestos − transferencias');
+    h+=card('Renta disponible YD',f(YD,2),'Y − T');
+    h+=card('Ahorro privado S',f(Sv,2),Sv<0?'<span class="bad">negativo: los hogares consumen más que su renta disponible</span>':'YD − C');
+    h+=card(def>=0?'Déficit público':'Superávit público',f(Math.abs(def),2),'G + transferencias − impuestos');
+    h+=card('Fugas = inyecciones',`${f(Sv+Tn,2)} = ${f(v.i+v.g,2)}`,'<span class="good">S + T = I + G ✓</span>');
+    h+=card('S − I = G − T',`${f(Sv-v.i,2)} = ${f(v.g-Tn,2)}`,def>0?'el ahorro privado neto financia el déficit':def<0?'el superávit público financia inversión privada':'presupuesto equilibrado');
+    document.getElementById('id-stats').innerHTML=h;
+  }
+  ids.forEach(k=>inp[k].addEventListener('input',idRun));
+  document.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>{b.dataset.id.split(',').forEach((x,j)=>inp[ids[j]].value=x);idRun();}));
+  idRun();
+})();
+</script>
