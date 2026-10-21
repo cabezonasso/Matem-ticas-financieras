@@ -75,6 +75,29 @@ tr.sum td{font-weight:600;border-top:2px solid var(--ink)}
 .ob .f{font:400 13.5px/1.85 var(--f-mono);overflow-x:auto;white-space:nowrap}
 .ob .f .muted{font-family:var(--f-body)}
 .ob>div.know{border:2px solid var(--accent);background:var(--accent-soft)}
+code{font-family:var(--f-mono);font-size:.95em}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:6px}
+.ex-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:12px}
+.codebox{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px 10px;border:1.5px dashed var(--accent);background:var(--accent-soft);border-radius:8px;padding:6px 8px 6px 12px;min-width:0;max-width:100%}
+.codebox .cb-l{font:700 11px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.codebox .cb-c{font:700 17px/1.2 var(--f-mono);color:var(--ink);letter-spacing:.02em;user-select:all;-webkit-user-select:all}
+.codebox .cb-m{font:600 12px/1.2 var(--f-body);color:var(--ok)}
+.codebox .cb-m:empty{display:none}
+.finder{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.finder label{display:block;font:700 13px/1.3 var(--f-body);margin-bottom:6px}
+.finder .frow{display:flex;gap:8px}
+.finder input{flex:1;min-width:0;font:600 16px/1.2 var(--f-mono);padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);text-transform:uppercase}
+.finder input::placeholder{text-transform:none;font-weight:400}
+.finder input:focus{outline:none;border-color:var(--accent)}
+.fmsg{font:400 13px/1.35 var(--f-body);color:var(--bad);margin-top:6px}
+.fmsg:empty{display:none}
+.rlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rlist:empty{display:none}
+.rl-h{width:100%;font:700 11px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rchip{all:unset;cursor:pointer;display:inline-flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--paper);font:400 12.5px/1.3 var(--f-body);color:var(--muted);max-width:100%;box-sizing:border-box}
+.rchip code{font:700 13px var(--f-mono);color:var(--ink)}
+.rchip.new{border-color:var(--accent);border-style:dashed}
+.rchip:hover,.rchip:focus-visible{border-color:var(--accent);outline:none}
 .fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:18px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 .field label{font:600 14px/1.3 var(--f-body)}
@@ -1309,9 +1332,14 @@ Año 2: 504 / 824 = 0,612 € por € producido   ⇒  +1,94 %</div></dd>
 
 <script>
 /* ---------- utilidades ---------- */
-const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+/* Todo lo aleatorio de los generadores pasa por rnd(): con withSeed() un mismo código da siempre los mismos números. */
+let rnd=Math.random;
+const R=(a,b)=>Math.floor(rnd()*(b-a+1))+a;
+const pick=a=>a[Math.floor(rnd()*a.length)];
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+function hash32(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function mulberry32(a){return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function withSeed(seed,fn){const prev=rnd;rnd=mulberry32(seed);try{return fn();}finally{rnd=prev;}}
 const rd=(x,d=2)=>Math.round(x*10**d)/10**d;
 const n=(x,d=2)=>Number(x).toLocaleString('es-ES',{maximumFractionDigits:d,minimumFractionDigits:0,useGrouping:true});
 const pc=(x,d=2)=>`${n(x,d)} %`;
@@ -1537,7 +1565,7 @@ function obStatement(p,board){
   ${blk('Trade with America',`${S('X','E')} = ${f(p.x)}·${S('Y','d','A')} + ${p.cX}·(q − 1)<br>${S('M','E')} = ${f(p.m)}·${YdE} − ${p.cM}·(q − 1)<br>real ex. rate: q = e·${S('P','A')}/${PE}`)}
   ${blk('We also know',`π<sup>e</sup><sub>domestic</sub> = ${pcs(p.pdom)}<br>${S('π','A','e')} = ${pcs(p.pA)}<br>${S('Y','d','A')} = ${f(p.YdA)}<br>${S('P','A')} = ${f(p.PA)}<br>${S('i','A')} = ${pcs(p.iA)}<br>e = 1`,'know')}</div>
   <p lang="en"><b>Q.</b> Calculate the equilibrium ${YE}, ${PE} and the net exports of E. Then, assume that e = ${f(p.e1,2)}. Explain using numerical support what happens to the net exports and why.</p>
-  <p>a) Inflación esperada de E y tipo oficial del BCE (en %).<br>b) Inversión y stock de capital de las empresas europeas.<br>c) Equilibrio AS = AD: ${PE} y ${YE}.<br>d) Tipo de cambio real, exportaciones, importaciones y exportaciones netas.<br>e) Con e = ${f(p.e1,2)}: nuevas exportaciones netas, si suben o bajan y por qué.</p>
+  <p>a) Inflación esperada de E y tipo oficial del BCE (en %).<br>b) Inversión y stock de capital de las empresas europeas.<br>c) Equilibrio AS = AD: precio ${PE} y producción ${YE}.<br>d) Tipo de cambio real, exportaciones, importaciones y exportaciones netas.<br>e) Con e = ${f(p.e1,2)}: nuevo precio ${PE} y nueva producción ${YE}, nuevas exportaciones netas, si suben o bajan y por qué.</p>
   <p class="muted" style="font-size:14px">Pista: la AD queda Y = a + b/P y la AS Y = A·√(K·(${p.L0} − c/P)). Con u = 1/P sale una ecuación de 2.º grado.</p>`;
 }
 function obSolution(p,r0,r1){
@@ -1558,7 +1586,7 @@ function obSolution(p,r0,r1){
   <li><b>Demanda agregada (AD).</b> Cada componente en función de Y y P (con e = 1, q = 1/P):<div class="formula">Y<sub>d</sub> = ${f(yd1)}·Y + ${f(yd0)}<br>C = ${f(1-p.s)}·Y<sub>d</sub>${Math.abs(rD)<1e-9?'':` − ${p.cr}·${F(rD)}`} + ${f(cP)}/P = ${F(cY)}·Y + ${F(cC)} + ${f(cP)}/P<br>X = ${f(p.x*p.YdA)} + ${p.cX}·(q − 1) = ${f(xC)} + ${f(p.cX)}/P<br>M = ${f(p.m)}·Y<sub>d</sub> − ${p.cM}·(q − 1) = ${F(mY)}·Y + ${F(mC)} − ${f(p.cM)}/P<br>Y = C + I + G + X − M = ${F(r0.k1)}·Y + ${F(r0.cst)} + ${f(r0.bnum)}/P<br>⇒ <span class="hl">AD: Y = ${F(r0.a)} + ${F(r0.b)}/P</span></div></li>
   <li><b>Equilibrio AS = AD.</b> Con u = 1/P, iguala y eleva al cuadrado:<div class="formula">(${F(r0.a)} + ${F(r0.b)}·u)² = ${f(p.A)}²·${f(r0.K)}·(${p.L0} − ${f(c)}·u)<br>${f(r0.qa,1)}·u² + ${f(r0.qb,1)}·u − ${f(-r0.qc,1)} = 0 → u = ${F(r0.u)}<br><span class="hl">P<sub>E</sub> = ${F(r0.P)}</span> · <span class="hl">Y<sub>E</sub> = ${f(r0.Y)}</span> · L<sub>E</sub> = ${f(r0.L)}</div>Comprobación con la AS: ${f(p.A)}·√(${f(r0.K)}·${f(r0.L)}) = ${f(p.A*Math.sqrt(r0.K*r0.L))}.</li>
   <li><b>Comercio con América.</b><div class="formula">q = 1·${f(p.PA)}/${F(r0.P)} = <span class="hl">${F(r0.q)}</span><br>Y<sub>d</sub><sup>E</sup> = ${f(yd1)}·${f(r0.Y)} + ${f(yd0)} = ${f(r0.Yd)}<br>X<sub>E</sub> = ${f(p.x*p.YdA)} + ${p.cX}·(${F(r0.q)} − 1) = <span class="hl">${f(r0.X)}</span><br>M<sub>E</sub> = ${f(p.m)}·${f(r0.Yd)} − ${p.cM}·(${F(r0.q)} − 1) = <span class="hl">${f(r0.M)}</span><br>NX = X − M = <span class="hl">${f(r0.NX)}</span> (${r0.NX>=0?'superávit':'déficit'} comercial)</div></li>
-  <li><b>Con e = ${f(e1)} se repite toda la cadena:</b>${tableHTML(['','e = 1',`e = ${f(e1)}`],rows,null,'lft')}</li>
+  <li><b>Con e = ${f(e1)} se repite toda la cadena:</b>${tableHTML(['','e = 1',`e = ${f(e1)}`],rows,null,'lft')}<div class="formula">Nuevo equilibrio con e = ${f(e1)}: <span class="hl">P<sub>E</sub> = ${F(r1.P)}</span> · <span class="hl">Y<sub>E</sub> = ${f(r1.Y)}</span> · <span class="hl">NX = ${f(r1.NX)}</span></div></li>
   <li><b>Qué pasa con NX y por qué.</b> Con e = ${f(e1)} el dólar se ${down?'deprecia':'aprecia'} y el euro se ${down?'aprecia':'deprecia'} un ${pc(Math.abs(e1-1)*100,0)}.
     <ul><li><b>Efecto precio (directo):</b> q pasa de ${F(r0.q)} a ${F(r1.q)}; los bienes europeos se vuelven ${down?'más caros':'más baratos'} para América. Solo por este canal, con P y Y fijos, NX cambiaría en (${p.cX} + ${p.cM})·(${f(e1)} − 1)·${F(r0.u)} = <span class="hl">${f(direct)}</span>.</li>
     <li><b>Efecto vía tipos y renta:</b> la inflación importada pasa de ${pcs(r0.pimp)} a ${pcs(r1.pimp)} y π<sub>E</sub><sup>e</sup> de ${pcs(r0.pe)} a ${pcs(r1.pe)}; el BCE ${down?'baja':'sube'} el tipo de ${pcs(r0.ip)} a ${pcs(r1.ip)}, la inversión ${up(r0.I,r1.I)} de ${f(r0.I)} a ${f(r1.I)} e Y ${up(r0.Y,r1.Y)} de ${f(r0.Y)} a ${f(r1.Y)}, con lo que la renta disponible y las importaciones también cambian. P<sub>E</sub> pasa de ${F(r0.P)} a ${F(r1.P)}.</li>
@@ -1574,7 +1602,7 @@ pib(){
   const st=pick(CHAINS),k=st.length;
   const va=st.map((_,i)=>i?R(3,15)*100:R(6,20)*100);
   const sales=[];let acc=0;va.forEach((v,i)=>{acc+=v;sales[i]=acc;});
-  const gdp=sales[k-1],sum=sales.reduce((a,b)=>a+b,0),W=Math.round(gdp*(0.5+Math.random()*0.2)/100)*100,j=R(1,k-1);
+  const gdp=sales[k-1],sum=sales.reduce((a,b)=>a+b,0),W=Math.round(gdp*(0.5+rnd()*0.2)/100)*100,j=R(1,k-1);
   const last=`Las ventas de la última etapa (${st[k-1]})`;
   return {topic:'pib',
     statement:`<p>Cadena de producción de una economía cerrada (en €). Ninguna etapa usa más inputs no laborales que lo que compra a la etapa anterior.</p>${tableHTML(['Etapa','Ventas','Compra a la etapa anterior'],st.map((s,i)=>[s,n(sales[i]),n(i?sales[i-1]:0)]),null,'lft')}<p>a) ¿Cuál es el valor añadido de «${st[j]}»?<br>b) ¿Cuánto es el PIB?<br>c) ¿Cuánto da la suma de todas las ventas y cuánto se contaría de más?<br>d) Si los salarios de toda la cadena suman <b>${n(W)} €</b>, ¿cuánto suman los beneficios y rentas?<br>e) ¿Qué gasto final coincide con el PIB?</p>`,
@@ -1720,9 +1748,10 @@ abierta(board){
     statement:obStatement(p,board),
     fields:[{label:'π<sub>E</sub><sup>e</sup> con e = 1',unit:'%',ans:r0.pe*100},{label:'Tipo oficial i<sub>policy</sub>',unit:'%',ans:r0.ip*100},
       {label:'Inversión I<sub>E</sub>',unit:'',ans:r0.I,tolAbs:.02},{label:'Capital K<sub>E</sub>',unit:'',ans:r0.K,tolAbs:.02},
-      {label:'Nivel de precios P<sub>E</sub>',unit:'',ans:r0.P,tolAbs:.006},{label:'Producción Y<sub>E</sub>',unit:'',ans:r0.Y,tolRel:.004},
+      {label:'Precio P<sub>E</sub> (nivel de precios)',unit:'',ans:r0.P,tolAbs:.006},{label:'Producción Y<sub>E</sub>',unit:'',ans:r0.Y,tolRel:.004},
       {label:'Tipo de cambio real q',unit:'',ans:r0.q,tolAbs:.011},{label:'Exportaciones X<sub>E</sub>',unit:'',ans:r0.X,tolRel:.006},
       {label:'Importaciones M<sub>E</sub>',unit:'',ans:r0.M,tolRel:.006},{label:'Exportaciones netas NX',unit:'',ans:r0.NX,tolAbs:1},
+      {label:`Precio P<sub>E</sub> con e = ${n(p.e1,2)}`,unit:'',ans:r1.P,tolAbs:.006},{label:`Producción Y<sub>E</sub> con e = ${n(p.e1,2)}`,unit:'',ans:r1.Y,tolRel:.004},
       {label:`NX con e = ${n(p.e1,2)}`,unit:'',ans:r1.NX,tolAbs:1},ch('Las exportaciones netas…',['Suben','Bajan'],down?'Bajan':'Suben',true),
       ch('¿Por qué? (efecto principal)',OB_WHY,down?OB_WHY[0]:OB_WHY[1],true)],
     solution:obSolution(p,r0,r1)};
@@ -1924,20 +1953,65 @@ const CARDS=[
  ['abierta','Apreciación del euro: canal de tipos','Menos inflación importada → el BCE baja el tipo → más I → más Y → más M'],
 ].map(([t,q,a],i)=>({id:'c'+i,t,q,a}));
 
+/* ---------- códigos de ejercicio ---------- */
+const PFX={pib:'PIB',real:'REAL',interes:'INT',dinero:'DIN',mercados:'MER',productividad:'PROD',conceptos:'CONC',actores:'ACT',identidades:'IDEN',shocks:'SHOCK',abierta:'OPEN'};
+const BY_PFX=Object.fromEntries(Object.entries(PFX).map(([k,v])=>[v,k]));
+const BOARD_CODE='OPEN-PIZARRA';
+const newNum=()=>10000+Math.floor(Math.random()*90000);
+const newCode=topic=>`${PFX[topic]}-${newNum()}`;
+const newExamCode=()=>`EXAM-${newNum()}`;
+function parseCode(s){
+  s=String(s||'').trim().toUpperCase().replace(/[\s_–—.]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  if(s==='PIZARRA')return {topic:'abierta',board:true,code:BOARD_CODE};
+  const m=s.match(/^([A-Z]+)-?(\d{1,6}|PIZARRA)$/);if(!m)return null;
+  if(m[1]==='EXAM')return m[2]==='PIZARRA'?null:{exam:true,code:`EXAM-${+m[2]}`};
+  const topic=BY_PFX[m[1]];if(!topic)return null;
+  if(m[2]==='PIZARRA')return topic==='abierta'?{topic,board:true,code:BOARD_CODE}:null;
+  return {topic,code:`${m[1]}-${+m[2]}`};
+}
+function genFromCode(code){
+  const p=parseCode(code);if(!p||p.exam)return null;
+  const ex=withSeed(hash32(p.code),()=>p.board?GEN.abierta(true):GEN[p.topic]());
+  ex.code=p.code;return ex;
+}
+function examCodes(code){return withSeed(hash32(code),()=>shuffle(TOPICS.map(t=>t.id)).slice(0,5).map(id=>`${PFX[id]}-${R(10000,99999)}`));}
+const codeBox=(code,label)=>`<div class="codebox"><span class="cb-l">${label||'Código'}</span><code class="cb-c">${esc(code)}</code><button type="button" class="btn sm" data-copy="${esc(code)}">Copiar</button><span class="cb-m" aria-live="polite"></span></div>`;
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('[data-copy]');if(!b)return;
+  const box=b.closest('.codebox'),msg=box&&box.querySelector('.cb-m'),cEl=box&&box.querySelector('.cb-c'),code=b.dataset.copy;
+  const say=t=>{if(!msg)return;msg.textContent=t;clearTimeout(msg._t);msg._t=setTimeout(()=>{msg.textContent='';},2600);};
+  const sel=()=>{if(!cEl)return;const r=document.createRange();r.selectNodeContents(cEl);const s=getSelection();s.removeAllRanges();s.addRange(r);};
+  try{navigator.clipboard.writeText(code).then(()=>say('Copiado ✓'),()=>{sel();say('Seleccionado: cópialo');});}catch(err){sel();say('Seleccionado: cópialo');}
+});
+
 /* ---------- progreso y guardado ---------- */
-const LS='ge-progress-v1';
-const blank=()=>({v:1,updated:0,topics:{},cards:{},exams:[]});
+const LS='ge-progress-v1',HMAX=60;
+const blank=()=>({v:1,updated:0,topics:{},cards:{},exams:[],cur:{},hist:[],topic:null,exam:null});
+function norm(o){o.topics=o.topics||{};o.cards=o.cards||{};o.exams=o.exams||[];o.cur=o.cur||{};o.hist=o.hist||[];if(o.exam===undefined)o.exam=null;if(o.topic===undefined)o.topic=null;return o;}
 let P=blank();
-try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.v===1)P=s;}catch(e){}
+try{const s=JSON.parse(localStorage.getItem(LS));if(s&&s.v===1)P=norm(s);}catch(e){}
 let dbRef=null,saveTimer=null,saving=Promise.resolve();
 function setSync(on,txt){const el=document.getElementById('sync');el.classList.toggle('on',on);el.querySelector('span').textContent=txt;}
-function save(){
-  P.updated=Date.now();
+/* bump=false: guarda sin marcarlo como cambio nuevo (p. ej. el primer ejercicio que se crea solo al abrir un tema) */
+function save(bump=true){
+  if(bump)P.updated=Date.now();
   try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}
   if(!dbRef)return;
   clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{const body=JSON.parse(JSON.stringify(P));saving=saving.then(()=>dbRef.set(body)).then(()=>setSync(true,'Guardado en tu cuenta')).catch(()=>setSync(false,'Sin conexión: guardado en este navegador'));},1200);
 }
+/* Junta lo guardado en este navegador con lo de la cuenta sin perder intentos, historial ni ejercicios abiertos */
+function mergeP(L,Rm){
+  const nw=(Rm.updated||0)>=(L.updated||0)?Rm:L,od=nw===Rm?L:Rm,o=norm(JSON.parse(JSON.stringify(nw)));
+  for(const k in od.topics){const a=od.topics[k],b=o.topics[k];if(!b||(a.att||0)>(b.att||0))o.topics[k]=a;}
+  for(const k in od.cards)if(!(k in o.cards))o.cards[k]=od.cards[k];
+  const ex=new Map();[...od.exams,...o.exams].forEach(e=>ex.set(e.date,e));o.exams=[...ex.values()].sort((a,b)=>a.date-b.date).slice(-20);
+  const h=new Map();[...od.hist,...o.hist].sort((a,b)=>a.t-b.t).forEach(e=>{const p=h.get(e.c);h.set(e.c,{c:e.c,t:e.t,r:e.r??(p?p.r:null)});});
+  o.hist=[...h.values()].sort((a,b)=>b.t-a.t).slice(0,HMAX);
+  o.cur={...od.cur,...o.cur};if(!o.topic)o.topic=od.topic;
+  return o;
+}
+const canon=o=>Array.isArray(o)?o.map(canon):o&&typeof o==='object'?Object.keys(o).sort().reduce((r,k)=>(r[k]=canon(o[k]),r),{}):o;
 (async()=>{
   try{
     if(!window.claude?.use)return;
@@ -1947,9 +2021,15 @@ function save(){
     const ref=db.doc('data/users/'+uid+'/progress');
     const snap=await ref.get();
     const remote=snap.exists?snap.data():null;
-    dbRef=ref;
-    if(remote&&remote.v===1&&(remote.updated||0)>=(P.updated||0)){P=JSON.parse(JSON.stringify(remote));try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}render();}
-    else if(P.updated){await ref.set(JSON.parse(JSON.stringify(P)));}
+    if(remote&&remote.v===1){
+      const rm=norm(JSON.parse(JSON.stringify(remote)));
+      P=mergeP(P,rm);
+      try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}
+      dbRef=ref;
+      if(!S.touched&&P.topic&&T[P.topic])S.topic=P.topic;
+      restoreExam();render();
+      if(JSON.stringify(canon(P))!==JSON.stringify(canon(rm)))await ref.set(JSON.parse(JSON.stringify(P)));
+    }else{dbRef=ref;if(P.updated||P.hist.length)await ref.set(JSON.parse(JSON.stringify(P)));}
     setSync(true,'Guardado en tu cuenta');
   }catch(e){}
 })();
@@ -1957,6 +2037,13 @@ function record(topic,ok){
   const t=P.topics[topic]||(P.topics[topic]={att:0,ok:0,hist:[]});
   t.att++;if(ok)t.ok++;t.hist=[...t.hist,ok?1:0].slice(-12);save();
 }
+function addHist(code){const i=P.hist.findIndex(h=>h.c===code);const e=i>=0?P.hist.splice(i,1)[0]:{c:code,r:null};e.t=Date.now();P.hist.unshift(e);P.hist=P.hist.slice(0,HMAX);}
+function markHist(code,ok){const e=P.hist.find(h=>h.c===code);if(e)e.r=ok?1:0;}
+/* respuestas a medias de Práctica: solo en este navegador */
+const DK='ge-draft';
+function loadDrafts(){try{return JSON.parse(localStorage.getItem(DK))||{};}catch(e){return {};}}
+function saveDraft(code,vals){const d=loadDrafts();d[code]={v:vals,t:Date.now()};Object.keys(d).sort((a,b)=>d[b].t-d[a].t).slice(25).forEach(k=>delete d[k]);try{localStorage.setItem(DK,JSON.stringify(d));}catch(e){}}
+const getDraft=code=>{const d=loadDrafts()[code];return d?d.v:null;};
 
 /* ---------- comprobación ---------- */
 function checkField(f,raw){
@@ -2065,22 +2152,81 @@ document.addEventListener('click',e=>{
 addEventListener('scroll',hideTip,{passive:true});
 
 /* ---------- vistas ---------- */
-const S={tab:'practica',topic:'pib',ex:null,checked:false,solved:false,fcTopic:'all',fc:null,flip:false,exam:null};
+const S={tab:'practica',topic:(P.topic&&T[P.topic])?P.topic:'pib',ex:null,checked:false,solved:false,fcTopic:'all',fc:null,flip:false,exam:null,touched:false};
 try{const t=localStorage.getItem('ge-tab');if(t&&['practica','teoria','apuntes','flash','examen','progreso'].includes(t))S.tab=t;}catch(e){}
 const view=document.getElementById('view');
+const setTab=t=>{S.tab=t;try{localStorage.setItem('ge-tab',t);}catch(e){}};
+const fmtWhen=ts=>{const d=new Date(ts);return d.toDateString()===new Date().toDateString()?d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'});};
+const codeName=c=>{const p=parseCode(c);return !p?'':p.exam?'Simulacro':T[p.topic].name;};
 
 function chipsHTML(sel,withAll){
   return `<div class="chips">${withAll?`<button class="chip" data-topic="all" aria-pressed="${sel==='all'}">Todos</button>`:''}${TOPICS.map(t=>`<button class="chip" data-topic="${t.id}" aria-pressed="${sel===t.id}">${t.name}</button>`).join('')}</div>`;
 }
+function setTopic(id){S.touched=true;S.topic=id;P.topic=id;save(false);}
+
+/* ---------- buscador de códigos ---------- */
+function finderHTML(){
+  return `<form class="finder" id="finder" autocomplete="off">
+    <label for="fCode">Buscar un ejercicio por su código o su número</label>
+    <div class="frow"><input id="fCode" placeholder="Ej.: OPEN-48213 o 48213" spellcheck="false" autocapitalize="characters" enterkeyhint="go"><button class="btn primary" type="submit">Abrir</button></div>
+    <div class="fmsg" id="fMsg" aria-live="polite"></div>
+    <div class="rlist" id="fList"></div></form>`;
+}
+function fillFinder(){
+  const inp=document.getElementById('fCode'),list=document.getElementById('fList');if(!inp||!list)return;
+  const raw=inp.value.trim(),q=raw.toUpperCase().replace(/\s+/g,''),p=parseCode(raw),num=/^\d{1,6}$/.test(raw);
+  const hits=P.hist.filter(h=>!q||h.c.includes(q)||codeName(h.c).toUpperCase().includes(q)).slice(0,q?12:6);
+  const chip=(c,extra,cls)=>`<button type="button" class="rchip${cls?' '+cls:''}" data-open="${c}"><code>${c}</code><span>${esc(codeName(c))}${extra}</span></button>`;
+  let html='';
+  if(p&&!hits.some(h=>h.c===p.code))html+=chip(p.code,' · abrir','new');
+  if(num&&!p){const c=`${PFX[S.topic]}-${+raw}`;if(!hits.some(h=>h.c===c))html+=chip(c,' · abrir en este tema','new');}
+  html+=hits.map(h=>chip(h.c,` · ${fmtWhen(h.t)}${h.r===1?' · ✓':h.r===0?' · ✗':''}`)).join('');
+  list.innerHTML=html?(q?'':'<div class="rl-h">Tus ejercicios recientes</div>')+html:(q?'<div class="muted" style="font-size:14px">Ese código no está en tu historial. Si es un código completo (p. ej. OPEN-48213), pulsa Abrir.</div>':'');
+}
+function openFromFinder(q){
+  const msg=document.getElementById('fMsg');q=String(q||'').trim();
+  if(!q){msg.textContent='Escribe un código, por ejemplo OPEN-48213.';return;}
+  let p=parseCode(q);
+  if(!p&&/^\d{1,6}$/.test(q)){
+    const hits=P.hist.filter(h=>h.c.endsWith('-'+(+q)));
+    if(hits.length===1)p=parseCode(hits[0].c);
+    else if(hits.length>1){msg.textContent=`Tienes ${hits.length} ejercicios con el número ${+q}: elige uno de la lista.`;return;}
+    else p=parseCode(`${PFX[S.topic]}-${+q}`);
+  }
+  if(!p){msg.textContent='No reconozco ese código. Tiene la forma OPEN-48213: letras del tema, guion y número.';return;}
+  openCode(p.code,msg);
+}
+function openCode(code,msgEl){
+  const p=parseCode(code);if(!p)return;
+  if(p.exam){
+    if(S.exam&&!S.exam.done&&S.exam.code!==p.code){
+      if(msgEl)msgEl.textContent=`Tienes un simulacro a medias (${S.exam.code}). Entrégalo o abandónalo en la pestaña Examen antes de abrir otro.`;
+      else{setTab('examen');render();window.scrollTo({top:0});}
+      return;}
+    if(!S.exam||S.exam.code!==p.code||S.exam.done)startExam(p.code);
+    setTab('examen');render();window.scrollTo({top:0});return;
+  }
+  S.touched=true;S.topic=p.topic;P.topic=p.topic;P.cur[p.topic]=p.code;addHist(p.code);save();
+  S.ex=null;setTab('practica');render();window.scrollTo({top:0});
+}
+document.addEventListener('click',e=>{const o=e.target.closest&&e.target.closest('[data-open]');if(!o)return;e.preventDefault();openCode(o.dataset.open,document.getElementById('fMsg'));});
+
+/* el ejercicio abierto de cada tema se guarda: al volver salen los mismos números */
+function ensureCur(topic){
+  let c=P.cur[topic];const p=c&&parseCode(c);
+  if(!p||p.exam||p.topic!==topic){c=topic==='abierta'?BOARD_CODE:newCode(topic);P.cur[topic]=c;addHist(c);save(false);}
+  return c;
+}
 
 function renderPractica(){
-  if(!S.ex||S.ex.topic!==S.topic){S.ex=S.topic==='abierta'&&!S.boardSeen?(S.boardSeen=true,GEN.abierta(true)):GEN[S.topic]();S.checked=false;S.solved=false;}
+  const code=ensureCur(S.topic);
+  if(!S.ex||S.ex.code!==code){S.ex=genFromCode(code);S.checked=false;S.solved=false;}
   const ex=S.ex,t=T[ex.topic];
-  view.innerHTML=chipsHTML(S.topic)+`
+  view.innerHTML=finderHTML()+chipsHTML(S.topic)+`
   <section class="sheet">
-    <div class="eyebrow">${t.tag} · ${t.name}${ex.board?' · ejercicio de la pizarra':''}</div>
-    <div class="statement" style="margin-top:10px">${ex.statement}</div>
-    <p class="muted" style="font-size:14px;margin-top:6px">Usa coma o punto para los decimales. Se aceptan pequeñas diferencias por redondeo. Cada vez que pidas otro ejercicio cambian los datos.</p>
+    <div class="ex-top"><div class="eyebrow">${t.tag} · ${t.name}${ex.board?' · ejercicio de la pizarra':''}</div>${codeBox(ex.code,'Código de este ejercicio')}</div>
+    <div class="statement">${ex.statement}</div>
+    <p class="muted" style="font-size:14px;margin-top:6px">Usa coma o punto para los decimales. Se aceptan pequeñas diferencias por redondeo. Este ejercicio se queda guardado: si sales y vuelves verás los mismos números, y con su código puedes recuperarlo cuando quieras.</p>
     ${fieldsHTML(ex,'p')}
     <div class="actions">
       <button class="btn primary" id="bCheck">Comprobar</button>
@@ -2090,27 +2236,35 @@ function renderPractica(){
     <div id="verdict"></div>
     <div class="solution" id="sol" ${S.solved?'':'hidden'}><h3 style="margin-top:0">Solución paso a paso</h3>${ex.solution}</div>
   </section>`;
-  bindChips(id=>{S.topic=id;S.ex=null;render();});
+  bindChips(id=>{setTopic(id);render();});
+  const ids=ex.fields.map((_,i)=>'pf'+i),dv=getDraft(ex.code);
+  if(dv)ids.forEach((id,i)=>{const el=document.getElementById(id);if(el&&dv[i]!=null)el.value=dv[i];});
+  const keep=()=>saveDraft(ex.code,ids.map(id=>document.getElementById(id).value));
+  ids.forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',keep);el.addEventListener('change',keep);});
   document.getElementById('bCheck').onclick=()=>{
     const g=grade(ex,'p',S.solved),all=g===ex.fields.length;
-    if(!S.checked){record(ex.topic,all);S.checked=true;}
+    if(!S.checked){markHist(ex.code,all);record(ex.topic,all);S.checked=true;}
     document.getElementById('verdict').innerHTML=`<div class="verdict ${all?'ok':'bad'}">${all?'¡Todo correcto! Prueba otro.':`${g} de ${ex.fields.length} correctos. Corrige lo marcado o mira la solución.`}</div>`;
   };
   document.getElementById('bSol').onclick=()=>{
     S.solved=!S.solved;
-    if(S.solved&&!S.checked){record(ex.topic,false);S.checked=true;}
+    if(S.solved&&!S.checked){markHist(ex.code,false);record(ex.topic,false);S.checked=true;}
     document.getElementById('sol').hidden=!S.solved;
     document.getElementById('bSol').textContent=S.solved?'Ocultar solución':'Ver solución';
   };
-  document.getElementById('bNew').onclick=()=>{S.ex=null;render();window.scrollTo({top:0});};
+  document.getElementById('bNew').onclick=()=>{const c=newCode(S.topic);S.touched=true;P.cur[S.topic]=c;addHist(c);save();S.ex=null;render();window.scrollTo({top:0});};
+  const inp=document.getElementById('fCode');
+  inp.addEventListener('input',()=>{document.getElementById('fMsg').textContent='';fillFinder();});
+  document.getElementById('finder').addEventListener('submit',e=>{e.preventDefault();openFromFinder(inp.value);});
+  fillFinder();
 }
 
 function renderTeoria(){
   const t=T[S.topic];
   view.innerHTML=chipsHTML(S.topic)+`<section><div class="eyebrow" style="margin-top:12px">${t.tag}</div><h2>${t.name}</h2>${THEORY[t.id]}
   <div class="actions"><button class="btn primary" id="bGo">Practicar este tema</button><button class="btn" id="bAp">Leer los apuntes completos</button></div></section>`;
-  bindChips(id=>{S.topic=id;render();});
-  document.getElementById('bGo').onclick=()=>{S.tab='practica';S.ex=null;render();window.scrollTo({top:0});};
+  bindChips(id=>{setTopic(id);render();});
+  document.getElementById('bGo').onclick=()=>{setTab('practica');render();window.scrollTo({top:0});};
   document.getElementById('bAp').onclick=()=>goApuntes(t.ap);
 }
 
@@ -2150,43 +2304,58 @@ function renderFlash(){
   annotate(view);
 }
 
+/* ---------- simulacro (también con código y guardado a medias) ---------- */
 let timerId=null;
+function examFrom(sv){const codes=examCodes(sv.code);return {...sv,codes,list:codes.map(genFromCode)};}
+function restoreExam(){const p=P.exam&&parseCode(P.exam.code);S.exam=p&&p.exam?examFrom(P.exam):null;}
+function persistExam(){const E=S.exam;P.exam=E?{code:E.code,end:E.end,done:E.done,score:E.score||0,res:E.res||[],answers:E.answers||null}:null;}
+function startExam(code){
+  const codes=examCodes(code),list=codes.map(genFromCode);
+  S.exam={code,codes,list,end:Date.now()+(list.some(x=>x.topic==='abierta')?40:30)*60000,done:false,score:0,res:[],answers:null};
+  addHist(code);persistExam();save();
+}
+function collectExam(){const E=S.exam;if(!E||E.done||!document.getElementById('e0f0'))return;E.answers=E.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`)?.value||''));persistExam();}
 function renderExamen(){
   const E=S.exam;
   if(!E){
     const last=P.exams.slice(-1)[0];
     view.innerHTML=`<section><h2>Simulacro de examen</h2>
-      <p>Cinco ejercicios de temas variados, con datos nuevos cada vez: cálculos (PIB, tipos, multiplicador, identidades…) y preguntas de razonamiento (shocks, actores, mercados). Tienes 30 minutos (40 si sale el ejercicio largo de economía abierta). No verás si aciertas hasta que entregues.</p>
-      <p class="muted">Ten a mano la calculadora y papel, como en el examen de verdad.</p>
-      ${last?`<p>Último simulacro: <b>${n(last.score,1)} / 10</b> (${new Date(last.date).toLocaleDateString('es-ES')}).</p>`:''}
-      <div class="actions"><button class="btn primary" id="bStart">Empezar examen</button></div></section>`;
-    document.getElementById('bStart').onclick=()=>{
-      const ids=shuffle(TOPICS.map(t=>t.id)).slice(0,5);
-      S.exam={list:ids.map(id=>GEN[id]()),end:Date.now()+(ids.includes('abierta')?40:30)*60*1000,done:false,score:0,res:[]};
-      render();window.scrollTo({top:0});
-    };
+      <p>Cinco ejercicios de temas variados: cálculos (PIB, tipos, multiplicador, identidades, economía abierta…) y preguntas de razonamiento (shocks, actores, mercados). Tienes 30 minutos (40 si sale el ejercicio largo de economía abierta). No verás si aciertas hasta que entregues.</p>
+      <p class="muted">Ten a mano la calculadora y papel, como en el examen de verdad. Cada simulacro tiene su código: si sales a medias, al volver lo encontrarás igual, con tus respuestas y el tiempo que quedaba.</p>
+      ${last?`<p>Último simulacro: <b>${n(last.score,1)} / 10</b> (${new Date(last.date).toLocaleDateString('es-ES')}${last.code?` · <code>${last.code}</code>`:''}).</p>`:''}
+      <div class="actions"><button class="btn primary" id="bStart">Empezar examen</button></div>
+      <form class="finder" id="exForm" autocomplete="off"><label for="exCode">Repetir un simulacro con su código</label><div class="frow"><input id="exCode" placeholder="Ej.: EXAM-48213" spellcheck="false" autocapitalize="characters"><button class="btn" type="submit">Empezar este</button></div><div class="fmsg" id="exMsg" aria-live="polite"></div></form></section>`;
+    document.getElementById('bStart').onclick=()=>{startExam(newExamCode());render();window.scrollTo({top:0});};
+    document.getElementById('exForm').onsubmit=e=>{e.preventDefault();const v=document.getElementById('exCode').value.trim();let p=parseCode(v);if(!p&&/^\d{1,6}$/.test(v))p=parseCode('EXAM-'+v);
+      if(!p||!p.exam){document.getElementById('exMsg').textContent='Escribe un código de simulacro, por ejemplo EXAM-48213.';return;}startExam(p.code);render();window.scrollTo({top:0});};
     return;
   }
   view.innerHTML=`<div class="exam-head"><div><div class="eyebrow">Simulacro</div><b>${E.done?'Corregido':'5 ejercicios'}</b></div>
-    ${E.done?`<div class="score">${n(E.score,1)}<span class="muted" style="font-size:20px"> / 10</span></div>`:`<div class="timer" id="timer">··:··</div><button class="btn primary" id="bEnd">Entregar</button>`}</div>
-    ${E.list.map((ex,k)=>`<section class="sheet"><div class="eyebrow">Ejercicio ${k+1} · ${T[ex.topic].name}${E.done?` · ${E.res[k]}/${ex.fields.length}`:''}</div>
-      <div class="statement" style="margin-top:10px">${ex.statement}</div>${fieldsHTML(ex,'e'+k)}
+    ${E.done?`<div class="score">${n(E.score,1)}<span class="muted" style="font-size:20px"> / 10</span></div>`:`<div class="timer" id="timer">··:··</div><div class="actions" style="margin:0"><button class="btn primary" id="bEnd">Entregar</button><button class="btn" id="bQuit">Abandonar</button></div>`}</div>
+    <div style="margin-top:12px">${codeBox(E.code,'Código del simulacro')}</div>
+    ${E.list.map((ex,k)=>`<section class="sheet"><div class="ex-top"><div class="eyebrow">Ejercicio ${k+1} · ${T[ex.topic].name}${E.done?` · ${E.res[k]}/${ex.fields.length}`:''}</div>${codeBox(ex.code)}</div>
+      <div class="statement">${ex.statement}</div>${fieldsHTML(ex,'e'+k)}
       ${E.done?`<details class="solution"><summary class="btn" style="display:inline-block">Ver solución</summary><div style="margin-top:12px">${ex.solution}</div></details>`:''}</section>`).join('')}
-    ${E.done?`<div class="actions"><button class="btn primary" id="bAgain">Hacer otro simulacro</button><button class="btn" id="bExit">Salir</button></div>`:''}`;
-  if(E.answers)E.list.forEach((ex,k)=>ex.fields.forEach((f,i)=>{document.getElementById(`e${k}f${i}`).value=E.answers[k][i]||'';}));
+    ${E.done?`<div class="actions"><button class="btn primary" id="bAgain">Hacer otro simulacro</button><button class="btn" id="bRedo">Repetir este</button><button class="btn" id="bExit">Salir</button></div>`:''}`;
+  if(E.answers)E.list.forEach((ex,k)=>ex.fields.forEach((f,i)=>{const el=document.getElementById(`e${k}f${i}`);if(el)el.value=(E.answers[k]||[])[i]||'';}));
   if(E.done){E.list.forEach((ex,k)=>{grade(ex,'e'+k,true);ex.fields.forEach((_,i)=>document.getElementById(`e${k}f${i}`).disabled=true);});
-    document.getElementById('bAgain').onclick=()=>{S.exam=null;render();document.getElementById('bStart').click();};
-    document.getElementById('bExit').onclick=()=>{S.exam=null;render();};
+    document.getElementById('bAgain').onclick=()=>{startExam(newExamCode());render();window.scrollTo({top:0});};
+    document.getElementById('bRedo').onclick=()=>{startExam(E.code);render();window.scrollTo({top:0});};
+    document.getElementById('bExit').onclick=()=>{S.exam=null;persistExam();save();render();};
     return;}
+  view.querySelectorAll('.fields input,.fields select').forEach(el=>{const h=()=>{collectExam();save();};el.addEventListener('input',h);el.addEventListener('change',h);});
   const finish=()=>{
     clearInterval(timerId);
     E.answers=E.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`).value));
     let tot=0;E.res=E.list.map((ex,k)=>{const g=ex.fields.filter((f,i)=>checkField(f,E.answers[k][i])).length;tot+=g/ex.fields.length;record(ex.topic,g===ex.fields.length);return g;});
     E.score=tot/E.list.length*10;E.done=true;
-    P.exams=[...P.exams,{date:Date.now(),score:rd(E.score,2)}].slice(-20);save();
+    P.exams=[...P.exams,{date:Date.now(),score:rd(E.score,2),code:E.code}].slice(-20);persistExam();save();
     render();window.scrollTo({top:0});
   };
   document.getElementById('bEnd').onclick=finish;
+  const qb=document.getElementById('bQuit');
+  qb.onclick=()=>{if(qb.dataset.armed){clearInterval(timerId);S.exam=null;persistExam();save();render();window.scrollTo({top:0});return;}
+    qb.dataset.armed='1';qb.textContent='¿Seguro? Pulsa otra vez';setTimeout(()=>{if(document.body.contains(qb)){delete qb.dataset.armed;qb.textContent='Abandonar';}},3500);};
   clearInterval(timerId);
   const tick=()=>{const s=Math.max(0,Math.round((E.end-Date.now())/1000)),el=document.getElementById('timer');
     if(!el){clearInterval(timerId);return;}
@@ -2209,18 +2378,17 @@ function renderProgreso(){
     <div class="actions"><button class="btn primary" id="bWeak">Practicar el tema más flojo: ${weakest.name}</button></div>
     <h3>Por tema</h3>${rows}
     <h3>Flashcards</h3><p><b>${mastered}</b> de ${CARDS.length} tarjetas en las cajas 4–5.</p>
-    <h3>Simulacros</h3>${P.exams.length?tableHTML(['Fecha','Nota'],P.exams.slice().reverse().slice(0,8).map(e=>[new Date(e.date).toLocaleDateString('es-ES'),n(e.score,1)])):'<p class="muted">Aún no has hecho ningún simulacro.</p>'}</section>`;
-  document.getElementById('bWeak').onclick=()=>{S.topic=weakest.id;S.tab='practica';S.ex=null;render();window.scrollTo({top:0});};
+    <h3>Simulacros</h3>${P.exams.length?tableHTML(['Fecha','Nota','Código'],P.exams.slice().reverse().slice(0,8).map(e=>[new Date(e.date).toLocaleDateString('es-ES'),n(e.score,1),e.code?`<button type="button" class="rchip" data-open="${e.code}" title="Repetir este simulacro"><code>${e.code}</code></button>`:'—'])):'<p class="muted">Aún no has hecho ningún simulacro.</p>'}</section>`;
+  document.getElementById('bWeak').onclick=()=>{setTopic(weakest.id);setTab('practica');render();window.scrollTo({top:0});};
 }
 
 function goApuntes(id){
-  S.tab='apuntes';try{localStorage.setItem('ge-tab',S.tab);}catch(e){}render();
+  setTab('apuntes');render();
   const el=document.getElementById(id);if(el)el.scrollIntoView();else window.scrollTo({top:0});
 }
 function bindChips(fn){view.querySelectorAll('.chip').forEach(b=>b.onclick=()=>fn(b.dataset.topic));}
 function render(){
-  if(S.tab!=='examen')clearInterval(timerId);
-  if(S.exam&&!S.exam.done&&S.tab!=='examen'&&document.getElementById('e0f0'))S.exam.answers=S.exam.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`)?.value||''));
+  if(S.tab!=='examen'){clearInterval(timerId);collectExam();}
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===S.tab)));
   const ap=document.getElementById('apuntes');
   ap.hidden=S.tab!=='apuntes';view.hidden=S.tab==='apuntes';
@@ -2229,8 +2397,9 @@ function render(){
   annotate(view);
 }
 document.getElementById('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
-  if(S.exam&&!S.exam.done&&S.tab==='examen')S.exam.answers=S.exam.list.map((ex,k)=>ex.fields.map((_,i)=>document.getElementById(`e${k}f${i}`).value));
-  S.tab=b.dataset.tab;try{localStorage.setItem('ge-tab',S.tab);}catch(e){}render();window.scrollTo({top:0});};
+  if(S.tab==='examen'){collectExam();save(false);}
+  setTab(b.dataset.tab);render();window.scrollTo({top:0});};
+restoreExam();
 annotate(document.getElementById('apuntes'));
 render();
 </script>
@@ -2423,7 +2592,7 @@ render();
     cap.textContent=`E₀ (e = 1): Y = ${f(r0.Y,1)}, P = ${f(r0.P,3)}. E₁ (e = ${f(p.e1,2)}): Y = ${f(r1.Y,1)}, P = ${f(r1.P,3)}. Con e = ${f(p.e1,2)} el BCE baja el tipo, la inversión sube de ${f(r0.I,0)} a ${f(r1.I,0)} y desplaza la AS (más capital) y la AD a la derecha. Línea discontinua: e = 1. Pasa el dedo o el ratón para leer Y a cada nivel de precios.`;
     fig.appendChild(cap);
     const box=document.getElementById('ob-class');
-    if(box){const ex=GEN.abierta(true);box.innerHTML=`<div class="ex-head"><h2>Europe and America</h2><span class="ex-tag">Pizarra de clase · Open economy</span></div>${ex.statement}<h3>Solución paso a paso</h3>${ex.solution}`;annotate(box);}
+    if(box){const ex=genFromCode(BOARD_CODE);box.innerHTML=`<div class="ex-head"><h2>Europe and America</h2><span class="ex-tag">Pizarra de clase · Open economy</span></div><div class="ex-top" style="margin-top:10px">${codeBox(BOARD_CODE,'Código')}<button type="button" class="btn sm" data-open="${BOARD_CODE}">Practicarlo con corrección</button></div>${ex.statement}<h3>Solución paso a paso</h3>${ex.solution}`;annotate(box);}
   }
   drawOB();
 })();
