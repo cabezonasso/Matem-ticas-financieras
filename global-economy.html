@@ -69,6 +69,12 @@ td.tx,th.tx{text-align:left;font-family:var(--f-body)}
 tr.sum td{font-weight:600;border-top:2px solid var(--ink)}
 .tbl.lft td:first-child,.tbl.lft th:first-child{text-align:left;font-family:var(--f-body)}
 .ev{font:700 19px/1.35 var(--f-display);margin:10px 0 12px;text-wrap:balance}
+.ob{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin:12px 0}
+.ob>div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}
+.ob h4,#apuntes .ob h4{margin:0 0 6px;font:700 12px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.ob .f{font:400 13.5px/1.85 var(--f-mono);overflow-x:auto;white-space:nowrap}
+.ob .f .muted{font-family:var(--f-body)}
+.ob>div.know{border:2px solid var(--accent);background:var(--accent-soft)}
 .fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:18px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 .field label{font:600 14px/1.3 var(--f-body)}
@@ -281,6 +287,8 @@ tr.sum td{font-weight:600;border-top:2px solid var(--ink)}
     <li><a href="#t13">13 · Analizar un shock</a></li>
     <li><a href="#t14">14 · Lente 4.0 y pensiones</a></li>
     <li><a href="#t15">15 · Método de examen</a></li>
+    <li class="grp">Parte V · Economía abierta</li>
+    <li><a href="#t16">16 · Open economy (pizarra)</a></li>
     <li class="grp">Ejercicios resueltos</li>
     <li><a href="#e1">Cadena de valor</a></li>
     <li><a href="#e2">PIB nominal y real</a></li>
@@ -994,6 +1002,49 @@ Por tanto                      <span class="key">S + T = I + G</span>
   <p><strong>Puente al Tema 2:</strong> se abren las fronteras. <span class="m">Y = C + I + G</span> pasa a ser <span class="m">Y = C + I + G + NX</span>, con exportaciones e importaciones. La lógica del sistema es la misma; entran actores y canales nuevos.</p>
 </section>
 
+<div class="part">Parte V · Economía abierta (pizarra de clase)</div>
+
+<section id="t16">
+  <h2><span class="n">16</span>Open economy: AS–AD con comercio exterior</h2>
+  <p>En clase se abre la economía: <strong>Europa (E)</strong>, con euros, comercia con <strong>América (A)</strong>, con dólares. El modelo junta los cinco actores del Topic 1 y añade exportaciones, importaciones y el tipo de cambio. Se busca el equilibrio en el que la oferta agregada (AS) iguala a la demanda agregada (AD).</p>
+  <div class="formula"><span class="lbl">Identidad de la economía abierta</span>AD: Y = C + I + G + X − M        NX = X − M
+<span class="lbl" style="margin-top:8px">Tipo de cambio</span>e = euros por dólar     e↑: el $ se aprecia (el € se deprecia)     e↓: el $ se deprecia (el € se aprecia)
+q = e · P<sub>A</sub> / P<sub>E</sub>     tipo de cambio real: precio de lo americano frente a lo europeo
+π<sup>e</sup><sub>imported</sub> = π<sub>A</sub><sup>e</sup> + (e − 1)/1</div>
+
+  <h3>El camino de la pizarra</h3>
+  <h4>Lado de la oferta</h4>
+  <ul class="chain"><li><span class="nd">BCE fija i<sub>policy</sub></span></li><li><span class="nd">Bancos: i<sub>B</sub></span></li><li><span class="nd">Inversión I</span></li><li><span class="nd">Capital K</span></li><li class="out"><span class="nd">AS: Y = A·√(K·L(P))</span></li></ul>
+  <h4>Lado de la demanda</h4>
+  <ul class="chain"><li><span class="nd">i<sub>D</sub> y π<sup>e</sup></span></li><li><span class="nd">Ahorro S</span></li><li><span class="nd">C en función de Y y P</span></li><li><span class="nd">+ I + G</span></li><li><span class="nd">+ X(P) − M(Y, P)</span></li><li class="out"><span class="nd">AD: Y = a + b/P</span></li></ul>
+  <p>El equilibrio es el cruce <strong>AS = AD</strong>. Como la AD queda <span class="m">Y = a + b/P</span> y la AS <span class="m">Y = A·√(K·(210 − c/P))</span>, con <span class="m">u = 1/P</span> se eleva al cuadrado y sale una ecuación de segundo grado.</p>
+
+  <div class="pair">
+    <div><h4>Por qué la AS sube</h4><p>El salario nominal está fijo. Si P sube, el salario real w/P baja, las empresas contratan más trabajo (L) y producen más.</p></div>
+    <div><h4>Por qué la AD baja</h4><p>Si P sube, cae la riqueza real de los depósitos (D/P), los hogares ahorran más y consumen menos; además q baja: se exporta menos y se importa más.</p></div>
+  </div>
+
+  <h3>Qué pasa si cambia e</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>e baja (el € se aprecia)</th><th>e sube (el € se deprecia)</th></tr></thead>
+    <tbody>
+      <tr><td>Tipo de cambio real q</td><td>baja</td><td>sube</td></tr>
+      <tr><td>Exportaciones X</td><td>bajan</td><td>suben</td></tr>
+      <tr><td>Importaciones M (por precio)</td><td>suben</td><td>bajan</td></tr>
+      <tr><td>Inflación importada y π<sub>E</sub><sup>e</sup></td><td>bajan</td><td>suben</td></tr>
+      <tr><td>Tipo del BCE e i<sub>B</sub></td><td>bajan</td><td>suben</td></tr>
+      <tr><td>Inversión, K e Y</td><td>suelen subir (más M por renta)</td><td>suelen bajar (menos M por renta)</td></tr>
+      <tr><td><strong>Exportaciones netas</strong></td><td><strong>bajan</strong></td><td><strong>suben</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <figure class="chart" id="fig-ob"></figure>
+
+  <h3>Ejercicio de la pizarra resuelto</h3>
+  <article class="ex" id="ob-class" style="margin-top:12px"></article>
+  <p>Para practicar con otros números, ve a <strong>Práctica → Open economy</strong>: el primer ejercicio es el de la pizarra y «Otro ejercicio» genera variantes.</p>
+</section>
+
 <div class="part">Ejercicios resueltos</div>
 
 <article class="ex" id="e1">
@@ -1209,6 +1260,7 @@ Año 2: 504 / 824 = 0,612 € por € producido   ⇒  +1,94 %</div></dd>
     <div><h4>Capacidad</h4><p>Y* = F(L, K; A)</p><p>productividad = Y real / horas</p><p>CLU = remuneración / Y real</p><p>% CLU ≈ % salario/hora − % productividad</p></div>
     <div><h4>Actores</h4><p>YD = salarios + beneficios + transferencias − impuestos</p><p>Beneficio = ingresos − costes</p><p>Déficit = G + transferencias − T</p></div>
     <div><h4>Identidades</h4><p>Y = C + S + T</p><p>S + T = I + G</p><p>S − I = G − T</p></div>
+    <div><h4>Economía abierta</h4><p>Y = C + I + G + X − M</p><p>q = e·P_A/P_E</p><p>π_imp = π_A + (e − 1)</p><p>AD: Y = a + b/P ; AS: Y = A√(K·L(P))</p></div>
     <div><h4>Shocks</h4><p>Shock → actor → decisión → flujo → PIB</p><p>Demanda: Y y π en la misma dirección</p><p>Costes: Y ↓ y π ↑</p></div>
   </div>
 </section>
@@ -1240,6 +1292,11 @@ Año 2: 504 / 824 = 0,612 € por € producido   ⇒  +1,94 %</div></dd>
       <tr><td>Retroalimentación</td><td>Feedback loop</td><td>Un resultado que cambia la siguiente decisión.</td></tr>
       <tr><td>Salarios rígidos</td><td>Sticky wages</td><td>Tardan en ajustarse; retrasan la recuperación.</td></tr>
       <tr><td>Ilusión monetaria</td><td>Money illusion</td><td>Fijarse en lo nominal en vez de lo real.</td></tr>
+      <tr><td>Tipo de cambio nominal / real</td><td>Nominal / real exchange rate (e, q)</td><td>e = € por $; q = e·P<sub>A</sub>/P<sub>E</sub>.</td></tr>
+      <tr><td>Exportaciones netas</td><td>Net exports (NX)</td><td>Exportaciones − importaciones.</td></tr>
+      <tr><td>Apreciación / depreciación</td><td>Appreciation / depreciation</td><td>La moneda vale más / menos frente a otra.</td></tr>
+      <tr><td>Inflación importada</td><td>Imported inflation</td><td>Subida de precios que llega por lo que se importa.</td></tr>
+      <tr><td>Oferta / demanda agregada</td><td>Aggregate supply / demand (AS / AD)</td><td>Su cruce da P<sub>E</sub> e Y<sub>E</sub>.</td></tr>
       <tr><td>Pensiones de reparto / capitalización</td><td>Pay-as-you-go / funded pensions</td><td>Dos derechos distintos sobre la misma producción.</td></tr>
     </tbody>
   </table></div>
@@ -1286,6 +1343,7 @@ const TOPICS=[
  {id:'actores',tag:'Parte II · Actores',name:'Actores y balances',ap:'t9'},
  {id:'identidades',tag:'Parte III · Interacciones',name:'Identidades: S + T = I + G',ap:'t12'},
  {id:'shocks',tag:'Parte IV · Shocks',name:'Transmisión de shocks',ap:'t13'},
+ {id:'abierta',tag:'Parte V · Economía abierta',name:'Open economy',ap:'t16'},
 ];
 const T=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
 const ACT=['Hogares','Empresas','Gobierno','Bancos comerciales','Banco central'];
@@ -1444,6 +1502,72 @@ const SHOCKS=[
   en:'Lower perceived risk leads banks to lend more. New loans create deposits, households and firms spend on durables and investment, and GDP rises. But credit also creates debt and repayment obligations tomorrow.'},
 ];
 
+/* ---------- economía abierta (modelo de la pizarra) ---------- */
+const BOARD={G:170,tau:.28,tr:.35,w:2.2,D:450,s:.12,h:.08,cr:40,phi:.01,om:.8,I0:210,bI:1200,cA:500,K0:800,L0:210,lw:45,A:3.97,x:.12,m:.18,cX:40,cM:30,pdom:.02,pA:.02,YdA:1200,PA:1,iA:.04,e1:.9};
+function openEq(p,e){
+  const pimp=p.pA+(e-1)/1,pe=p.om*p.pdom+(1-p.om)*pimp,ip=p.phi+pe,iD=ip-0.01,iB=ip+0.02;
+  const I=p.I0-p.bI*iB-p.cA*p.iA,K=p.K0+I,k1=(1-p.s-p.m)*(1-p.tau);
+  const cst=(1-p.s-p.m)*p.tr*p.G-p.cr*(iD-pe)+I+p.G+p.x*p.YdA-(p.cX+p.cM);
+  const bnum=p.h*p.D+(p.cX+p.cM)*e*p.PA,a=cst/(1-k1),b=bnum/(1-k1);
+  const c=p.lw*p.w,AK=p.A*p.A*K,qa=b*b,qb=2*a*b+AK*c,qc=a*a-AK*p.L0;
+  const u=(-qb+Math.sqrt(qb*qb-4*qa*qc))/(2*qa),P=1/u,Y=a+b*u,L=p.L0-c*u,q=e*p.PA*u,Yd=(1-p.tau)*Y+p.tr*p.G;
+  const X=p.x*p.YdA+p.cX*(q-1),M=p.m*Yd-p.cM*(q-1),S=p.s*Yd+p.cr*(iD-pe)-p.h*p.D*u,C=Yd-S;
+  return {e,pimp,pe,ip,iD,iB,I,K,k1,cst,bnum,a,b,c,AK,qa,qb,qc,u,P,Y,L,q,Yd,X,M,NX:X-M,S,C};
+}
+const obOk=r=>isFinite(r.P)&&r.qc<0&&r.P>0.35&&r.P<3&&r.L>5&&r.I>0&&r.X>0&&r.M>0;
+function obRandom(){
+  for(;;){
+    const p={...BOARD,G:pick([150,160,170,180,190]),tau:pick([.25,.28,.3]),tr:pick([.3,.35,.4]),w:pick([2,2.2,2.4]),D:pick([400,450,500]),s:pick([.1,.12,.15]),phi:pick([.01,.015,.02]),om:pick([.7,.8,.9]),I0:pick([200,210,220]),K0:pick([750,800,850]),A:pick([3.6,3.8,3.97,4.1]),x:pick([.1,.12,.15]),m:pick([.15,.18,.2]),pdom:pick([.015,.02,.025,.03]),pA:pick([.01,.02,.03]),YdA:pick([1000,1100,1200,1300]),iA:pick([.02,.03,.04,.05]),e1:pick([.85,.9,.95,1.05,1.1,1.15])};
+    const r0=openEq(p,1),r1=openEq(p,p.e1);
+    if(obOk(r0)&&obOk(r1)&&Math.sign(r1.NX-r0.NX)===Math.sign(p.e1-1)&&Math.abs(r1.NX-r0.NX)>1)return p;
+  }
+}
+const pcs=v=>pc(v*100,2);
+function obStatement(p,board){
+  const f=(v,d=4)=>n(v,d),S=(x,a,b)=>`${x}${a?`<sub>${a}</sub>`:''}${b?`<sup>${b}</sup>`:''}`;
+  const blk=(t,body,cls)=>`<div${cls?` class="${cls}"`:''}><h4>${t}</h4><div class="f">${body}</div></div>`;
+  const PE=S('P','E'),YE=S('Y','E'),YdE=S('Y','d','E'),iD=S('i','D','E'),iB=S('i','B','E'),piE=S('π','E','e'),ipol=S('i','policy');
+  return `${board?'<p class="muted" style="font-size:14px;margin-bottom:6px">Datos de la pizarra de clase. «Otro ejercicio» genera variantes con otros números.</p>':''}
+  <p><b>Europe (E)</b> usa el euro (€) y comercia con <b>America (A)</b>, que usa el dólar ($). <b>e</b> = euros por dólar: si e sube, el dólar se aprecia; si e baja, el dólar se deprecia y el euro se aprecia.</p>
+  <div class="ob">${blk('Households in E',`${YdE} = (${f(p.w)}/${PE})·${S('L','E')} + ${S('Π','E')} + ${iD}·(${f(p.D)}/${PE}) + ${f(p.tr)}·G − ${f(p.tau)}·${YE}<br><span class="muted">(salarios + beneficios + intereses = ${YE})</span><br>${S('S','E')} = ${f(p.s)}·${YdE} + ${p.cr}·(${iD} − ${piE}) − ${f(p.h)}·(${f(p.D)}/${PE})<br>${S('C','E')} = ${YdE} − ${S('S','E')}`)}
+  ${blk('Government',`G = ${f(p.G)}<br>T = ${f(p.tau)}·${YE}`)}
+  ${blk('European Central Bank',`${ipol} = ${f(p.phi)} + ${piE}<br>${piE} = ${f(p.om)}·π<sup>e</sup><sub>domestic</sub> + ${f(1-p.om)}·π<sup>e</sup><sub>imported</sub><br>π<sup>e</sup><sub>imported</sub> = ${S('π','A','e')} + (e − 1)/1`)}
+  ${blk('Commercial banks',`${iD} = ${ipol} − 0,01<br>${iB} = ${ipol} + 0,02`)}
+  ${blk('European firms',`${S('I','E')} = ${p.I0} − ${p.bI}·${iB} − ${p.cA}·${S('i','A')}<br>${S('K','E')} = ${p.K0} + ${S('I','E')}<br>${S('L','E')} = ${p.L0} − ${p.lw}·(${f(p.w)}/${PE})<br>${YE} = ${f(p.A)}·√(${S('K','E')}·${S('L','E')}) <span class="muted">(${f(p.A)} = TFP)</span>`)}
+  ${blk('Trade with America',`${S('X','E')} = ${f(p.x)}·${S('Y','d','A')} + ${p.cX}·(q − 1)<br>${S('M','E')} = ${f(p.m)}·${YdE} − ${p.cM}·(q − 1)<br>real ex. rate: q = e·${S('P','A')}/${PE}`)}
+  ${blk('We also know',`π<sup>e</sup><sub>domestic</sub> = ${pcs(p.pdom)}<br>${S('π','A','e')} = ${pcs(p.pA)}<br>${S('Y','d','A')} = ${f(p.YdA)}<br>${S('P','A')} = ${f(p.PA)}<br>${S('i','A')} = ${pcs(p.iA)}<br>e = 1`,'know')}</div>
+  <p lang="en"><b>Q.</b> Calculate the equilibrium ${YE}, ${PE} and the net exports of E. Then, assume that e = ${f(p.e1,2)}. Explain using numerical support what happens to the net exports and why.</p>
+  <p>a) Inflación esperada de E y tipo oficial del BCE (en %).<br>b) Inversión y stock de capital de las empresas europeas.<br>c) Equilibrio AS = AD: ${PE} y ${YE}.<br>d) Tipo de cambio real, exportaciones, importaciones y exportaciones netas.<br>e) Con e = ${f(p.e1,2)}: nuevas exportaciones netas, si suben o bajan y por qué.</p>
+  <p class="muted" style="font-size:14px">Pista: la AD queda Y = a + b/P y la AS Y = A·√(K·(${p.L0} − c/P)). Con u = 1/P sale una ecuación de 2.º grado.</p>`;
+}
+function obSolution(p,r0,r1){
+  const f=(v,d=2)=>n(v,d),F=v=>n(v,4),e1=p.e1,down=e1<1;
+  const S=(x,a,b)=>`${x}${a?`<sub>${a}</sub>`:''}${b?`<sup>${b}</sup>`:''}`;
+  const PE=S('P','E'),YE=S('Y','E'),piE=S('π','E','e');
+  const rD=r0.iD-r0.pe,c=p.lw*p.w,yd1=1-p.tau,yd0=p.tr*p.G;
+  const cY=(1-p.s)*yd1,cC=(1-p.s)*yd0-p.cr*rD,cP=p.h*p.D,xC=p.x*p.YdA-p.cX,mY=p.m*yd1,mC=p.m*yd0+p.cM;
+  const direct=(p.cX+p.cM)*(e1-1)*p.PA*r0.u,dNX=r1.NX-r0.NX,up=(a,b)=>b>a?'sube':'baja';
+  const rows=[['π importada',pcs(r0.pimp),pcs(r1.pimp)],['π<sub>E</sub><sup>e</sup>',pcs(r0.pe),pcs(r1.pe)],['i<sub>policy</sub>',pcs(r0.ip),pcs(r1.ip)],['i<sub>B</sub>',pcs(r0.iB),pcs(r1.iB)],['I<sub>E</sub>',f(r0.I),f(r1.I)],['K<sub>E</sub>',f(r0.K),f(r1.K)],['AD: Y = a + b/P',`${f(r0.a)} + ${f(r0.b)}/P`,`${f(r1.a)} + ${f(r1.b)}/P`],['P<sub>E</sub>',F(r0.P),F(r1.P)],['Y<sub>E</sub>',f(r0.Y),f(r1.Y)],['q',F(r0.q),F(r1.q)],['X<sub>E</sub>',f(r0.X),f(r1.X)],['M<sub>E</sub>',f(r0.M),f(r1.M)],['NX',`<b>${f(r0.NX)}</b>`,`<b>${f(r1.NX)}</b>`]];
+  const en=down
+    ?`When e falls from 1 to ${f(e1)}, the dollar depreciates and the euro appreciates. The real exchange rate q = e·P<sub>A</sub>/P<sub>E</sub> falls from ${F(r0.q)} to ${F(r1.q)}, so European goods become relatively more expensive: exports go from ${f(r0.X)} to ${f(r1.X)} and imports from ${f(r0.M)} to ${f(r1.M)}. Cheaper imports also lower imported inflation, so expected inflation in E falls from ${pcs(r0.pe)} to ${pcs(r1.pe)} and the ECB cuts the policy rate from ${pcs(r0.ip)} to ${pcs(r1.ip)}; investment goes from ${f(r0.I)} to ${f(r1.I)} and output from ${f(r0.Y)} to ${f(r1.Y)}, which changes disposable income and imports too. Net exports fall from ${f(r0.NX)} to ${f(r1.NX)}.`
+    :`When e rises from 1 to ${f(e1)}, the dollar appreciates and the euro depreciates. The real exchange rate q = e·P<sub>A</sub>/P<sub>E</sub> rises from ${F(r0.q)} to ${F(r1.q)}, so European goods become relatively cheaper: exports go from ${f(r0.X)} to ${f(r1.X)} and imports from ${f(r0.M)} to ${f(r1.M)}. Dearer imports also raise imported inflation, so expected inflation in E rises from ${pcs(r0.pe)} to ${pcs(r1.pe)} and the ECB raises the policy rate from ${pcs(r0.ip)} to ${pcs(r1.ip)}; investment goes from ${f(r0.I)} to ${f(r1.I)} and output from ${f(r0.Y)} to ${f(r1.Y)}, which changes disposable income and imports too. Net exports rise from ${f(r0.NX)} to ${f(r1.NX)}.`;
+  return `<ol class="steps">
+  <li><b>Expectativas y tipos (e = 1).</b><div class="formula">π<sup>e</sup><sub>imported</sub> = ${pcs(p.pA)} + (1 − 1)/1 = ${pcs(r0.pimp)}<br>${piE} = ${f(p.om)}·${pcs(p.pdom)} + ${f(1-p.om)}·${pcs(r0.pimp)} = <span class="hl">${pcs(r0.pe)}</span><br>i<sub>policy</sub> = ${pcs(p.phi)} + ${pcs(r0.pe)} = <span class="hl">${pcs(r0.ip)}</span> → i<sub>D</sub> = ${pcs(r0.iD)} · i<sub>B</sub> = ${pcs(r0.iB)}</div>${Math.abs(rD)<1e-9?'Fíjate: i<sub>D</sub> − π<sub>E</sub><sup>e</sup> = 0, así que el término del tipo real desaparece del ahorro.':`El tipo real de los depósitos es i<sub>D</sub> − π<sub>E</sub><sup>e</sup> = ${pcs(rD)}.`}</li>
+  <li><b>Empresas.</b><div class="formula">I<sub>E</sub> = ${p.I0} − ${p.bI}·${F(r0.iB)} − ${p.cA}·${F(p.iA)} = <span class="hl">${f(r0.I)}</span><br>K<sub>E</sub> = ${p.K0} + ${f(r0.I)} = <span class="hl">${f(r0.K)}</span></div></li>
+  <li><b>Oferta agregada (AS).</b> El salario nominal es ${f(p.w)}; si P sube, el salario real baja y se contrata más trabajo:<div class="formula">L<sub>E</sub> = ${p.L0} − ${p.lw}·${f(p.w)}/P = ${p.L0} − ${f(c)}/P<br>AS: Y = ${f(p.A)}·√(${f(r0.K)}·(${p.L0} − ${f(c)}/P))</div></li>
+  <li><b>Demanda agregada (AD).</b> Cada componente en función de Y y P (con e = 1, q = 1/P):<div class="formula">Y<sub>d</sub> = ${f(yd1)}·Y + ${f(yd0)}<br>C = ${f(1-p.s)}·Y<sub>d</sub>${Math.abs(rD)<1e-9?'':` − ${p.cr}·${F(rD)}`} + ${f(cP)}/P = ${F(cY)}·Y + ${F(cC)} + ${f(cP)}/P<br>X = ${f(p.x*p.YdA)} + ${p.cX}·(q − 1) = ${f(xC)} + ${f(p.cX)}/P<br>M = ${f(p.m)}·Y<sub>d</sub> − ${p.cM}·(q − 1) = ${F(mY)}·Y + ${F(mC)} − ${f(p.cM)}/P<br>Y = C + I + G + X − M = ${F(r0.k1)}·Y + ${F(r0.cst)} + ${f(r0.bnum)}/P<br>⇒ <span class="hl">AD: Y = ${F(r0.a)} + ${F(r0.b)}/P</span></div></li>
+  <li><b>Equilibrio AS = AD.</b> Con u = 1/P, iguala y eleva al cuadrado:<div class="formula">(${F(r0.a)} + ${F(r0.b)}·u)² = ${f(p.A)}²·${f(r0.K)}·(${p.L0} − ${f(c)}·u)<br>${f(r0.qa,1)}·u² + ${f(r0.qb,1)}·u − ${f(-r0.qc,1)} = 0 → u = ${F(r0.u)}<br><span class="hl">P<sub>E</sub> = ${F(r0.P)}</span> · <span class="hl">Y<sub>E</sub> = ${f(r0.Y)}</span> · L<sub>E</sub> = ${f(r0.L)}</div>Comprobación con la AS: ${f(p.A)}·√(${f(r0.K)}·${f(r0.L)}) = ${f(p.A*Math.sqrt(r0.K*r0.L))}.</li>
+  <li><b>Comercio con América.</b><div class="formula">q = 1·${f(p.PA)}/${F(r0.P)} = <span class="hl">${F(r0.q)}</span><br>Y<sub>d</sub><sup>E</sup> = ${f(yd1)}·${f(r0.Y)} + ${f(yd0)} = ${f(r0.Yd)}<br>X<sub>E</sub> = ${f(p.x*p.YdA)} + ${p.cX}·(${F(r0.q)} − 1) = <span class="hl">${f(r0.X)}</span><br>M<sub>E</sub> = ${f(p.m)}·${f(r0.Yd)} − ${p.cM}·(${F(r0.q)} − 1) = <span class="hl">${f(r0.M)}</span><br>NX = X − M = <span class="hl">${f(r0.NX)}</span> (${r0.NX>=0?'superávit':'déficit'} comercial)</div></li>
+  <li><b>Con e = ${f(e1)} se repite toda la cadena:</b>${tableHTML(['','e = 1',`e = ${f(e1)}`],rows,null,'lft')}</li>
+  <li><b>Qué pasa con NX y por qué.</b> Con e = ${f(e1)} el dólar se ${down?'deprecia':'aprecia'} y el euro se ${down?'aprecia':'deprecia'} un ${pc(Math.abs(e1-1)*100,0)}.
+    <ul><li><b>Efecto precio (directo):</b> q pasa de ${F(r0.q)} a ${F(r1.q)}; los bienes europeos se vuelven ${down?'más caros':'más baratos'} para América. Solo por este canal, con P y Y fijos, NX cambiaría en (${p.cX} + ${p.cM})·(${f(e1)} − 1)·${F(r0.u)} = <span class="hl">${f(direct)}</span>.</li>
+    <li><b>Efecto vía tipos y renta:</b> la inflación importada pasa de ${pcs(r0.pimp)} a ${pcs(r1.pimp)} y π<sub>E</sub><sup>e</sup> de ${pcs(r0.pe)} a ${pcs(r1.pe)}; el BCE ${down?'baja':'sube'} el tipo de ${pcs(r0.ip)} a ${pcs(r1.ip)}, la inversión ${up(r0.I,r1.I)} de ${f(r0.I)} a ${f(r1.I)} e Y ${up(r0.Y,r1.Y)} de ${f(r0.Y)} a ${f(r1.Y)}, con lo que la renta disponible y las importaciones también cambian. P<sub>E</sub> pasa de ${F(r0.P)} a ${F(r1.P)}.</li>
+    <li><b>Resultado:</b> X pasa de ${f(r0.X)} a ${f(r1.X)} y M de ${f(r0.M)} a ${f(r1.M)}: las exportaciones netas <span class="hl">${dNX<0?'bajan':'suben'} de ${f(r0.NX)} a ${f(r1.NX)}</span> (${f(dNX)}).</li></ul></li>
+  </ol>
+  <div class="en" lang="en"><b>Exam answer (EN)</b>${en}</div>`;
+}
+const OB_WHY=['El euro se aprecia: q baja (menos X, más M)','El euro se deprecia: q sube (más X, menos M)','No cambia q: solo cambia la renta de América'];
+
 /* ---------- generadores ---------- */
 const GEN={
 pib(){
@@ -1590,6 +1714,19 @@ shocks(){
     fields:[ch('Actor que toma la primera decisión',ACT,s.actor,true),ch('Canal principal hacia el PIB',CANALES,s.canal,true),ch('Efecto sobre Y a corto plazo',['Sube','Baja'],s.Y,true),ch('Presión sobre la inflación',['Al alza','A la baja'],s.inf,true)],
     solution:`${chainHTML(s.chain,STEP5)}${s.loop?`<p class="loop">↺ ${s.loop}</p>`:''}<p><b>Matiz:</b> ${s.caveat}</p><p><b>¿Quién puede frenarlo?</b> ${s.stop}</p><div class="en" lang="en"><b>Exam answer (EN)</b>${s.en}</div>`};
 },
+abierta(board){
+  const p=board?BOARD:obRandom(),r0=openEq(p,1),r1=openEq(p,p.e1),down=p.e1<1;
+  return {topic:'abierta',board:!!board,
+    statement:obStatement(p,board),
+    fields:[{label:'π<sub>E</sub><sup>e</sup> con e = 1',unit:'%',ans:r0.pe*100},{label:'Tipo oficial i<sub>policy</sub>',unit:'%',ans:r0.ip*100},
+      {label:'Inversión I<sub>E</sub>',unit:'',ans:r0.I,tolAbs:.02},{label:'Capital K<sub>E</sub>',unit:'',ans:r0.K,tolAbs:.02},
+      {label:'Nivel de precios P<sub>E</sub>',unit:'',ans:r0.P,tolAbs:.006},{label:'Producción Y<sub>E</sub>',unit:'',ans:r0.Y,tolRel:.004},
+      {label:'Tipo de cambio real q',unit:'',ans:r0.q,tolAbs:.011},{label:'Exportaciones X<sub>E</sub>',unit:'',ans:r0.X,tolRel:.006},
+      {label:'Importaciones M<sub>E</sub>',unit:'',ans:r0.M,tolRel:.006},{label:'Exportaciones netas NX',unit:'',ans:r0.NX,tolAbs:1},
+      {label:`NX con e = ${n(p.e1,2)}`,unit:'',ans:r1.NX,tolAbs:1},ch('Las exportaciones netas…',['Suben','Bajan'],down?'Bajan':'Suben',true),
+      ch('¿Por qué? (efecto principal)',OB_WHY,down?OB_WHY[0]:OB_WHY[1],true)],
+    solution:obSolution(p,r0,r1)};
+},
 };
 
 function miniSD(c,d){
@@ -1686,6 +1823,14 @@ ${tableHTML(['Shock','Primera decisión','Transmisión'],[['Cae la confianza','h
 <h3>Firma de cada tipo de shock</h3>
 <ul><li><b>Demanda</b> (confianza, tipos, impuestos, crédito, G): Y y la inflación se mueven en la <b>misma</b> dirección.</li><li><b>Costes</b> (energía, inputs): Y baja y la inflación sube a la vez.</li></ul>
 <div class="warn"><b>Para nota:</b> nombra el matiz (capacidad, inflación, financiación o expectativas) y quién podría cortar el bucle.</div>`,
+abierta:`<p>En clase se abre la economía: Europa (E, con €) comercia con América (A, con $). El modelo junta los cinco actores del Topic 1 y añade exportaciones, importaciones y el tipo de cambio. El objetivo es encontrar el equilibrio AS = AD y ver qué pasa cuando cambia e.</p>
+<h3>Fórmulas</h3>
+<div class="formula">AD: Y = C + I + G + X − M &nbsp;·&nbsp; NX = X − M<br>e = euros por dólar: e↑ el $ se aprecia · e↓ el $ se deprecia (el € se aprecia)<br>q = e · P<sub>A</sub> / P<sub>E</sub> &nbsp;(tipo de cambio real)<br>π<sup>e</sup><sub>imported</sub> = π<sub>A</sub><sup>e</sup> + (e − 1)/1</div>
+<h3>El camino de la pizarra</h3>
+<ol class="steps"><li>BCE: π<sub>E</sub><sup>e</sup> → i<sub>policy</sub> → i<sub>D</sub> e i<sub>B</sub>.</li><li>i<sub>B</sub> → I → K (lado de la oferta).</li><li>AS: L depende del salario real w/P; Y = A·√(K·L) queda en función de P.</li><li>AD: i<sub>D</sub>, π<sup>e</sup> → S → C en función de Y y P; X en función de P; M en función de Y y P. Junta todo en Y = a + b/P.</li><li>AS = AD con u = 1/P: ecuación de 2.º grado → P<sub>E</sub> e Y<sub>E</sub>.</li><li>q, X, M y NX. Si cambia e, repite toda la cadena.</li></ol>
+<h3>Si cambia e</h3>
+${tableHTML(['','e baja (€ se aprecia)','e sube (€ se deprecia)'],[['q','baja','sube'],['X','baja','sube'],['M (por precio)','sube','baja'],['Inflación importada','baja','sube'],['Tipo del BCE','baja','sube'],['I e Y','suelen subir','suelen bajar'],['NX','bajan','suben']],null,'lft')}
+<div class="warn"><b>Ojo:</b> e es euros por dólar. Que e baje significa que el euro <b>se aprecia</b>: Europa pierde competitividad.</div>`
 };
 
 /* ---------- flashcards ---------- */
@@ -1767,6 +1912,16 @@ const CARDS=[
  ['shocks','Matices de una buena respuesta','Capacidad, inflación, financiación o expectativas'],
  ['shocks','Lente 4.0','Datos, plataformas y automatización aceleran los bucles de retroalimentación'],
  ['shocks','Dilema de las pensiones','Reparto o capitalización: ambas se pagan con la producción disponible cuando se cobran'],
+ ['abierta','Identidad de una economía abierta','Y = C + I + G + X − M (NX = X − M)'],
+ ['abierta','Tipo de cambio real','q = e · P_A / P_E'],
+ ['abierta','¿Qué significa e en el modelo de clase?','Euros por dólar: si e sube, el dólar se aprecia y el euro se deprecia'],
+ ['abierta','Si e baja (el euro se aprecia)','q baja: Europa exporta menos, importa más y las NX bajan'],
+ ['abierta','Inflación importada','π_imported = π_A + (e − 1)/1: si el euro se deprecia, lo importado se encarece'],
+ ['abierta','¿Por qué la AS tiene pendiente positiva?','Si P sube, el salario real w/P baja, las empresas contratan más L y producen más'],
+ ['abierta','¿Por qué la AD tiene pendiente negativa?','Si P sube, cae la riqueza real D/P (menos C) y baja q (menos X, más M)'],
+ ['abierta','Cómo se resuelve AS = AD en el modelo de clase','AD: Y = a + b/P; AS: Y = A√(K·L(P)); con u = 1/P sale una ecuación de 2.º grado'],
+ ['abierta','Efecto de los tipos de América en Europa','Tipos más altos en América reducen la inversión europea (− 500·i_A)'],
+ ['abierta','Apreciación del euro: canal de tipos','Menos inflación importada → el BCE baja el tipo → más I → más Y → más M'],
 ].map(([t,q,a],i)=>({id:'c'+i,t,q,a}));
 
 /* ---------- progreso y guardado ---------- */
@@ -1853,9 +2008,14 @@ const GL={
  PIB:['Producto interior bruto (GDP)','Valor de la producción final de un país en un periodo.'],
  CLU:['Coste laboral unitario (ULC)','Remuneración del trabajo / producción real.'],
  VA:['Valor añadido','Ventas − coste de los inputs no laborales.'],
+ X:['Exportaciones','Lo que Europa vende a América. Suben con la renta de América y con q.'],
+ M:['Importaciones','Lo que Europa compra a América. Suben con la renta disponible de Europa y bajan con q.'],
+ q:['Tipo de cambio real','q = e·P_A/P_E: precio de lo americano frente a lo europeo. Si q sube, Europa gana competitividad.'],
+ AS:['Oferta agregada','Producción que ofrecen las empresas a cada nivel de precios.'],
+ AD:['Demanda agregada','Gasto total C + I + G + X − M a cada nivel de precios.'],
 };
-const GSEL='.m,.formula,.hero-eq,.cheat p,.card-fc .a,.field label';
-const RUN=/[A-Za-zÁÉÍÓÚáéíóúñÑπᵉℓ*0-9]+/g;
+const GSEL='.m,.formula,.hero-eq,.cheat p,.card-fc .a,.field label,.ob .f';
+const RUN=/[A-Za-zÁÉÍÓÚáéíóúñÑπΠᵉℓ*0-9]+/g;
 function makeSym(key,txt){const sp=document.createElement('span');sp.className='sym';sp.dataset.k=key;sp.textContent=txt;return sp;}
 function annotate(root){
   const tops=[...root.querySelectorAll(GSEL)].filter(el=>!el.parentElement.closest(GSEL)&&!el.closest('.nosym,svg'));
@@ -1866,6 +2026,7 @@ function annotate(root){
       const txt=t.data,pieces=[];let last=0,hit=false;
       for(const mt of txt.matchAll(RUN)){
         const k=mt[0];if(!Object.prototype.hasOwnProperty.call(GL,k))continue;
+        if(mt.index+k.length===txt.length&&t.nextSibling&&t.nextSibling.nodeName==='SUB')continue; // Y_d, P_E… son otra variable
         if(mt.index>last)pieces.push(document.createTextNode(txt.slice(last,mt.index)));
         pieces.push(makeSym(k,k));last=mt.index+k.length;hit=true;
       }
@@ -1913,11 +2074,11 @@ function chipsHTML(sel,withAll){
 }
 
 function renderPractica(){
-  if(!S.ex||S.ex.topic!==S.topic){S.ex=GEN[S.topic]();S.checked=false;S.solved=false;}
+  if(!S.ex||S.ex.topic!==S.topic){S.ex=S.topic==='abierta'&&!S.boardSeen?(S.boardSeen=true,GEN.abierta(true)):GEN[S.topic]();S.checked=false;S.solved=false;}
   const ex=S.ex,t=T[ex.topic];
   view.innerHTML=chipsHTML(S.topic)+`
   <section class="sheet">
-    <div class="eyebrow">${t.tag} · ${t.name}</div>
+    <div class="eyebrow">${t.tag} · ${t.name}${ex.board?' · ejercicio de la pizarra':''}</div>
     <div class="statement" style="margin-top:10px">${ex.statement}</div>
     <p class="muted" style="font-size:14px;margin-top:6px">Usa coma o punto para los decimales. Se aceptan pequeñas diferencias por redondeo. Cada vez que pidas otro ejercicio cambian los datos.</p>
     ${fieldsHTML(ex,'p')}
@@ -1995,19 +2156,19 @@ function renderExamen(){
   if(!E){
     const last=P.exams.slice(-1)[0];
     view.innerHTML=`<section><h2>Simulacro de examen</h2>
-      <p>Cinco ejercicios de temas variados, con datos nuevos cada vez: cálculos (PIB, tipos, multiplicador, identidades…) y preguntas de razonamiento (shocks, actores, mercados). Tienes 30 minutos. No verás si aciertas hasta que entregues.</p>
+      <p>Cinco ejercicios de temas variados, con datos nuevos cada vez: cálculos (PIB, tipos, multiplicador, identidades…) y preguntas de razonamiento (shocks, actores, mercados). Tienes 30 minutos (40 si sale el ejercicio largo de economía abierta). No verás si aciertas hasta que entregues.</p>
       <p class="muted">Ten a mano la calculadora y papel, como en el examen de verdad.</p>
       ${last?`<p>Último simulacro: <b>${n(last.score,1)} / 10</b> (${new Date(last.date).toLocaleDateString('es-ES')}).</p>`:''}
       <div class="actions"><button class="btn primary" id="bStart">Empezar examen</button></div></section>`;
     document.getElementById('bStart').onclick=()=>{
       const ids=shuffle(TOPICS.map(t=>t.id)).slice(0,5);
-      S.exam={list:ids.map(id=>GEN[id]()),end:Date.now()+30*60*1000,done:false,score:0,res:[]};
+      S.exam={list:ids.map(id=>GEN[id]()),end:Date.now()+(ids.includes('abierta')?40:30)*60*1000,done:false,score:0,res:[]};
       render();window.scrollTo({top:0});
     };
     return;
   }
   view.innerHTML=`<div class="exam-head"><div><div class="eyebrow">Simulacro</div><b>${E.done?'Corregido':'5 ejercicios'}</b></div>
-    ${E.done?`<div class="score">${n(E.score,1)}<span class="muted" style="font-size:20px"> / 10</span></div>`:`<div class="timer" id="timer">30:00</div><button class="btn primary" id="bEnd">Entregar</button>`}</div>
+    ${E.done?`<div class="score">${n(E.score,1)}<span class="muted" style="font-size:20px"> / 10</span></div>`:`<div class="timer" id="timer">··:··</div><button class="btn primary" id="bEnd">Entregar</button>`}</div>
     ${E.list.map((ex,k)=>`<section class="sheet"><div class="eyebrow">Ejercicio ${k+1} · ${T[ex.topic].name}${E.done?` · ${E.res[k]}/${ex.fields.length}`:''}</div>
       <div class="statement" style="margin-top:10px">${ex.statement}</div>${fieldsHTML(ex,'e'+k)}
       ${E.done?`<details class="solution"><summary class="btn" style="display:inline-block">Ver solución</summary><div style="margin-top:12px">${ex.solution}</div></details>`:''}</section>`).join('')}
@@ -2217,5 +2378,53 @@ render();
   ids.forEach(k=>inp[k].addEventListener('input',idRun));
   document.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>{b.dataset.id.split(',').forEach((x,j)=>inp[ids[j]].value=x);idRun();}));
   idRun();
+
+  /* ---------- open economy: AS–AD de la pizarra ---------- */
+  function drawOB(){
+    const fig=document.getElementById('fig-ob');if(!fig)return;
+    const p=BOARD,r0=openEq(p,1),r1=openEq(p,p.e1),c=p.lw*p.w;
+    const AS=(r,P)=>p.A*Math.sqrt(r.K*(p.L0-c/P)),AD=(r,P)=>r.a+r.b/P;
+    const Plo=Math.max(c/p.L0*1.05,Math.min(r0.P,r1.P)*0.72),Phi=Math.max(r0.P,r1.P)*1.4;
+    const Ylo=Math.floor(Math.min(r0.Y,r1.Y)*0.82/50)*50,Yhi=Math.ceil(Math.max(r0.Y,r1.Y)*1.18/50)*50;
+    fig.innerHTML='';
+    legend(fig,[['--s-d','AD (demanda agregada)'],['--s-s','AS (oferta agregada)'],['--muted','con e = 1',1]]);
+    const W=640,H=340,m={l:52,r:24,t:14,b:40};
+    const sx=Y=>m.l+(Y-Ylo)/(Yhi-Ylo)*(W-m.l-m.r),sy=P=>m.t+(Phi-P)/(Phi-Plo)*(H-m.t-m.b);
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`AS y AD de Europa: con e = 1 el equilibrio es Y = ${f(r0.Y,1)} y P = ${f(r0.P,3)}; con e = ${f(p.e1,2)} pasa a Y = ${f(r1.Y,1)} y P = ${f(r1.P,3)}`},fig);
+    const cid='obc'+Math.random().toString(36).slice(2);
+    el('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b},el('clipPath',{id:cid},el('defs',{},svg)));
+    const ax=el('g',{class:'ax'},svg),ys=niceStep(Phi-Plo,6),xs=niceStep(Yhi-Ylo,6);
+    for(let v=Math.ceil(Plo/ys)*ys;v<=Phi+1e-9;v+=ys){el('line',{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),'stroke-width':1},ax);txt(ax,{x:m.l-8,y:sy(v)+4,'text-anchor':'end'},f(v,2));}
+    for(let v=Math.ceil(Ylo/xs)*xs;v<=Yhi+1e-9;v+=xs){el('line',{x1:sx(v),x2:sx(v),y1:H-m.b,y2:H-m.b+5,'stroke-width':1},ax);txt(ax,{x:sx(v),y:H-m.b+18,'text-anchor':'middle'},f(v,0));}
+    txt(ax,{x:W-m.r,y:H-4,'text-anchor':'end'},'producción Y');
+    const g=el('g',{'clip-path':`url(#${cid})`},svg);
+    const path=fn=>{let d='';for(let i=0;i<=120;i++){const P=Plo+(Phi-Plo)*i/120;d+=(i?'L':'M')+sx(fn(P)).toFixed(1)+','+sy(P).toFixed(1);}return d;};
+    el('path',{d:path(P=>AD(r0,P)),fill:'none',stroke:'var(--s-d)','stroke-width':2,'stroke-dasharray':'5 4',opacity:.5},g);
+    el('path',{d:path(P=>AS(r0,P)),fill:'none',stroke:'var(--s-s)','stroke-width':2,'stroke-dasharray':'5 4',opacity:.5},g);
+    el('path',{d:path(P=>AD(r1,P)),fill:'none',stroke:'var(--s-d)','stroke-width':2.2},g);
+    el('path',{d:path(P=>AS(r1,P)),fill:'none',stroke:'var(--s-s)','stroke-width':2.2},g);
+    const Pt=Phi-(Phi-Plo)*0.06;
+    txt(svg,{x:Math.min(W-m.r-4,sx(AD(r1,Pt))+8),y:sy(Pt)+4,class:'lab'},'AD');
+    txt(svg,{x:Math.min(W-m.r-4,sx(AS(r1,Pt)))-8,y:sy(Pt)+4,class:'lab','text-anchor':'end'},'AS');
+    el('circle',{cx:sx(r0.Y),cy:sy(r0.P),r:4.5,fill:'var(--card)',stroke:'var(--ink)','stroke-width':1.5},svg);
+    el('circle',{cx:sx(r1.Y),cy:sy(r1.P),r:5,fill:'var(--ink)',stroke:'var(--card)','stroke-width':2},svg);
+    txt(svg,{x:sx(r0.Y)-9,y:sy(r0.P)-8,class:'dotlab','text-anchor':'end'},'E₀');
+    txt(svg,{x:sx(r1.Y)+9,y:sy(r1.P)-8,class:'dotlab'},'E₁');
+    const cross=el('line',{x1:m.l,x2:W-m.r,stroke:'var(--ink2)','stroke-width':1,opacity:0},svg);
+    const hit=el('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:'transparent'},svg);
+    const tip=tipBox(fig);
+    const move=ev=>{const r=svg.getBoundingClientRect(),py=(ev.clientY-r.top)/r.height*H;let P=Phi-(py-m.t)/(H-m.t-m.b)*(Phi-Plo);P=Math.max(Plo,Math.min(Phi,P));
+      cross.setAttribute('y1',sy(P));cross.setAttribute('y2',sy(P));cross.setAttribute('opacity',.5);
+      const px=(ev.clientX-r.left)/r.width*W;
+      placeTip(fig,svg,tip,px,W,`<b>P = ${f(P,3)}</b><br><span style="color:var(--s-d)">●</span> AD: Y = ${f(AD(r1,P),1)} (antes ${f(AD(r0,P),1)})<br><span style="color:var(--s-s)">●</span> AS: Y = ${f(AS(r1,P),1)} (antes ${f(AS(r0,P),1)})`);};
+    hit.addEventListener('pointermove',move);hit.addEventListener('pointerdown',move);
+    hit.addEventListener('pointerleave',()=>{tip.hidden=true;cross.setAttribute('opacity',0);});
+    const cap=document.createElement('figcaption');
+    cap.textContent=`E₀ (e = 1): Y = ${f(r0.Y,1)}, P = ${f(r0.P,3)}. E₁ (e = ${f(p.e1,2)}): Y = ${f(r1.Y,1)}, P = ${f(r1.P,3)}. Con e = ${f(p.e1,2)} el BCE baja el tipo, la inversión sube de ${f(r0.I,0)} a ${f(r1.I,0)} y desplaza la AS (más capital) y la AD a la derecha. Línea discontinua: e = 1. Pasa el dedo o el ratón para leer Y a cada nivel de precios.`;
+    fig.appendChild(cap);
+    const box=document.getElementById('ob-class');
+    if(box){const ex=GEN.abierta(true);box.innerHTML=`<div class="ex-head"><h2>Europe and America</h2><span class="ex-tag">Pizarra de clase · Open economy</span></div>${ex.statement}<h3>Solución paso a paso</h3>${ex.solution}`;annotate(box);}
+  }
+  drawOB();
 })();
 </script>
